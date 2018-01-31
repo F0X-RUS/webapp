@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+
+</head>
+<body>
+
+    <nav th:fragment="navbar(activeTab)" role="navigation" class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <div class="container d-flex justify-content-between">
+            <a class="navbar-brand" href="#">LOGO</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a th:class="${activeTab == 'main'} ? 'active nav-link' : 'nav-link'" th:href="@{'/'}">
+                            <span data-feather="home"></span>
+                            Главная
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:class="${activeTab == 'forum'} ? 'active nav-link' : 'nav-link'" th:href="@{'/auth'}">
+                            <span data-feather="file"></span>
+                            Форум
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:class="${activeTab == 'editor'} ? 'active nav-link' : 'nav-link'" th:href="@{'/editor'}">
+                            <span data-feather="shopping-cart"></span>
+                            Редактор
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
+        <!--<link rel="icon" href="../../../../favicon.ico">-->
+        <title>Вход на форум</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></link>
+        <link th:href="@{/css/auth.css}" rel="stylesheet"></link>
+    </head>
+    <body>
+        <header>
+            <!--    TOP NAVBAR  -->
+            <nav th:replace="${'/fragments/navbar'} :: navbar(${'forum'})"></nav>
+        </header>
+        <div class="text-center">
+            <form method="post" action="/auth" class="form-signin">
+                <h1>ЛОГОТИП</h1>
+                <h1 class="h3 mb-3 font-weight-normal">Введите данные</h1>
+                <input type="text" id="inputLogin" class="form-control" placeholder="Логин" required="required" autofocus="true"/>
+
+                <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required="required"/>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"/> Запомнить
+                    </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Вход</button>
+            </form>
+        </div>
+    </body>
+</html>

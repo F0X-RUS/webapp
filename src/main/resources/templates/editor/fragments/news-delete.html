@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Редактирование - Удалить новость</title>
+</head>
+<body>
+<div th:fragment="news" role="main" class="col-sm-10 pt-3">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Удаление новости</h1>
+    </div>
+
+
+    <div style="width:50%; margin:auto" class="card text-center border-danger">
+        <div class="card-body text-danger">
+            <form method="post" enctype="multipart/form-data" action="/editor/news/delete">
+                <h5 class="card-title">Вы действительно хотите удалить новость?</h5>
+                <img style="width:auto; height:50px;" th:src="@{'~/' + ${news_images_dir} + '/' + ${news.imageName}}"/>
+                <div class="form-group">
+                    <h6>Заголовок: <span th:text="${news.title}"></span> </h6>
+                    <h6>Содержание: <span th:text="${news.content}"></span> </h6>
+                    <h6>Последнее изменение: <span th:text="@{${news.date} + ' ' + ${news.time}}"></span> </h6>
+                </div>
+                <input type="hidden" id="id" class="form-control" name="id" th:value="${news.id}"/>
+                <button name="submit" type="submit" class="btn btn-outline-danger">Подтвердить</button> |
+                <button name="cancel" type="submit" class="btn btn-outline-danger">Назад</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

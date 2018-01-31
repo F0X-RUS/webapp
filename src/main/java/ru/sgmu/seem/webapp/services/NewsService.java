@@ -1,20 +1,18 @@
 package ru.sgmu.seem.webapp.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.sgmu.seem.webapp.domains.News;
 
 import java.util.List;
 
-public interface NewsService {
+public interface NewsService extends CrudService<News> {
 
-    void addNews(News news);
+    List<News> getLast3();
 
-    void updateNews(News news);
+    Page<News> findAll(Pageable pageable);
 
-    void removeNews(long id);
+    Page<News> getPage(int pageNumber, int size, Sort.Direction direction, String... orderParam);
 
-    News getNewsByID(long id);
-
-    List<News> getAll();
-
-    List<News> getTopThree();
 }

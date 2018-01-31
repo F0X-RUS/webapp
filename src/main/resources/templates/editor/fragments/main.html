@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Редактирование - Главная страница</title>
+</head>
+<body>
+    <div class="container">
+        <div th:fragment="main" role="main" class="col-sm-10 pt-3">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Изменение содержимого главной страницы</h1>
+            </div>
+
+            <div class="card-group">
+
+
+                <div class="card">
+                    <div style="display: inline-block" class="border rounded m-3">
+                        <img class="editor-main-image img-fluid card-img-top" th:src="@{'~/' + ${man_upload_directory} + '/' + ${man_list[0].imageName}}"/>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" action="/editor/main/man/0" modelAttribute="man">
+                            <div class="form-group">
+                                <label for="image0">Фотография</label>
+                                <input accept="image/jpeg,image/png,image/gif,image/jpg" id="image0" name="image" type="file"/>
+                                <div th:if="${#vars['image0_error']}" style="display:block;" class="invalid-feedback">
+                                    Неверный формат изображения!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="surname0">Фамилия</label>
+                                <input id="surname0" type="text" class="form-control" name="surname" th:value="${man_list[0].surname}" placeholder="..."/>
+                                <div th:if="${#vars['surname0_error']}" style="display:block;" class="invalid-feedback">
+                                    Фамилия должна содержать от 1 до 25 символов!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name0">Имя</label>
+                                <input id="name0" type="text" class="form-control" name="name" th:value="${man_list[0].name}" placeholder="..."/>
+                                <div th:if="${#vars['name0_error']}" style="display:block;" class="invalid-feedback">
+                                    Имя должно содержать от 1 до 25 символов!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="patronymic0">Отчество</label>
+                                <input id="patronymic0" type="text" class="form-control" name="patronymic" th:value="${man_list[0].patronymic}" placeholder="..."/>
+                            </div>
+                            <div class="form-group">
+                                <label for="description0">Описание</label>
+                                <textarea id="description0" th:text="${man_list[0].description}" name="description" class="form-control" rows="3"></textarea>
+                                <div th:if="${#vars['description0_error']}" style="display:block;" class="invalid-feedback">
+                                    Описание должно содержать от 5 до 75 символов!
+                                </div>
+                            </div>
+                            <input type="hidden" id="id0" class="form-control" name="id" th:value="${man_list[0].id}"/>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="display: inline-block" class="border rounded m-3">
+                        <img th:width="200px" class="editor-main-image img-fluid card-img-top" th:src="@{'~/' + ${man_upload_directory} + '/' + ${man_list[1].imageName}}"/>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" action="/editor/main/man/1" modelAttribute="man">
+                            <div class="form-group">
+                                <label for="image1">Фотография</label>
+                                <input accept="image/jpeg,image/png,image/gif,image/jpg" id="image1" name="image" type="file"/>
+                                <div th:if="${#vars['image1_error']}" style="display:block;" class="invalid-feedback">
+                                    Неверный формат изображения!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="surname1">Фамилия</label>
+                                <input id="surname1" type="text" class="form-control" name="surname" th:value="${man_list[1].surname}" placeholder="..."/>
+                                <div th:if="${#vars['surname1_error']}" style="display:block;" class="invalid-feedback">
+                                    Фамилия должна содержать от 1 до 25 символов!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name1">Имя</label>
+                                <input id="name1" type="text" class="form-control" name="name" th:value="${man_list[1].name}" placeholder="..."/>
+                                <div th:if="${#vars['name1_error']}" style="display:block;" class="invalid-feedback">
+                                    Имя должно содержать от 1 до 25 символов!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="patronymic1">Отчество</label>
+                                <input id="patronymic1" type="text" class="form-control" name="patronymic" th:value="${man_list[1].patronymic}" placeholder="..."/>
+                            </div>
+                            <div class="form-group">
+                                <label for="description1">Описание</label>
+                                <textarea id="description1" th:text="${man_list[1].description}" name="description" class="form-control" rows="3"></textarea>
+                                <div th:if="${#vars['description1_error']}" style="display:block;" class="invalid-feedback">
+                                    Описание должно содержать от 5 до 75 символов!
+                                </div>
+                            </div>
+                            <input type="hidden" id="id1" class="form-control" name="id" th:value="${man_list[1].id}"/>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="display: inline-block" class="border rounded m-3">
+                        <img th:width="200px" class="editor-main-image img-fluid card-img-top" th:src="@{'~/' + ${man_upload_directory} + '/' + ${man_list[2].imageName}}"/>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" action="/editor/main/man/2" modelAttribute="man">
+                            <div class="form-group">
+                                <label for="image2">Фотография</label>
+                                <input accept="image/jpeg,image/png,image/gif,image/jpg" id="image2" name="image" type="file"/>
+                                <div th:if="${#vars['image2_error']}" style="display:block;" class="invalid-feedback">
+                                    Неверный формат изображения!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="surname2">Фамилия</label>
+                                <input id="surname2" type="text" class="form-control" name="surname" th:value="${man_list[2].surname}" placeholder="..."/>
+                                <div th:if="${#vars['surname2_error']}" style="display:block;" class="invalid-feedback">
+                                    Фамилия должна содержать от 1 до 25 символов!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name2">Имя</label>
+                                <input id="name2" type="text" class="form-control" name="name" th:value="${man_list[2].name}" placeholder="..."/>
+                                <div th:if="${#vars['name2_error']}" style="display:block;" class="invalid-feedback">
+                                    Имя должно содержать от 1 до 25 символов!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="patronymic2">Отчество</label>
+                                <input id="patronymic2" type="text" class="form-control" name="patronymic" th:value="${man_list[2].patronymic}" placeholder="..."/>
+                            </div>
+                            <div class="form-group">
+                                <label for="description2">Описание</label>
+                                <textarea id="description2" th:text="${man_list[2].description}" name="description" class="form-control" rows="3"></textarea>
+                                <div th:if="${#vars['description2_error']}" style="display:block;" class="invalid-feedback">
+                                    Описание должно содержать от 5 до 75 символов!
+                                </div>
+                            </div>
+                            <input type="hidden" id="id2" class="form-control" name="id" th:value="${man_list[2].id}"/>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <a name="infoform0"></a>
+            <div class="form-row border rounded-top pr-3 pl-4 pt-4 pb-4 mt-3 ml-0 mr-0">
+
+                <div style="display: inline-block" class="mb-3">
+                    <img class="editor-main-image img-fluid border rounded p-2 mr-4" th:src="@{'~/' + ${infoblock_upload_directory} + '/' + ${infoblock_list[0].imageName}}"></img>
+                </div>
+                <div class="media-body">
+                    <form method="post" enctype="multipart/form-data" action="/editor/main/infoblock/0" modelAttribute="infoblock">
+                        <div class="form-group">
+                            <label for="infoblockImage0">Изображение</label>
+                            <input accept="image/jpeg,image/png,image/gif,image/jpg" id="infoblockImage0" name="image" type="file"/>
+                            <div th:if="${#vars['image0_ierror']}" style="display:block;" class="invalid-feedback">
+                                Неверный формат изображения!
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockTitle0">Заголовок</label>
+                            <input id="infoblockTitle0" name="title" th:value="${infoblock_list[0].title}" type="text" class="form-control" placeholder="..."/>
+                            <div th:if="${#vars['title0_ierror']}" style="display:block;" class="invalid-feedback">
+                                Заголовок должен содержать от 5 до 50 символов!
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockSlogan0">Слоган к заголовку</label>
+                            <input id="infoblockSlogan0" name="slogan" th:value="${infoblock_list[0].slogan}" type="text" class="form-control" placeholder="..."/>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockDesc0">Информация</label>
+                            <textarea id="infoblockDesc0" th:text="${infoblock_list[0].description}" name="description" class="form-control" rows="3"></textarea>
+                            <div th:if="${#vars['description0_ierror']}" style="display:block;" class="invalid-feedback">
+                                Описание должно содержать от 5 до 100 символов!
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+
+            <a name="infoform1"></a>
+            <div class="form-row border rounded-top pr-3 pl-4 pt-4 pb-4 mt-3 ml-0 mr-0">
+
+                <div style="display: inline-block" class="mb-3">
+                    <img class="editor-main-image img-fluid border rounded p-2 mr-4" th:src="@{'~/' + ${infoblock_upload_directory} + '/' + ${infoblock_list[1].imageName}}"></img>
+                </div>
+                <div class="media-body">
+                    <form method="post" enctype="multipart/form-data" action="/editor/main/infoblock/1" modelAttribute="infoblock">
+                        <div class="form-group">
+                            <label for="infoblockImage1">Изображение</label>
+                            <input accept="image/jpeg,image/png,image/gif,image/jpg" id="infoblockImage1" name="image" type="file"/>
+                            <div th:if="${#vars['image1_ierror']}" style="display:block;" class="invalid-feedback">
+                                Неверный формат изображения!
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockTitle1">Заголовок</label>
+                            <input id="infoblockTitle1" name="title" th:value="${infoblock_list[1].title}" type="text" class="form-control" placeholder="..."/>
+                            <div th:if="${#vars['title1_ierror']}" style="display:block;" class="invalid-feedback">
+                                Заголовок должен содержать от 5 до 50 символов!
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockSlogan1">Слоган к заголовку</label>
+                            <input id="infoblockSlogan1" name="slogan" th:value="${infoblock_list[1].slogan}" type="text" class="form-control" placeholder="..."/>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockDesc1">Информация</label>
+                            <textarea id="infoblockDesc1" th:text="${infoblock_list[1].description}" name="description" class="form-control" rows="3"></textarea>
+                            <div th:if="${#vars['description1_ierror']}" style="display:block;" class="invalid-feedback">
+                                Описание должно содержать от 5 до 100 символов!
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+
+            <a name="infoform2"></a>
+            <div class="form-row border rounded-top pr-3 pl-4 pt-4 pb-4 mt-3 ml-0 mr-0">
+
+                <div style="display: inline-block" class="mb-3">
+                    <img class="editor-main-image img-fluid border rounded p-2 mr-4" th:src="@{'~/' + ${infoblock_upload_directory} + '/' + ${infoblock_list[2].imageName}}"></img>
+                </div>
+                <div class="media-body">
+                    <form method="post" enctype="multipart/form-data" action="/editor/main/infoblock/2" modelAttribute="infoblock">
+                        <div class="form-group">
+                            <label for="infoblockImage2">Изображение</label>
+                            <input accept="image/jpeg,image/png,image/gif,image/jpg" id="infoblockImage2" name="image" type="file"/>
+                            <div th:if="${#vars['image2_ierror']}" style="display:block;" class="invalid-feedback">
+                                Неверный формат изображения!
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockTitle2">Заголовок</label>
+                            <input id="infoblockTitle2" name="title" th:value="${infoblock_list[2].title}" type="text" class="form-control" placeholder="..."/>
+                            <div th:if="${#vars['title2_ierror']}" style="display:block;" class="invalid-feedback">
+                                Заголовок должен содержать от 5 до 50 символов!
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockSlogan2">Слоган к заголовку</label>
+                            <input id="infoblockSlogan2" name="slogan" th:value="${infoblock_list[2].slogan}" type="text" class="form-control" placeholder="..."/>
+                        </div>
+                        <div class="form-group">
+                            <label for="infoblockDesc2">Информация</label>
+                            <textarea id="infoblockDesc2" th:text="${infoblock_list[2].description}" name="description" class="form-control" rows="3"></textarea>
+                            <div th:if="${#vars['description2_ierror']}" style="display:block;" class="invalid-feedback">
+                                Описание должно содержать от 5 до 100 символов!
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>
