@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+    <div th:fragment="main" role="main">
+        <div class="jumbotron p-0">
+            <div class="crop-slider">
+                <img th:src="@{'~/' + ${news_images_path} + '/' + ${news.imageName}}"/>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 th:text="${news.title}">Заголовок</h2>
+                    <p th:text="${news.content}">Содержание</p>
+                    <p class="card-text">
+                        <small th:text="${news.date} + ' ' + ${news.time}" class="text-muted"></small>
+                    </p>
+                </div>
+            </div>
+            <hr/>
+        </div>
+    </div>
+</body>
+</html>

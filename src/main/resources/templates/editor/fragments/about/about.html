@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Изменение данных для страницы "О кафедре"</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <a th:href="@{'/editor/about/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить абзац</button></a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Название абзаца</th>
+            <th>Содержание</th>
+            <th>Изменил(а)</th>
+            <th>Функции</th>
+        </tr>
+        </thead>
+        <tr th:each="item : ${PASSAGE_LIST}">
+                <td class="align-middle" th:text="${item.title}"></td>
+                <td class="align-middle" th:text="${item.content}"></td>
+                <td class="align-middle" th:text="${item.updatedBy}"></td>
+                <td>
+                    <input type="hidden" name="id" th:value="${item.id}"/>
+                    <button type="submit" class="btn btn-primary">Обновить</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                            th:attr="data-id=${item.id},data-title=${item.title}">
+                        Удалить
+                    </button>
+                </td>
+        </tr>
+    </table>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Вы действительно хотите удалить абзац?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <h5 class="card-title">Заголовок:</h5>
+                    <p id="title" class="card-text"></p>
+                    <p class="card-text"><small id="date" class="text-muted"></small></p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <form method="post" enctype="multipart/form-data" action="/editor/about/delete">
+                    <input type="hidden" id="id" name="id"/>
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

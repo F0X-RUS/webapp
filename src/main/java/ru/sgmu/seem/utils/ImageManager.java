@@ -3,6 +3,7 @@ package ru.sgmu.seem.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,28 +15,25 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.sgmu.seem.utils.FolderManager.NEWS_IMAGES_URL;
+
+@Component
 public class ImageManager {
+
+    private final FilenameGenerator filenameGenerator;
 
     public static final String DEFAULT_IMAGE = "default.png";
 
     private enum Extentions {
-        png,
-        jpg,
-        jpeg,
-        gif
+        PNG,
+        JPG,
+        JPEG,
+        GIF
     }
 
-    private static ImageManager imageManager;
-
-    private ImageManager() {
-
-    }
-
-    public static ImageManager getInstance() {
-        if (imageManager == null) {
-            imageManager = new ImageManager();
-        }
-        return imageManager;
+    @Autowired
+    public ImageManager(FilenameGenerator filenameGenerator){
+        this.filenameGenerator = filenameGenerator;
     }
 
     public void createImage(MultipartFile file, String path, String filename) throws IOException {
@@ -58,5 +56,15 @@ public class ImageManager {
             }
         }
         return flag;
+    }
+
+    public String parseFile(MultipartFile file) throws IOException{
+
+        String extention = file.getContentType().split("/")[1];
+        if (!checkExtention(extention.toUpperCase())) {
+            throw new IOException("Wrong extention!");
+        }
+        String name = filenameGenerator.nextString(50);
+        return name + "." + extention;
     }
 }

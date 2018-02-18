@@ -9,27 +9,40 @@
         <div class="sidebar-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a th:class="${activeTab == 'default'} ? 'active nav-link' : 'nav-link'" href="/editor">
+                    <a th:class="${activeTab == 'VIEW'} ? 'active nav-link' : 'nav-link'" href="/editor">
                         <span data-feather="home"></span>
                         Обзор <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:class="${activeTab == 'main'} ? 'active nav-link' : 'nav-link'" href="/editor/main">
+                    <a th:class="${activeTab == 'MAIN'} ? 'active nav-link' : 'nav-link'" href="/editor/main">
                         <span data-feather="file"></span>
                         Главная страница
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:class="${activeTab == 'news'} ? 'active nav-link' : 'nav-link'" href="/editor/news">
+                    <a th:class="${activeTab == 'NEWS'} ? 'active nav-link' : 'nav-link'" href="/editor/news">
                         <span data-feather="shopping-cart"></span>
                         Новости
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a th:class="${activeTab == 'CONTACTS'} ? 'active nav-link' : 'nav-link'" href="/editor/contacts">
+                        <span data-feather="shopping-cart"></span>
+                        Контакты
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a th:class="${activeTab == 'ABOUT'} ? 'active nav-link' : 'nav-link'" href="/editor/about">
+                        <span data-feather="shopping-cart"></span>
+                        О кафедре
+                    </a>
+                </li>
             </ul>
 
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                <span>Saved reports</span>
+            <!--<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Второй блок меню</span>
                 <a class="d-flex align-items-center text-muted" href="#">
                     <span data-feather="plus-circle"></span>
                 </a>
@@ -38,28 +51,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">
                         <span data-feather="file-text"></span>
-                        Current month
+                        Первый пункт
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Last quarter
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Social engagement
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Year-end sale
-                    </a>
-                </li>
-            </ul>
+            </ul>-->
         </div>
     </nav>
 </body>

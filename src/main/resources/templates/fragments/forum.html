@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Кафедра СТ и НМ - Форум</title>
+</head>
+<body>
+    <div th:fragment="main" role="main" class="container">
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Список направлений</h6>
+
+            <div th:each='item : ${list}' class="media text-muted pt-3">
+                <img data-src="holder.js/32x32" alt="" class="mr-2 rounded"/>
+                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                    <a th:if="${#vars['line']}" th:href="@{'forum/' + ${item.id}}">
+                        <strong th:text="${item.title}" class="d-block text-gray-dark"></strong>
+                    </a>
+                    <span th:text='${item.description}'></span>
+                </p>
+            </div>
+
+            <small class="d-block text-right mt-3">
+                <a href="#">Ссылка</a> <span th:text="${text}"></span>
+            </small>
+        </div>
+    </div>
+</body>
+</html>

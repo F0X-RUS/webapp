@@ -17,8 +17,12 @@ import java.util.List;
 @Transactional
 public class NewsServiceImpl implements NewsService {
 
+    private final NewsRepository newsRepository;
+
     @Autowired
-    private NewsRepository newsRepository;
+    public NewsServiceImpl(NewsRepository newsRepository) {
+        this.newsRepository = newsRepository;
+    }
 
     @Override
     @Transactional

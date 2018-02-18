@@ -10,6 +10,8 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping(value = "/auth")
 public class AuthController {
 
+    //TODO: REMOVE IN FUTURE
+
     @RequestMapping(method = RequestMethod.GET)
     public String auth(Model model){
         return "auth";

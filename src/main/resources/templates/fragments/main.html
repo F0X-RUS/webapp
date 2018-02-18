@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="main" role="main">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active crop-slider">
+                    <img class="first-slide" th:src="@{${news_images_path} + '/' + ${NEWS_LIST[0].imageName}}"/>
+                    <div class="container">
+                        <div class="carousel-caption text-left">
+                            <h1 th:text="${NEWS_LIST[0].title}"></h1>
+                            <p th:text="${NEWS_LIST[0].content}"></p>
+                            <p><a class="btn btn-lg btn-primary" th:href="${'/news/' + NEWS_LIST[0].id}" role="button">Далее</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item crop-slider">
+                    <img class="first-slide" th:src="@{${news_images_path} + '/' + ${NEWS_LIST[1].imageName}}"/>
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1 th:text="${NEWS_LIST[1].title}"></h1>
+                            <p th:text="${NEWS_LIST[1].content}"></p>
+                            <p><a class="btn btn-lg btn-primary" th:href="${'/news/' + NEWS_LIST[1].id}" role="button">Далее</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item crop-slider">
+                    <img class="first-slide" th:src="@{${news_images_path} + '/' + ${NEWS_LIST[2].imageName}}"/>
+                    <div class="container">
+                        <div class="carousel-caption text-right">
+                            <h1 th:text="${NEWS_LIST[2].title}"></h1>
+                            <p th:text="${NEWS_LIST[2].content}"></p>
+                            <p><a class="btn btn-lg btn-primary" th:href="${'/news/' + NEWS_LIST[2].id}" role="button">Далее</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <div class="carousel-control-prev-icon"></div>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                <div class="carousel-control-next-icon"></div>
+            </a>
+        </div>
+        <div class="container marketing">
+            <div class="row">
+                <div class="col-lg-4">
+                    <img class="rounded-circle" th:src="@{${man_images_path} + '/' + ${MAN_LIST[0].imageName}}" width="140" height="140"/>
+                    <h3 th:text="@{${MAN_LIST[0].surname} + ' ' + ${MAN_LIST[0].name} + ' '} + @{${MAN_LIST[0].patronymic} ? ' ' + ${MAN_LIST[0].patronymic} : ''}"></h3>
+                    <p th:text="${MAN_LIST[0].description}"></p>
+                </div>
+                <div class="col-lg-4">
+                    <img class="rounded-circle" th:src="@{${man_images_path} + '/' + ${MAN_LIST[1].imageName}}" width="140" height="140"/>
+                    <h3 th:text="@{${MAN_LIST[1].surname} + ' ' + ${MAN_LIST[1].name} + ' '} + @{${MAN_LIST[1].patronymic} ? ' ' + ${MAN_LIST[1].patronymic} : ''}"></h3>
+                    <p th:text="${MAN_LIST[1].description}"></p>
+                </div>
+                <div class="col-lg-4">
+                    <img class="rounded-circle" th:src="@{${man_images_path} + '/' + ${MAN_LIST[2].imageName}}" width="140" height="140"/>
+                    <h3 th:text="@{${MAN_LIST[2].surname} + ' ' + ${MAN_LIST[2].name} + ' '} + @{${MAN_LIST[2].patronymic} ? ' ' + ${MAN_LIST[2].patronymic} : ''}"></h3>
+                    <p th:text="${MAN_LIST[2].description}"></p>
+                </div>
+            </div>
+            <hr class="featurette-divider"/>
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 th:text="${INFOBLOCK_LIST[0].title}" class="featurette-heading"></h2>
+                    <h3 th:text="${INFOBLOCK_LIST[0].slogan}" class="featurette-heading-my"><span class="text-muted"></span></h3>
+                    <p th:text="${INFOBLOCK_LIST[0].description}" class="lead"></p>
+                </div>
+                <div class="col-md-5 my-auto">
+                    <img width="500px" height="500px" class="featurette-image img-fluid mx-auto" th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[0].imageName}}"
+                         alt="Generic placeholder image"/>
+                </div>
+            </div>
+            <hr class="featurette-divider "/>
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 th:text="${INFOBLOCK_LIST[1].title}" class="featurette-heading"></h2>
+                    <h3 th:text="${INFOBLOCK_LIST[1].slogan}" class="featurette-heading-my"><span class="text-muted"></span></h3>
+                    <p th:text="${INFOBLOCK_LIST[1].description}" class="lead"></p>
+                </div>
+                <div class="col-md-5 order-md-1 my-auto">
+                    <img width="500px" height="500px" class="featurette-image img-fluid mx-auto" th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[1].imageName}}"
+                         alt="Generic placeholder image"/>
+                </div>
+            </div>
+            <hr class="featurette-divider"/>
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 th:text="${INFOBLOCK_LIST[2].title}" class="featurette-heading"></h2>
+                    <h3 th:text="${INFOBLOCK_LIST[2].slogan}" class="featurette-heading-my"><span class="text-muted"></span></h3>
+                    <p th:text="${INFOBLOCK_LIST[2].description}" class="lead"></p>
+                </div>
+                <div class="col-md-5 my-auto">
+                    <img width="500px" height="500px" class="featurette-image img-fluid mx-auto"
+                         th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[2].imageName}}"
+                         alt="Generic placeholder image"/>
+                </div>
+            </div>
+            <hr class="featurette-divider"/>
+        </div>
+    </div>
+</body>
+</html>

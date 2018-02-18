@@ -1,18 +1,13 @@
 package ru.sgmu.seem.webapp.domains;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-public class Man implements MainPageElement{
+public class Man {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,12 +26,13 @@ public class Man implements MainPageElement{
 
     private String patronymic;
 
-    @Size(min=5, max=75)
+    @Column(length = 65535)
+    @Size(min=5)
     private String description;
 
-    private Date dateLastUpdate;
+    private Date date;
 
-    private Time timeLastUpdate;
+    private Time time;
 
     private String updatedBy;
 
@@ -89,19 +85,19 @@ public class Man implements MainPageElement{
     }
 
     public Date getDate() {
-        return dateLastUpdate;
+        return date;
     }
 
     public void setDate(Date dateLastUpdate) {
-        this.dateLastUpdate = dateLastUpdate;
+        this.date = dateLastUpdate;
     }
 
     public Time getTime() {
-        return timeLastUpdate;
+        return time;
     }
 
     public void setTime(Time timeLastUpdate) {
-        this.timeLastUpdate = timeLastUpdate;
+        this.time = timeLastUpdate;
     }
 
     public String getUpdatedBy() {

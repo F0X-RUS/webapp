@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"></meta>
+    <meta charset="UTF-8"/>
     <title>Редактирование - Добавление новости</title>
 </head>
 <body>
-
-    <div th:fragment="news" role="main" class="col-sm-10 pt-3">
+    <div th:fragment="CONTENT" role="main" class="col-sm-9 pt-3">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">Добавление новости</h1>
-        </div>
-
-        <div th:if="${#vars['message']}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Ошибка!</strong>  <span th:text="${#vars['message']}"></span>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
         </div>
 
         <form method="post" enctype="multipart/form-data" action="/editor/news/add" modelAttribute="news">
@@ -37,14 +29,12 @@
                 <label for="image">Изображение</label>
                 <input accept="image/jpeg,image/png,image/gif,image/jpg" id="image" name="image" type="file"/>
                 <div th:if="${#vars['image_error']}" style="display:block;" class="invalid-feedback">
-                    Требует выбрать изображение.
+                    Требуется выбрать изображение.
                 </div>
             </div>
             <button name="submit" type="submit" class="btn btn-primary">Добавить</button> |
             <button name="cancel" type="submit" class="btn btn-primary">Назад</button>
         </form>
-
     </div>
-
 </body>
 </html>

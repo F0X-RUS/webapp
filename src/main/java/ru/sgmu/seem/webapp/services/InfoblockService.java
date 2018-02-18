@@ -13,8 +13,12 @@ import java.util.List;
 @Transactional
 public class InfoblockService implements CrudService<Infoblock>{
 
+    private final InfoblockRepository infoblockRepository;
+
     @Autowired
-    InfoblockRepository infoblockRepository;
+    public InfoblockService(InfoblockRepository infoblockRepository) {
+        this.infoblockRepository = infoblockRepository;
+    }
 
     @Override
     @Transactional

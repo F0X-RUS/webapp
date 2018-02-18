@@ -1,14 +1,13 @@
 package ru.sgmu.seem.webapp.domains;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Size;
-import java.sql.Time;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.sql.Time;
 
 @Entity
 public class Course {
@@ -17,34 +16,25 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Size(min=1, max=75)
-    private String title;
-
-    @Size(max = 250)
-    private String description;
+    @NotNull
+    private Long number;
 
     private Date date;
+
     private Time time;
+
     private String updatedBy;
 
     public Long getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public Long getNumber() {
+        return number;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setNumber(Long number) {
+        this.number = number;
     }
 
     public Date getDate() {

@@ -14,8 +14,12 @@ import java.util.List;
 @Transactional
 public class ManService implements CrudService<Man> {
 
+    private final ManRepository manRepository;
+
     @Autowired
-    private ManRepository manRepository;
+    public ManService(ManRepository manRepository) {
+        this.manRepository = manRepository;
+    }
 
     @Override
     @Transactional

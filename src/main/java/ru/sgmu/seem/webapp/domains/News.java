@@ -9,7 +9,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-public class News implements MainPageElement{
+public class News {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,12 +17,13 @@ public class News implements MainPageElement{
 
     @NotNull
     @NotEmpty
-    @Size(min=7, max=75)
+    @Size(min=7, max=255)
     private String title;
 
-    @NotNull
-    @NotEmpty
-    @Size(min=10, max=255)
+    //@NotNull
+    //@NotEmpty
+    @Column(length = 65535)
+    @Size(min=10)
     private String content;
 
     private Date date;

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+    <div th:fragment="main" role="main" class="container mt-5">
+        <h1 class="display-4 ml-3 mr-3">Кафедра</h1>
+        <hr class="my-4"/>
+        <div class="col-12 ml-3 mr-3">
+            <div class="ml-3 mr-3" th:each='item : ${PASSAGE_LIST}'>
+                <h4 th:text="${item.title}"></h4>
+                <p th:text="${item.content}"></p>
+            </div>
+        </div>
+        <hr class="my-4"/>
+    </div>
+</body>
+</html>

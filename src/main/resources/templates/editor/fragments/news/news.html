@@ -5,8 +5,7 @@
     <title>Редактирование - Новости</title>
 </head>
 <body>
-    <div class="container">
-        <div th:fragment="news" role="main" class="col-sm-10 pt-3">
+        <div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h1 class="h2">Новости</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
@@ -26,16 +25,12 @@
                         <span class="page-link" th:if='${not page.hasPreviousPage}'>«</span>
                         <a class="page-link" th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'>«</a>
                     </li>
-
-
                     <li th:each='item : ${page.items}' th:class="${item.active}? 'page-item active' : 'page-item'">
                         <span class="page-link" th:if='${item.active}' th:text='${item.number}'>1</span>
                         <a class="page-link" th:if='${not item.active}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'>
                             <span th:text='${item.number}'>1</span>
                         </a>
                     </li>
-
-
                     <li th:class="${page.hasNextPage}? 'page-item' : 'page-item disabled'">
                         <span class="page-link" th:if='${not page.hasNextPage}'>»</span>
                         <a class="page-link" th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}'>»</a>
@@ -59,27 +54,56 @@
                         <th>Функции</th>
                     </tr>
                 </thead>
-                <tr th:each="news_item : ${news}">
-                    <td th:text="${news_item.title}"></td>
-                    <td th:text="${news_item.content}"></td>
-                    <td th:text="${news_item.date}"></td>
-                    <td th:text="${news_item.time}"></td>
+                <tr th:each="news_item : ${NEWS_LIST}">
+                    <td class="align-middle" th:text="${news_item.title}"></td>
+                    <td class="align-middle" th:text="${news_item.content}"></td>
+                    <td class="align-middle" th:text="${news_item.date}"></td>
+                    <td class="align-middle" th:text="${news_item.time}"></td>
                     <td>
-                        <img width="100px" th:src="@{'~/' + ${news_images_dir} + '/' + ${news_item.imageName}}"/>
+                        <img width="100px" th:src="@{'~/' + ${news_images_path} + '/' + ${news_item.imageName}}"/>
                     </td>
-                    <td>
+                    <td class="align-middle">
                         <a th:href="@{'/editor/news/{id}/edit'(id=${news_item.id})}" class="edit">
-                            Редактировать
+                            <button type="button" class="btn btn-primary">Редактировать</button>
                         </a> |
-                        <a th:href="@{'/editor/news/{id}/delete'(id=${news_item.id})}" class="delete">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                                th:attr="data-id=${news_item.id},data-title=${news_item.title},
+                                data-date=${news_item.date} + ' ' + ${news_item.time}">
                             Удалить
-                        </a>
+                        </button>
                     </td>
                 </tr>
             </table>
 
 
         </div>
-</div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Вы действительно хотите удалить новость?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <h5 class="card-title">Заголовок:</h5>
+                            <p id="title" class="card-text"></p>
+                            <p class="card-text"><small id="date" class="text-muted"></small></p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="post" enctype="multipart/form-data" action="/editor/news/delete">
+                            <input type="hidden" id="id" class="form-control" name="id"/>
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </body>
 </html>
