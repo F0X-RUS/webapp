@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.sgmu.seem.utils.*;
 import ru.sgmu.seem.webapp.domains.Infoblock;
 import ru.sgmu.seem.webapp.domains.Man;
 import ru.sgmu.seem.webapp.services.CrudService;
@@ -12,10 +11,9 @@ import ru.sgmu.seem.webapp.services.NewsService;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
-import java.sql.Time;
 import java.util.List;
 
+import static ru.sgmu.seem.utils.DateManager.*;
 import static ru.sgmu.seem.utils.FolderManager.*;
 import static ru.sgmu.seem.utils.enums.FolderTitle.*;
 import static ru.sgmu.seem.utils.ImageManager.DEFAULT_IMAGE;
@@ -47,12 +45,12 @@ public class HomeController {
     public String main(Model model) {
 
         //TODO: MOVE TO ANOTHER CLASS
-        /*if (manService.getAll().size() < 3) {
+        if (manService.getAll().size() < 3) {
             initMainMan();
         }
         if (infoblockService.getAll().size() < 3) {
             initMainInfoblock();
-        }*/
+        }
 
         List<Man> manList = manService.getAll();
         List<Infoblock> infoblockList = infoblockService.getAll();
@@ -81,8 +79,8 @@ public class HomeController {
             man.setPatronymic("Отчество " + i);
             man.setDescription("Описание " + i);
             man.setUpdatedBy("admin" + i);
-            man.setDate(Date.valueOf(DateManager.getCurrentDate()));
-            man.setTime(Time.valueOf(DateManager.getCurrentTime()));
+            man.setDate(getCurrentDate());
+            man.setTime(getCurrentTime());
             manService.add(man);
         }
     }
@@ -96,8 +94,8 @@ public class HomeController {
             infoblock.setSlogan("Слоган " + i);
             infoblock.setDescription("Описание " + i);
             infoblock.setUpdatedBy("admin" + i);
-            infoblock.setDate(Date.valueOf(DateManager.getCurrentDate()));
-            infoblock.setTime(Time.valueOf(DateManager.getCurrentTime()));
+            infoblock.setDate(getCurrentDate());
+            infoblock.setTime(getCurrentTime());
             infoblockService.add(infoblock);
         }
     }

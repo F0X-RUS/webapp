@@ -5,8 +5,10 @@
     <title>Новости</title>
 </head>
 <body>
-    <div th:fragment="main" role="main" class="p-3 m-4">
-        <div class="row justify-content-center">
+    <div th:fragment="main" role="main" class="container mt-4">
+        <h1 class="display-4 ml-3 mr-3">Новости</h1>
+        <hr class="my-4"/>
+        <div class="row justify-content-center" th:if="${not #lists.isEmpty(NEWS_LIST)}">
             <ul class="pagination">
                 <li th:class="${page.firstPage}?'page-item disabled':'page-item'">
                     <span class="page-link" th:if='${page.firstPage}'>←</span>
@@ -37,15 +39,16 @@
                 </li>
             </ul>
         </div>
-
-        <div class="text-center">
-            <a th:href="@{'/news/add'}">
-                <button type="button" class="btn btn-sm btn-outline-secondary mb-3">Добавить новость</button>
-            </a>
+        <div class="mx-auto col-md-9" th:if="${#lists.isEmpty(NEWS_LIST)}">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Тут пусто!</h4>
+                <p>В этом разделе отсутствуют новости!</p>
+                <hr/>
+                <p class="mb-0">Подождите, пока администратор добавит их.</p>
+            </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-4" th:each='item : ${NEWS_LIST}'>
+        <div class="row mx-auto">
+            <div class="mx-auto col-md-4" th:each='item : ${NEWS_LIST}'>
                 <div class="card mb-4 box-shadow">
                     <div class="crop">
                         <img class="card-img-top" th:src="@{'~/' + ${news_images_path} + '/' + ${item.imageName}}"
@@ -55,22 +58,20 @@
                         </header>
                     </div>
                     <div class="card-body">
-                        <p class="card-text" th:text="${item.content}"></p>
+                        <p class="card-text" th:text="${#strings.abbreviate(item.content,140)}"></p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group ">
                                 <a th:href="@{'/news/' + ${item.id}}">
                                     <button type="button" class="btn btn-sm btn-outline-secondary mr-2">Подробнее</button>
                                 </a>
-                                <a th:href="@{'/news/' + ${item.id} + '/edit'}">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-2">Изменить</button>
-                                </a>
                             </div>
-                            <small class="text-muted" th:text="@{${item.time} + ' ' + ${item.date}}">01.06.2018</small>
+                            <small class="text-muted" th:text="@{${#dates.format(item.time, 'HH:mm')} + ' ' + ${#dates.format(item.date, 'dd.MM.yyyy')}}">01.06.2018</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 </html>

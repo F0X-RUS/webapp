@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="main" role="main" class="container mt-4">
+    <h1 class="display-4 ml-3 mr-3">Сотрудники кафедры</h1>
+    <hr class="my-4"/>
+    <div>
+        <div class="mx-auto main-man-crop text-center">
+            <img class="rounded" th:if="${staff?.imageName}" th:width="250px" th:src="@{'/' + ${staff_images_path} + '/' + ${staff.imageName}}"/>
+        </div>
+        <h3 class="text-center" th:text="@{${staff.surname} + ' ' + ${staff.name} + ' ' + ${staff?.patronymic}}"></h3>
+        <h6 class="text-center" th:text="${staff.position}"></h6>
+        <p th:text="${staff.description}"></p>
+    </div>
+</div>
+</body>
+</html>

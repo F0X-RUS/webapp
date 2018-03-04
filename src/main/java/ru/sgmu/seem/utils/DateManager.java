@@ -1,20 +1,23 @@
 package ru.sgmu.seem.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
+import java.util.Calendar;
 
 public class DateManager {
 
-    public static String getCurrentDate(){
-        DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        Date currentDate = new Date();
-        return date.format(currentDate);
+    private static Calendar calendar = Calendar.getInstance();
+
+    public static Date getCurrentDate(){
+        return new Date(calendar.getTimeInMillis());
     }
 
-    public static String getCurrentTime(){
-        DateFormat time = new SimpleDateFormat("HH:mm:ss");
-        Date currentDate = new Date();
-        return time.format(currentDate);
+    public static Time getCurrentTime(){
+        return new Time(calendar.getTimeInMillis());
     }
 }

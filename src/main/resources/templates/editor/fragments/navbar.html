@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
@@ -27,34 +27,24 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:class="${activeTab == 'CONTACTS'} ? 'active nav-link' : 'nav-link'" href="/editor/contacts">
-                        <span data-feather="shopping-cart"></span>
-                        Контакты
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a th:class="${activeTab == 'ABOUT'} ? 'active nav-link' : 'nav-link'" href="/editor/about">
                         <span data-feather="shopping-cart"></span>
                         О кафедре
                     </a>
                 </li>
-            </ul>
-
-            <!--<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                <span>Второй блок меню</span>
-                <a class="d-flex align-items-center text-muted" href="#">
-                    <span data-feather="plus-circle"></span>
-                </a>
-            </h6>
-            <ul class="nav flex-column mb-2">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Первый пункт
+                    <a th:class="${activeTab == 'STAFF'} ? 'active nav-link' : 'nav-link'" href="/editor/staff">
+                        <span data-feather="shopping-cart"></span>
+                        Сотрудники
                     </a>
                 </li>
-            </ul>-->
+                <li class="nav-item">
+                    <a th:class="${activeTab == 'CONTACTS'} ? 'active nav-link' : 'nav-link'" href="/editor/contacts">
+                        <span data-feather="shopping-cart"></span>
+                        Контакты
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 </body>

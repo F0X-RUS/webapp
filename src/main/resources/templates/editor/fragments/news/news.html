@@ -10,7 +10,7 @@
                 <h1 class="h2">Новости</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
-                        <a th:href="@{'/editor/news/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить новость</button></a>
+                        <a th:href="@{'news/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить новость</button></a>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,6 @@
                 <thead>
                     <tr>
                         <th>Название</th>
-                        <th>Содержание</th>
                         <th>Дата</th>
                         <th>Время</th>
                         <th>Изображение</th>
@@ -55,25 +54,25 @@
                     </tr>
                 </thead>
                 <tr th:each="news_item : ${NEWS_LIST}">
-                    <td class="align-middle" th:text="${news_item.title}"></td>
-                    <td class="align-middle" th:text="${news_item.content}"></td>
-                    <td class="align-middle" th:text="${news_item.date}"></td>
-                    <td class="align-middle" th:text="${news_item.time}"></td>
-                    <td>
+                    <td class="align-middle" th:text="${#strings.abbreviate(news_item.title,60)}"></td>
+                    <td class="align-middle" th:text="${#dates.format(news_item.date, 'dd.MM.yyyy')}"></td>
+                    <td class="align-middle" th:text="${#dates.format(news_item.time, 'HH:mm:ss')}"></td>
+                    <td class="">
                         <img width="100px" th:src="@{'~/' + ${news_images_path} + '/' + ${news_item.imageName}}"/>
                     </td>
                     <td class="align-middle">
-                        <a th:href="@{'/editor/news/{id}/edit'(id=${news_item.id})}" class="edit">
+                        <a th:href="@{'news/{id}/edit'(id=${news_item.id})}" class="edit">
                             <button type="button" class="btn btn-primary">Редактировать</button>
-                        </a> |
+                        </a>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
                                 th:attr="data-id=${news_item.id},data-title=${news_item.title},
-                                data-date=${news_item.date} + ' ' + ${news_item.time}">
+                                data-date=${#dates.format(news_item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(news_item.time, 'HH:mm:ss')}">
                             Удалить
                         </button>
                     </td>
                 </tr>
             </table>
+
 
 
         </div>

@@ -1,16 +1,14 @@
 package ru.sgmu.seem.webapp.controllers.editor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.sgmu.seem.utils.DateManager;
 import ru.sgmu.seem.utils.FormValidator;
 import ru.sgmu.seem.utils.ImageManager;
+import ru.sgmu.seem.utils.enums.FolderTitle;
 import ru.sgmu.seem.utils.enums.MenuOption;
 import ru.sgmu.seem.webapp.domains.Infoblock;
 import ru.sgmu.seem.webapp.domains.Man;
@@ -20,32 +18,32 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
-import java.sql.Time;
 import java.util.List;
-import java.util.Map;
 
-import static ru.sgmu.seem.utils.FolderManager.INFOBLOCK_IMAGES_URL;
-import static ru.sgmu.seem.utils.FolderManager.MAN_IMAGES_URL;
-import static ru.sgmu.seem.utils.FormValidator.IMAGE_ERROR;
-import static ru.sgmu.seem.utils.FormValidator.IMAGE_WRONG_FORMAT;
-import static ru.sgmu.seem.utils.enums.PageAttribute.CONTENT;
-import static ru.sgmu.seem.utils.enums.PageAttribute.MENU_OPTION;
-import static ru.sgmu.seem.utils.enums.PageAttribute.TITLE;
+import static ru.sgmu.seem.utils.DateManager.getCurrentDate;
+import static ru.sgmu.seem.utils.DateManager.getCurrentTime;
+import static ru.sgmu.seem.utils.FolderManager.*;
+import static ru.sgmu.seem.utils.FormValidator.IMAGE_UPLOAD_ERROR;
+import static ru.sgmu.seem.utils.enums.ListTitle.INFOBLOCK_LIST;
+import static ru.sgmu.seem.utils.enums.ListTitle.MAN_LIST;
 import static ru.sgmu.seem.utils.enums.FolderTitle.INFOBLOCK_IMAGES;
 import static ru.sgmu.seem.utils.enums.FolderTitle.MAN_IMAGES;
+import static ru.sgmu.seem.utils.enums.PageAttribute.*;
+import static ru.sgmu.seem.utils.enums.PageTitle.EDIT_INFOBLOCK;
+import static ru.sgmu.seem.utils.enums.PageTitle.EDIT_MAN;
 import static ru.sgmu.seem.utils.enums.PageTitle.MAIN;
 
 @Controller("EditorMainController")
 @RequestMapping(value = "/editor/main")
 public class MainController {
 
-    private Path mainFragmentPath = Paths.get("editor", "fragments", "main");
-
-    private final CrudService<Man> manService;
-    private final CrudService<Infoblock> infoblockService;
-    private final FormValidator formValidator;
-    private final ImageManager imageManager;
+    private Path main = Paths.get("editor", "fragments", "main", "main");
+    private Path editMan = Paths.get("editor", "fragments", "main", "edit-man");
+    private Path editInfoblock = Paths.get("editor", "fragments", "main", "edit-infoblock");
+    private CrudService<Man> manService;
+    private CrudService<Infoblock> infoblockService;
+    private FormValidator formValidator;
+    private ImageManager imageManager;
 
     @Autowired
     public MainController(CrudService<Man> manService,
@@ -64,69 +62,107 @@ public class MainController {
         List<Infoblock> infoblockList = infoblockService.getAll();
         manList.sort((e1, e2) -> (Long.compare(e1.getId(), e2.getId())));
         infoblockList.sort((e1, e2) -> (Long.compare(e1.getId(), e2.getId())));
-        model.addAttribute("man_list", manList);
-        model.addAttribute("infoblock_list", infoblockList);
-        model.addAttribute(CONTENT.toString(), mainFragmentPath);
-        model.addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name());
-        model.addAttribute(TITLE.toString(), MAIN.getText());
-        model.addAttribute(MAN_IMAGES.getText(), MAN_IMAGES_URL);
-        model.addAttribute(INFOBLOCK_IMAGES.getText(), INFOBLOCK_IMAGES_URL);
+        model.addAttribute(MAN_LIST.name(), manList)
+                .addAttribute(INFOBLOCK_LIST.name(), infoblockList)
+                .addAttribute(CONTENT.toString(), main)
+                .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name())
+                .addAttribute(TITLE.toString(), MAIN.getText())
+                .addAttribute(MAN_IMAGES.getText(), MAN_IMAGES_URL)
+                .addAttribute(INFOBLOCK_IMAGES.getText(), INFOBLOCK_IMAGES_URL);
         return "editor/layouts/index";
     }
 
-    @RequestMapping(value = "/man/{id}", method = RequestMethod.POST)
-    public String main(@Valid @ModelAttribute("man") Man man,
+    @RequestMapping(value = "/man/{id}", method = RequestMethod.GET)
+    public String main(Man man,
+                       @PathVariable("id") Long id,
+                       Model model) {
+        man = manService.getById(id);
+        model.addAttribute(CONTENT.toString(), editMan)
+                .addAttribute(TITLE.toString(), EDIT_MAN.getText())
+                .addAttribute(MAN_IMAGES.getText(), MAN_IMAGES_URL)
+                .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name())
+                .addAttribute("man", man);
+        return "editor/layouts/index";
+    }
+
+    @RequestMapping(value = "/man/save", method = RequestMethod.POST)
+    public String main(@Valid Man man,
                        BindingResult bindingResult,
-                       @PathVariable("id") Long formId,
                        @RequestParam("image") MultipartFile file,
-                       RedirectAttributes redirectAttributes) throws IOException {
-        Map<String, String> errors = FormValidator.getMap(bindingResult);
-        errors.remove("imageName_error");
+                       Model model) {
         String oldImageName = manService.getById(man.getId()).getImageName();
-        String newImageExtention = file.getContentType().split("/")[1];
-        String imageName = formValidator.checkImage(oldImageName, file);
-        if (!file.isEmpty() && !imageManager.checkExtention(newImageExtention)) {
-            errors.put(IMAGE_ERROR, IMAGE_WRONG_FORMAT);
+        String fileExtention = file.getContentType().split("/")[1].toUpperCase();
+        if (!imageManager.checkExtention(fileExtention) && !file.isEmpty()){
+            model.addAttribute("image_err", IMAGE_UPLOAD_ERROR);
+        }
+        if (bindingResult.hasErrors() || model.containsAttribute("image_err")) {
+            man.setImageName(oldImageName);
+            model.addAttribute(CONTENT.name(), editMan)
+                    .addAttribute(TITLE.name(), EDIT_MAN.getText())
+                    .addAttribute(CURRENT_PAGE.name(), MenuOption.MAIN.toString())
+                    .addAttribute("man", man)
+                    .addAttribute(FolderTitle.MAN_IMAGES.getText(), MAN_IMAGES_URL);
+            return "/editor/layouts/index";
+        }
+        String imageName = (!file.isEmpty()) ? imageManager.getImageName(file, manImagesPath) : oldImageName;
+        if (!imageName.equals(oldImageName)){
+            try {
+                imageManager.deleteImage(Paths.get(manImagesPath.toString(), oldImageName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         man.setImageName(imageName);
-        if (errors.size() != 0) {
-            for (Map.Entry<String, String> entry : errors.entrySet()) {
-                redirectAttributes.addFlashAttribute(entry.getKey().split("_")[0] + formId + "_error", entry.getValue());
-            }
-        } else {
-            man.setDate(Date.valueOf(DateManager.getCurrentDate()));
-            man.setTime(Time.valueOf(DateManager.getCurrentTime()));
-            manService.update(man);
-            imageManager.createImage(file, MAN_IMAGES_URL, imageName);
-        }
+        man.setDate(getCurrentDate());
+        man.setTime(getCurrentTime());
+        manService.update(man);
         return "redirect:/editor/main";
     }
 
-    @RequestMapping(value = "/infoblock/{id}", method = RequestMethod.POST)
-    public String main(@Valid @ModelAttribute("infoblock") Infoblock infoblock,
+    @RequestMapping(value = "/infoblock/{id}", method = RequestMethod.GET)
+    public String main(Infoblock infoblock,
+                       @PathVariable("id") Long id,
+                       Model model) {
+        infoblock = infoblockService.getById(id);
+        model.addAttribute(CONTENT.toString(), editInfoblock)
+                .addAttribute(TITLE.toString(), EDIT_INFOBLOCK.getText())
+                .addAttribute(INFOBLOCK_IMAGES.getText(), INFOBLOCK_IMAGES_URL)
+                .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name())
+                .addAttribute("infoblock", infoblock);
+        return "editor/layouts/index";
+    }
+
+    @RequestMapping(value = "/infoblock/save", method = RequestMethod.POST)
+    public String main(@Valid Infoblock infoblock,
                        BindingResult bindingResult,
-                       @PathVariable("id") Long formId,
                        @RequestParam("image") MultipartFile file,
-                       RedirectAttributes redirectAttributes) throws IOException {
-        Map<String, String> errors = FormValidator.getMap(bindingResult);
-        errors.remove("imageName_error");
+                       Model model) {
         String oldImageName = infoblockService.getById(infoblock.getId()).getImageName();
-        String newImageExtention = file.getContentType().split("/")[1];
-        String imageName = formValidator.checkImage(oldImageName, file);
-        if (!file.isEmpty() && !imageManager.checkExtention(newImageExtention)) {
-            errors.put(IMAGE_ERROR, IMAGE_WRONG_FORMAT);
+        String fileExtention = file.getContentType().split("/")[1].toUpperCase();
+        if (!imageManager.checkExtention(fileExtention) && !file.isEmpty()){
+            model.addAttribute("image_err", IMAGE_UPLOAD_ERROR);
+        }
+        if (bindingResult.hasErrors() || model.containsAttribute("image_err")) {
+            infoblock.setImageName(oldImageName);
+            model.addAttribute(CONTENT.name(), editInfoblock)
+                    .addAttribute(TITLE.name(), EDIT_INFOBLOCK.getText())
+                    .addAttribute(CURRENT_PAGE.name(), MenuOption.MAIN.toString())
+                    .addAttribute("infoblock", infoblock)
+                    .addAttribute(FolderTitle.INFOBLOCK_IMAGES.getText(), INFOBLOCK_IMAGES_URL);
+            return "/editor/layouts/index";
+        }
+        String imageName = (!file.isEmpty()) ? imageManager.getImageName(file, infoblockImagesPath) : oldImageName;
+        if (!imageName.equals(oldImageName)){
+            try {
+                imageManager.deleteImage(Paths.get(infoblockImagesPath.toString(), oldImageName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         infoblock.setImageName(imageName);
-        if (errors.size() != 0) {
-            for (Map.Entry<String, String> entry : errors.entrySet()) {
-                redirectAttributes.addFlashAttribute(entry.getKey().split("_")[0] + formId + "_ierror", entry.getValue());
-            }
-        } else {
-            infoblock.setDate(Date.valueOf(DateManager.getCurrentDate()));
-            infoblock.setTime(Time.valueOf(DateManager.getCurrentTime()));
-            infoblockService.update(infoblock);
-            imageManager.createImage(file, INFOBLOCK_IMAGES_URL, imageName);
-        }
-        return "redirect:/editor/main#infoform" + formId;
+        infoblock.setDate(getCurrentDate());
+        infoblock.setTime(getCurrentTime());
+        infoblockService.update(infoblock);
+        return "redirect:/editor/main";
     }
 }

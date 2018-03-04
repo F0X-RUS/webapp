@@ -1,56 +1,54 @@
 package ru.sgmu.seem.webapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.Man;
-import ru.sgmu.seem.webapp.repositories.ManRepository;
+import ru.sgmu.seem.webapp.repositories.ManDAO;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
 public class ManService implements CrudService<Man> {
 
-    private final ManRepository manRepository;
+    private final ManDAO manDAO;
 
     @Autowired
-    public ManService(ManRepository manRepository) {
-        this.manRepository = manRepository;
+    public ManService(ManDAO manDAO) {
+        this.manDAO = manDAO;
     }
 
     @Override
     @Transactional
     public void add(Man man) {
-        manRepository.save(man);
+        manDAO.save(man);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
     public void update(Man man) {
-        manRepository.save(man);
+        manDAO.save(man);
     }
 
     @Override
     @Transactional
     public void remove(long id) {
-        Man man = manRepository.findOne(id);
+        Man man = manDAO.findOne(id);
         if (man != null) {
-            manRepository.delete(id);
+            manDAO.delete(id);
         }
     }
 
     @Override
     public Man getById(long id) {
-        return manRepository.findOne(id);
+        return manDAO.findOne(id);
     }
 
     @Override
     public List<Man> getAll() {
-        return (List<Man>) manRepository.findAll();
+        return (List<Man>) manDAO.findAll();
     }
 
 }

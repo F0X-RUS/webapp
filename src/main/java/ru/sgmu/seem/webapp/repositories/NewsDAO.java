@@ -7,6 +7,6 @@ import ru.sgmu.seem.webapp.domains.News;
 
 import java.util.List;
 
-public interface NewsRepository extends PagingAndSortingRepository<News, Long> {
+public interface NewsDAO extends PagingAndSortingRepository<News, Long> {
 
 }

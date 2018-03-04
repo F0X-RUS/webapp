@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="main" role="main" class="col-sm-10 p-3 m-4 mr-auto ml-auto mb-5">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Изменение информационного блока"</h1>
+    </div>
+    <div class="man-edit text-center">
+        <img class="border rounded p-2" th:src="@{'~/' + ${infoblock_images_path} + '/' + ${infoblock.imageName}}"/>
+    </div>
+    <div class="m-1 p-2">
+        <form method="post" enctype="multipart/form-data" action="save" th:object="${infoblock}">
+            <div class="form-group">
+                <label for="title">Заголовок</label>
+                <input th:value="${infoblock.title}" class="form-control" id="title" th:field="*{title}" type="text"  name="title" placeholder="..."/>
+                <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="display:block;" class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="slogan">Слоган</label>
+                <input th:value="${infoblock.slogan}" class="form-control" id="slogan" th:field="*{slogan}" type="text"  name="slogan" placeholder="..."/>
+                <div th:if="${#fields.hasErrors('slogan')}" th:errors="*{slogan}" style="display:block;" class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <textarea th:text="${infoblock.description}" id="description" name="description" th:field="*{description}" class="form-control" rows="3"></textarea>
+                <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="display:block;" class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="image">Изображение</label>
+                <input accept="image/jpeg,image/png,image/gif,image/jpg" id="image" name="image" type="file"/>
+                <div th:if="${#vars['image_err']}" style="display:block;" class="invalid-feedback">
+                    <span th:text="${image_err}"></span>
+                </div>
+            </div>
+            <input type="hidden" id="id" class="form-control" name="id" th:value="${infoblock.id}"/>
+            <button name="submit" type="submit" class="btn btn-primary">Сохранить</button> |
+            <a href="/editor/main"><button type="button" class="btn btn-secondary">Назад</button></a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

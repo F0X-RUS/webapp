@@ -1,23 +1,18 @@
 package ru.sgmu.seem.webapp.domains;
 
-
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-public class Course {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class EntityDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
-    private Long number;
+    private String imageName;
 
     private Date date;
 
@@ -29,12 +24,16 @@ public class Course {
         return id;
     }
 
-    public Long getNumber() {
-        return number;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     public Date getDate() {

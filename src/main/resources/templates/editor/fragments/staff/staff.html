@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Сотрудники</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <a th:href="@{'staff/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить нового сотрудника</button></a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Фотография</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Последнее изменение</th>
+            <th>Изменил(а)</th>
+            <th>Функции</th>
+        </tr>
+        </thead>
+        <tr th:each="item : ${STAFF_LIST}">
+            <td>
+                <img width="100px" th:src="@{'~/' + ${staff_images_path} + '/' + ${item.imageName}}"/>
+            </td>
+            <td class="align-middle" th:text="${item.name}"></td>
+            <td class="align-middle" th:text="${item.surname}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.patronymic,10)}"></td>
+            <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.updatedBy,7)}"></td>
+            <td class="align-middle">
+                <a th:href="@{'staff/' + ${item.id} + '/edit'}"><button type="submit" class="btn btn-primary">Изменить</button></a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                        th:attr="data-id=${item.id},data-title=${item.surname} + ' ' + ${item.name}  + ' ' + ${item.patronymic},
+                                data-date=${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}">
+                    Удалить
+                </button>
+            </td>
+        </tr>
+    </table>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Вы действительно хотите удалить сотрудника?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <h5 class="card-title">Инициалы:</h5>
+                        <p id="title" class="card-text"></p>
+                        <p class="card-text"><small id="date" class="text-muted"></small></p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" enctype="multipart/form-data" action="/editor/staff/delete">
+                        <input type="hidden" id="id" class="form-control" name="id"/>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="main" role="main" class="container mt-4">
+    <h1 class="display-4 ml-3 mr-3">Сотрудники кафедры</h1>
+    <hr class="my-4"/>
+    <div class="col-12 ml-3 mr-3 row">
+        <div class="ml-2" th:each='item : ${STAFF_MAP}'>
+            <p>
+                <a class="btn btn-primary" th:text="${item.key}" data-toggle="collapse"
+                    th:href="'#elem' + ${item.key}" role="button" aria-expanded="false"
+                    th:attr="aria-controls='#elem' + ${item.key}">
+                </a>
+            </p>
+        </div>
+    </div>
+    <div class="col-12 ml-3 mr-3" th:each='item : ${STAFF_MAP}'>
+        <div class="collapse" th:id="'elem' + ${item.key}">
+            <div th:each="staff : ${item.value}">
+                <a class="inline" th:href="'staff/' + ${staff.id}" th:text="${staff.surname} + ' ' + ${staff.name} + ' ' + ${staff.patronymic}"></a>
+                <span th:text="' - ' + ${staff.position}"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

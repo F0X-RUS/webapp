@@ -53,4 +53,10 @@ public class ImageController {
     public ResponseEntity<?> infoblockOneRawImage(@PathVariable String filename) {
         return findOne(filename, infoblockImagesPath.toString());
     }
+
+    @RequestMapping(value = "images/staff/" + FILENAME, method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> staffOneRawImage(@PathVariable String filename) {
+        return findOne(filename, staffImagesPath.toString());
+    }
 }

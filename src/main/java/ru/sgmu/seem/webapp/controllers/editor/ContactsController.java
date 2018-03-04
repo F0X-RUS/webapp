@@ -21,6 +21,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
+import static ru.sgmu.seem.utils.DateManager.*;
 import static ru.sgmu.seem.utils.enums.PageAttribute.CONTENT;
 import static ru.sgmu.seem.utils.enums.PageAttribute.MENU_OPTION;
 import static ru.sgmu.seem.utils.enums.PageAttribute.TITLE;
@@ -58,8 +59,8 @@ public class ContactsController {
                          @Valid Contact contact,
                          BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            contact.setDate(Date.valueOf(DateManager.getCurrentDate()));
-            contact.setTime(Time.valueOf(DateManager.getCurrentTime()));
+            contact.setDate(getCurrentDate());
+            contact.setTime(getCurrentTime());
             //contact.setUpdatedBy("");
             contactService.update(contact);
         }
@@ -89,8 +90,8 @@ public class ContactsController {
                     .addAttribute(TITLE.name(), ADD_CONTACTS.getText());
             return "editor/layouts/index";
         }
-        contact.setTime(Time.valueOf(DateManager.getCurrentTime()));
-        contact.setDate(Date.valueOf(DateManager.getCurrentDate()));
+        contact.setTime(getCurrentTime());
+        contact.setDate(getCurrentDate());
         //contact.setUpdatedBy();
         contactService.add(contact);
         List<Contact> list = contactService.getAll();

@@ -16,7 +16,7 @@
                     <h2 th:text="${news.title}">Заголовок</h2>
                     <p th:text="${news.content}">Содержание</p>
                     <p class="card-text">
-                        <small th:text="${news.date} + ' ' + ${news.time}" class="text-muted"></small>
+                        <small th:text="@{'Добавлено: ' + ${#dates.format(news.time, 'HH:mm')} + ' ' + ${#dates.format(news.date, 'dd.MM.yyyy')}}" class="text-muted"></small>
                     </p>
                 </div>
             </div>

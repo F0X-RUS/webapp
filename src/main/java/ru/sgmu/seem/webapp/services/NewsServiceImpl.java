@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.News;
-import ru.sgmu.seem.webapp.repositories.NewsRepository;
+import ru.sgmu.seem.webapp.repositories.NewsDAO;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
@@ -17,56 +17,59 @@ import java.util.List;
 @Transactional
 public class NewsServiceImpl implements NewsService {
 
-    private final NewsRepository newsRepository;
+    private final NewsDAO newsDAO;
 
     @Autowired
-    public NewsServiceImpl(NewsRepository newsRepository) {
-        this.newsRepository = newsRepository;
+    public NewsServiceImpl(NewsDAO newsDAO) {
+        this.newsDAO = newsDAO;
     }
 
     @Override
     @Transactional
     public void add(News news) {
-        newsRepository.save(news);
+        newsDAO.save(news);
     }
 
     @Override
     @Transactional
     public void update(News news) {
-        newsRepository.save(news);
+        newsDAO.save(news);
     }
 
     @Override
     public void remove(long id) {
-        newsRepository.delete(id);
+        newsDAO.delete(id);
     }
 
     @Override
     public News getById(long id) {
-        return newsRepository.findOne(id);
+        return newsDAO.findOne(id);
     }
 
     @Override
     public List<News> getAll() {
-        return (List<News>) newsRepository.findAll();
+        return (List<News>) newsDAO.findAll();
     }
 
     @Override
     public List<News> getLast3() {
-        List<News> newsList = (List<News>) newsRepository.findAll();
+        List<News> newsList = (List<News>) newsDAO.findAll();
         Collections.reverse(newsList);
-        return newsList.subList(0, 3);
+        if (newsList.size() >= 3){
+            newsList = newsList.subList(0, 3);
+        }
+        return newsList;
     }
 
     @Override
     public Page<News> findAll(Pageable pageable) {
-        return newsRepository.findAll(pageable);
+        return newsDAO.findAll(pageable);
     }
 
     @Override
     public Page<News> getPage(int pageNumber, int size, Sort.Direction direction, String... orderParam) {
         PageRequest pageRequest = new PageRequest(pageNumber, size, direction, orderParam);
-        return newsRepository.findAll(pageRequest);
+        return newsDAO.findAll(pageRequest);
     }
 
 

@@ -5,36 +5,31 @@
     <title>Редактирование - Добавление новости</title>
 </head>
 <body>
-    <div th:fragment="CONTENT" role="main" class="col-sm-9 pt-3">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">Добавление новости</h1>
-        </div>
-
-        <form method="post" enctype="multipart/form-data" action="/editor/news/add" modelAttribute="news">
-            <div class="form-group">
-                <label for="title">Заголовок</label>
-                <input name="title" type="text" class="form-control" id="title" placeholder="Заголовок..."/>
-                <div th:if="${#vars['title_error']}" style="display:block;" class="invalid-feedback">
-                    Заголовок должен содержать минимум 7 символов.
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="content">Содержание</label>
-                <textarea id="content" name="content" class="form-control" rows="3"></textarea>
-                <div th:if="${#vars['content_error']}" style="display:block;" class="invalid-feedback">
-                    Содержание должно состоять минимум из 10 символов.
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="image">Изображение</label>
-                <input accept="image/jpeg,image/png,image/gif,image/jpg" id="image" name="image" type="file"/>
-                <div th:if="${#vars['image_error']}" style="display:block;" class="invalid-feedback">
-                    Требуется выбрать изображение.
-                </div>
-            </div>
-            <button name="submit" type="submit" class="btn btn-primary">Добавить</button> |
-            <button name="cancel" type="submit" class="btn btn-primary">Назад</button>
-        </form>
+<div th:fragment="main" role="main" class="col-sm-10 p-3 m-4 mr-auto ml-auto mt-5 mb-5 ">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Добавление новости</h1>
     </div>
+    <form method="post" enctype="multipart/form-data" action="add" th:object="${news}">
+        <div class="form-group">
+            <label for="title">Заголовок</label>
+            <input class="form-control" id="title" th:field="*{title}" type="text"  name="title" placeholder="..."/>
+            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <label for="content">Содержание</label>
+            <textarea id="content" name="content" th:field="*{content}" class="form-control" rows="3"></textarea>
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <label for="image">Изображение</label>
+            <input th:required="required" accept="image/jpeg,image/png,image/gif,image/jpg" id="image" name="image" type="file"/>
+            <div th:if="${#vars['image_err']}" style="display:block;" class="invalid-feedback">
+                <span th:text="${image_err}"></span>
+            </div>
+        </div>
+        <button name="submit" type="submit" class="btn btn-primary">Добавить</button> |
+        <a href="/editor/news"><button type="button" class="btn btn-secondary">Назад</button></a>
+    </form>
+</div>
 </body>
 </html>

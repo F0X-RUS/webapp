@@ -7,5 +7,6 @@ public enum ListTitle {
     CONTACTS_LIST,
     PHONE_LIST,
     ADDRESS_LIST,
-    PASSAGE_LIST
+    PASSAGE_LIST,
+    STAFF_LIST,
 }

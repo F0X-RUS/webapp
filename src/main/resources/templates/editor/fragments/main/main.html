@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Редактирование - Главная страница</title>
+</head>
+<body>
+<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Изменение содержимого главной страницы</h1>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Фотография</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Последнее изменение</th>
+                <th>Изменил(а)</th>
+                <th>Функции</th>
+            </tr>
+        </thead>
+        <tr th:each="item : ${MAN_LIST}">
+            <td>
+                <img width="100px" th:src="@{'~/' + ${man_images_path} + '/' + ${item.imageName}}"/>
+            </td>
+            <td class="align-middle" th:text="${item.surname}"></td>
+            <td class="align-middle" th:text="${item.name}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.patronymic,10)}"></td>
+            <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.updatedBy,7)}"></td>
+            <td class="align-middle">
+                <a th:href="@{'main/man/' + ${item.id}}"><button type="submit" class="btn btn-primary">Изменить</button></a>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Изображение</th>
+            <th>Заголовок</th>
+            <th>Слоган</th>
+            <th>Последнее изменение</th>
+            <th>Изменил(а)</th>
+            <th>Функции</th>
+        </tr>
+        </thead>
+        <tr th:each="item : ${INFOBLOCK_LIST}">
+            <td>
+                <img width="100px" th:src="@{'~/' + ${infoblock_images_path} + '/' + ${item.imageName}}"/>
+            </td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.title,17)}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.slogan,15)}"></td>
+            <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.updatedBy,7)}"></td>
+            <td class="align-middle">
+                <a th:href="@{'main/infoblock/' + ${item.id}}"><button type="submit" class="btn btn-primary">Изменить</button></a>
+            </td>
+        </tr>
+    </table>
+
+</div>
+</body>
+</html>

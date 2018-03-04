@@ -8,14 +8,13 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-public class Infoblock {
+public class Infoblock extends EntityDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Long id;
 
-    @NotNull
-    private String imageName;
+//    private String imageName;
 
     @NotNull
     @Size(min=5, max=50)
@@ -27,27 +26,27 @@ public class Infoblock {
     @Size(min=5)
     private String description;
 
-    private Date date;
+//    private Date date;
+//
+//    private Time time;
 
-    private Time time;
+//    private String updatedBy;
 
-    private String updatedBy;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public String getImageName() {
+//        return imageName;
+//    }
+//
+//    public void setImageName(String imageName) {
+//        this.imageName = imageName;
+//    }
 
     public String getTitle() {
         return title;
@@ -73,27 +72,27 @@ public class Infoblock {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date dateLastUpdate) {
-        this.date = dateLastUpdate;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time timeLastUpdate) {
-        this.time = timeLastUpdate;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Date dateLastUpdate) {
+//        this.date = dateLastUpdate;
+//    }
+//
+//    public Time getTime() {
+//        return time;
+//    }
+//
+//    public void setTime(Time timeLastUpdate) {
+//        this.time = timeLastUpdate;
+//    }
+//
+//    public String getUpdatedBy() {
+//        return updatedBy;
+//    }
+//
+//    public void setUpdatedBy(String updatedBy) {
+//        this.updatedBy = updatedBy;
+//    }
 }

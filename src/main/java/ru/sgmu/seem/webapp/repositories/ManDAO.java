@@ -9,7 +9,7 @@ import ru.sgmu.seem.webapp.domains.Man;
 import java.util.List;
 
 @Repository
-public interface ManRepository extends CrudRepository<Man, Long> {
+public interface ManDAO extends CrudRepository<Man, Long> {
 
     /*@Autowired
     private SessionFactory sessionFactory;

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Добавление сотрудника</h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" action="add" th:object="${staff}">
+        <div class="form-group">
+            <label for="surname">Фамилия</label>
+            <input class="form-control" id="surname" th:field="*{surname}" type="text"  name="surname" placeholder="..."/>
+            <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <label for="name">Имя</label>
+            <input class="form-control" id="name" th:field="*{name}" type="text"  name="name" placeholder="..."/>
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <label for="patronymic">Отчество</label>
+            <input class="form-control" id="patronymic" th:field="*{patronymic}" type="text"  name="patronymic" placeholder="..."/>
+            <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <textarea id="description" name="description" th:field="*{description}" class="form-control" rows="3"></textarea>
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <label for="position">Должность</label>
+            <input class="form-control" id="position" th:field="*{position}" type="text"  name="position" placeholder="..."/>
+            <div th:if="${#fields.hasErrors('position')}" th:errors="*{position}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <label for="image">Изображение</label>
+            <input th:required="required" accept="image/jpeg,image/png,image/gif,image/jpg" id="image" name="image" type="file"/>
+            <div th:if="${#vars['image_err']}" style="display:block;" class="invalid-feedback">
+                <span th:text="${image_err}"></span>
+            </div>
+        </div>
+        <button name="submit" type="submit" class="btn btn-primary">Добавить</button> |
+        <a href="/editor/staff"><button type="button" class="btn btn-secondary">Назад</button></a>
+    </form>
+
+
+</div>
+</body>
+</html>

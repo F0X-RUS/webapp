@@ -3,7 +3,7 @@ package ru.sgmu.seem.webapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.Contact;
-import ru.sgmu.seem.webapp.repositories.ContactRepository;
+import ru.sgmu.seem.webapp.repositories.ContactDAO;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -12,35 +12,35 @@ import java.util.List;
 @Transactional
 public class ContactService implements CrudService<Contact>{
 
-    private final ContactRepository contactRepository;
+    private final ContactDAO contactDAO;
 
     @Autowired
-    public ContactService(ContactRepository contactRepository){
-        this.contactRepository = contactRepository;
+    public ContactService(ContactDAO contactDAO){
+        this.contactDAO = contactDAO;
     }
 
     @Override
     public void add(Contact entity) {
-        contactRepository.save(entity);
+        contactDAO.save(entity);
     }
 
     @Override
     public void update(Contact entity) {
-        contactRepository.save(entity);
+        contactDAO.save(entity);
     }
 
     @Override
     public void remove(long id) {
-        contactRepository.delete(id);
+        contactDAO.delete(id);
     }
 
     @Override
     public Contact getById(long id) {
-        return contactRepository.findOne(id);
+        return contactDAO.findOne(id);
     }
 
     @Override
     public List<Contact> getAll() {
-        return (List<Contact>) contactRepository.findAll();
+        return (List<Contact>) contactDAO.findAll();
     }
 }

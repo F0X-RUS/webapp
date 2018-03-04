@@ -2,36 +2,23 @@ package ru.sgmu.seem.webapp.domains;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.sql.Date;
+import java.sql.Time;
 
 @Entity
-public class Passage {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+@AttributeOverride(name = "imageName", column = @Column(name = "image_name", insertable = false, updatable = false))
+public class Passage extends EntityDetails{
 
     @Column(length = 400)
-    @Size(max = 400)
+    @Size(min = 10, max = 400)
     private String title;
 
     @NotEmpty
     @Column(length = 65535)
+    @Size(min = 20)
     private String content;
-
-    private String updatedBy;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -48,14 +35,4 @@ public class Passage {
     public void setContent(String content) {
         this.content = content;
     }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-
 }

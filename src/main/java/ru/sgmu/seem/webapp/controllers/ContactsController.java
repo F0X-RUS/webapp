@@ -16,6 +16,7 @@ import java.sql.Time;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ru.sgmu.seem.utils.DateManager.*;
 import static ru.sgmu.seem.utils.enums.PageAttribute.CONTENT;
 import static ru.sgmu.seem.utils.enums.PageAttribute.CURRENT_PAGE;
 import static ru.sgmu.seem.utils.enums.PageAttribute.TITLE;
@@ -74,15 +75,15 @@ public class ContactsController {
         Contact phone = new Contact();
         phone.setType("Телефон");
         phone.setContent(DEFAULT_PHONE);
-        phone.setDate(Date.valueOf(DateManager.getCurrentDate()));
-        phone.setTime(Time.valueOf(DateManager.getCurrentTime()));
+        phone.setDate(getCurrentDate());
+        phone.setTime(getCurrentTime());
         phone.setUpdatedBy("admin");
         contactService.add(phone);
         Contact address = new Contact();
         address.setType("Адрес");
         address.setContent(DEFAULT_ADDRESS);
-        address.setDate(Date.valueOf(DateManager.getCurrentDate()));
-        address.setTime(Time.valueOf(DateManager.getCurrentTime()));
+        address.setDate(getCurrentDate());
+        address.setTime(getCurrentTime());
         address.setUpdatedBy("admin");
         contactService.add(address);
     }

@@ -10,6 +10,6 @@ import ru.sgmu.seem.webapp.domains.Infoblock;
 import java.util.List;
 
 @Repository
-public interface InfoblockRepository extends CrudRepository<Infoblock, Long> {
+public interface InfoblockDAO extends CrudRepository<Infoblock, Long> {
 
 }

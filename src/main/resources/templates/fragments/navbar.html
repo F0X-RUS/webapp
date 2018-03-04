@@ -2,15 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Title</title>
-
 </head>
 <body>
-
-    <header>
-        <!--    TOP NAVBAR  -->
-        <nav th:replace="${'/fragments/navbar'} :: navbar(${'forum'})"></nav>
-    </header>
 
     <nav th:fragment="navbar(activeTab)" role="navigation" class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container d-flex justify-content-between">
@@ -44,15 +37,6 @@
                             Новости
                         </a>
                     </li>
-                    <!--<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Кафедра
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" th:href="@{'/info'}">Информация</a>
-                            <a class="dropdown-item" th:href="@{'/staff'}">Сотрудники</a>
-                        </div>
-                    </li>-->
                     <li class="nav-item">
                         <a th:class="${activeTab == 'ABOUT'} ? 'active nav-link' : 'nav-link'" th:href="@{'/about'}">
                             <span data-feather="shopping-cart"></span>
