@@ -3,6 +3,7 @@ package ru.sgmu.seem.webapp.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import ru.sgmu.seem.webapp.domains.Thread;
 import ru.sgmu.seem.webapp.services.CrudService;
 import ru.sgmu.seem.webapp.services.EducationStepService;
 
+import javax.validation.Valid;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -26,9 +28,11 @@ import static ru.sgmu.seem.utils.enums.MenuOption.*;
 @RequestMapping(value = "/forum")
 public class ForumController {
 
-    private Path forum = Paths.get("fragments", "forum", "forum");
+    private Path forumLayout = Paths.get("fragments", "forum", "layouts", "forum");
+    private Path forumMain = Paths.get("fragments", "forum", "forum");
     private Path coursesFragment = Paths.get("fragments", "forum", "courses");
     private Path threadFragment = Paths.get("fragments", "forum", "thread");
+    private Path addThreadFragment = Paths.get("fragments", "forum", "add-thread");
     private CrudService<EducationStep> educationStepService;
     private CrudService<Course> courseCrudService;
     private CrudService<Specialization> specializationCrudService;
@@ -52,7 +56,8 @@ public class ForumController {
     public String educationSteps(Model model) {
         List<EducationStep> educationSteps = educationStepService.getAll();
         educationSteps.sort(Comparator.comparing(EntityDetails::getId));
-        model.addAttribute(CONTENT.name(), forum)
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", forumMain)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", educationSteps);
@@ -64,7 +69,8 @@ public class ForumController {
                           @PathVariable("educ_id") Long educ_id) {
         SortedSet<Course> courses = new TreeSet<>(Comparator.comparing(EntityDetails::getId));
         courses.addAll(educationStepService.getById(educ_id).getCourses());
-        model.addAttribute(CONTENT.name(), coursesFragment)
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", coursesFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", courses)
@@ -83,7 +89,8 @@ public class ForumController {
         SortedSet<Specialization> courseSpecList = new TreeSet<>(Comparator.comparing(EntityDetails::getId));
         courseSpecList.addAll(course.getSpecializations());
         courseSpecList.retainAll(educSpecList);     // RETAIN SPECS FROM COURSE IN CURRENT EDUC_STEP
-        model.addAttribute(CONTENT.name(), coursesFragment)
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", coursesFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", courseSpecList)
@@ -95,9 +102,9 @@ public class ForumController {
 
     @RequestMapping(value = "/{educ_id}/{course_id}/{spec_id}", method = RequestMethod.GET)
     public String disciplines(Model model,
-                                  @PathVariable("educ_id") Long educ_id,
-                                  @PathVariable("course_id") Long course_id,
-                                  @PathVariable("spec_id") Long spec_id) {
+                              @PathVariable("educ_id") Long educ_id,
+                              @PathVariable("course_id") Long course_id,
+                              @PathVariable("spec_id") Long spec_id) {
         EducationStep educationStep = educationStepService.getById(educ_id);
         Course course = courseCrudService.getById(course_id);
         Specialization specialization = specializationCrudService.getById(spec_id);
@@ -107,11 +114,12 @@ public class ForumController {
         courseDiscList.retainAll(educDiscList);
         specDiscList.retainAll(courseDiscList);
         specDiscList = specDiscList.stream().sorted(Comparator.comparing(EntityDetails::getId)).collect(Collectors.toSet());
-        model.addAttribute(CONTENT.name(), coursesFragment)
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", coursesFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", specDiscList)
-                .addAttribute("current_id",spec_id)
+                .addAttribute("current_id", spec_id)
                 .addAttribute("educ", educationStep)
                 .addAttribute("course", course)
                 .addAttribute("spec", specialization);
@@ -120,10 +128,10 @@ public class ForumController {
 
     @RequestMapping(value = "/{educ_id}/{course_id}/{spec_id}/{disc_id}", method = RequestMethod.GET)
     public String threads(Model model,
-                              @PathVariable("educ_id") Long educ_id,
-                              @PathVariable("course_id") Long course_id,
-                              @PathVariable("spec_id") Long spec_id,
-                              @PathVariable("disc_id") Long disc_id) {
+                          @PathVariable("educ_id") Long educ_id,
+                          @PathVariable("course_id") Long course_id,
+                          @PathVariable("spec_id") Long spec_id,
+                          @PathVariable("disc_id") Long disc_id) {
         EducationStep educationStep = educationStepService.getById(educ_id);
         Course course = courseCrudService.getById(course_id);
         Specialization specialization = specializationCrudService.getById(spec_id);
@@ -136,11 +144,12 @@ public class ForumController {
         specThreadList.retainAll(courseThreadList);
         discThreadList.retainAll(specThreadList);
         discThreadList = discThreadList.stream().sorted(Comparator.comparing(EntityDetails::getId)).collect(Collectors.toSet());
-        model.addAttribute(CONTENT.name(), coursesFragment)
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", coursesFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", discThreadList)
-                .addAttribute("current_id",disc_id)
+                .addAttribute("current_id", disc_id)
                 .addAttribute("educ", educationStep)
                 .addAttribute("course", course)
                 .addAttribute("spec", specialization)
@@ -150,17 +159,18 @@ public class ForumController {
 
     @RequestMapping(value = "/{educ_id}/{course_id}/{spec_id}/{disc_id}/{thread_id}", method = RequestMethod.GET)
     public String thread(Model model,
-                              @PathVariable("educ_id") Long educ_id,
-                              @PathVariable("course_id") Long course_id,
-                              @PathVariable("spec_id") Long spec_id,
-                              @PathVariable("disc_id") Long disc_id,
-                              @PathVariable("thread_id") Long thread_id) {
+                         @PathVariable("educ_id") Long educ_id,
+                         @PathVariable("course_id") Long course_id,
+                         @PathVariable("spec_id") Long spec_id,
+                         @PathVariable("disc_id") Long disc_id,
+                         @PathVariable("thread_id") Long thread_id) {
         Thread currentThread = threadCrudService.getById(thread_id);
         EducationStep educationStep = educationStepService.getById(educ_id);
         Course course = courseCrudService.getById(course_id);
         Specialization specialization = specializationCrudService.getById(spec_id);
         Discipline discipline = disciplineCrudService.getById(disc_id);
-        model.addAttribute(CONTENT.name(), threadFragment)
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", threadFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("thread", currentThread)
@@ -171,31 +181,66 @@ public class ForumController {
         return "layouts/main";
     }
 
-    @RequestMapping(value = "/{educ_id}/{course_id}/{spec_id}/{disc_id}/{thread_id}/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/{educ_id}/{course_id}/{spec_id}/{disc_id}/add", method = RequestMethod.GET)
     public String threadAdd(Model model,
-                         @PathVariable("educ_id") Long educ_id,
-                         @PathVariable("course_id") Long course_id,
-                         @PathVariable("spec_id") Long spec_id,
-                         @PathVariable("disc_id") Long disc_id,
-                         @PathVariable("thread_id") Long thread_id,
-                         Thread thread) {
-
-        Thread currentThread = threadCrudService.getById(thread_id);
+                            @PathVariable("educ_id") Long educ_id,
+                            @PathVariable("course_id") Long course_id,
+                            @PathVariable("spec_id") Long spec_id,
+                            @PathVariable("disc_id") Long disc_id,
+                            Thread thread) {
         EducationStep educationStep = educationStepService.getById(educ_id);
         Course course = courseCrudService.getById(course_id);
         Specialization specialization = specializationCrudService.getById(spec_id);
         Discipline discipline = disciplineCrudService.getById(disc_id);
-
-
-
-        model.addAttribute(CONTENT.name(), threadFragment)
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", addThreadFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
-                .addAttribute("thread", currentThread)
                 .addAttribute("educ", educationStep)
                 .addAttribute("course", course)
                 .addAttribute("spec", specialization)
                 .addAttribute("disc", discipline);
+        return "layouts/main";
+    }
+
+    @RequestMapping(value = "/{educ_id}/{course_id}/{spec_id}/{disc_id}/add", method = RequestMethod.POST)
+    public String threadSave(Model model,
+                             @Valid Thread thread,
+                             BindingResult bindingResult,
+                             @PathVariable("educ_id") Long educ_id,
+                             @PathVariable("course_id") Long course_id,
+                             @PathVariable("spec_id") Long spec_id,
+                             @PathVariable("disc_id") Long disc_id) {
+        if (bindingResult.hasErrors()){
+            model.addAttribute(CONTENT.name(), forumLayout)
+                    .addAttribute("FORUM_CONTENT", addThreadFragment)
+                    .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
+                    .addAttribute(CURRENT_PAGE.name(), FORUM.name());
+            return "layouts/main";
+        }
+        thread.setDate(getCurrentDate());
+        thread.setTime(getCurrentTime());
+        //TODO: SET UPDATED BY
+//        thread.setUpdatedBy("");
+        EducationStep educationStep = educationStepService.getById(educ_id);
+        Course course = courseCrudService.getById(course_id);
+        Specialization specialization = specializationCrudService.getById(spec_id);
+        Discipline discipline = disciplineCrudService.getById(disc_id);
+        thread.setDiscipline(discipline);
+        thread.getEducationSteps().add(educationStep);
+        thread.getCourses().add(course);
+        thread.getSpecializations().add(specialization);
+        threadCrudService.add(thread);
+        educationStep.getThreads().add(thread);
+        educationStepService.update(educationStep);
+//        course.getThreads().add(thread);
+//        courseCrudService.update(course);
+//        specialization.getThreads().add(thread);
+//        specializationCrudService.update(specialization);
+        model.addAttribute(CONTENT.name(), forumLayout)
+                .addAttribute("FORUM_CONTENT", threadFragment)
+                .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
+                .addAttribute(CURRENT_PAGE.name(), FORUM.name());
         return "layouts/main";
     }
 }

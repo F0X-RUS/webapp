@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+<div th:fragment="main" role="main" class="container mt-4">
+    <h1 class="display-4 ml-3 mr-3">Форум</h1>
+    <hr class="my-4"/>
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+
+        <div th:replace="${FORUM_CONTENT}"></div>
+
+        <small class="d-block text-right mt-3">
+            <a href="#">Ссылка</a> <span th:text="${text}"></span>
+        </small>
+    </div>
+</div>
+</body>
+</html>

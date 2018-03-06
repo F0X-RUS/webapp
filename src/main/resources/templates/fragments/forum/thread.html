@@ -5,21 +5,17 @@
 </head>
 <body>
 <div th:fragment="main" role="main" class="container mt-4">
-    <h1 class="display-4 ml-3 mr-3">Форум</h1>
-    <hr class="my-4"/>
-    <div class="my-3 p-3 bg-white rounded box-shadow">
-        <nav th:replace="@{'fragments/forum/breadcrumb'} :: navbar"></nav>
+    <nav th:replace="@{'fragments/forum/breadcrumb'} :: navbar"></nav>
 
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0" th:text="${thread.name}">Заголовок</h5>
-            </div>
-            <div class="card-body bg-transparent">
-                <p th:text="${thread.content}" class="card-text">Содержание темы.</p>
-            </div>
-            <div class="card-footer bg-transparent text-right">
-                <small th:text="@{'Автор: ' + ${thread.updatedBy} + '. Дата последнего изменения: ' + ${thread.time} + ' ' + ${thread.date}}"></small>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0" th:text="${thread.name}">Заголовок</h5>
+        </div>
+        <div class="card-body bg-transparent">
+            <p th:text="${thread.content}" class="card-text">Содержание темы.</p>
+        </div>
+        <div class="card-footer bg-transparent text-right">
+            <small th:text="@{'Автор: ' + ${thread.updatedBy} + '. Дата последнего изменения: ' + ${thread.time} + ' ' + ${thread.date}}"></small>
         </div>
     </div>
 </div>
