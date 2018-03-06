@@ -30,12 +30,12 @@ public class ContactService implements CrudService<Contact>{
     }
 
     @Override
-    public void remove(long id) {
+    public void remove(Long id) {
         contactDAO.delete(id);
     }
 
     @Override
-    public Contact getById(long id) {
+    public Contact getById(Long id) {
         return contactDAO.findOne(id);
     }
 

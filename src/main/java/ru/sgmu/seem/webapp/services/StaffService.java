@@ -28,14 +28,14 @@ public class StaffService implements CrudService<Staff>{
     }
 
     @Override
-    public void remove(long id) {
+    public void remove(Long id) {
         if (staffDAO.exists(id)){
             staffDAO.delete(id);
         }
     }
 
     @Override
-    public Staff getById(long id) {
+    public Staff getById(Long id) {
         return staffDAO.findOne(id);
     }
 

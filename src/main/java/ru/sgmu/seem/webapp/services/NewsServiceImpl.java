@@ -37,12 +37,12 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void remove(long id) {
+    public void remove(Long id) {
         newsDAO.delete(id);
     }
 
     @Override
-    public News getById(long id) {
+    public News getById(Long id) {
         return newsDAO.findOne(id);
     }
 

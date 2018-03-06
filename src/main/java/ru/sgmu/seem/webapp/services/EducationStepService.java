@@ -17,27 +17,29 @@ public class EducationStepService implements CrudService<EducationStep>{
 
     @Override
     public void add(EducationStep entity) {
-
+        educationStepDAO.save(entity);
     }
 
     @Override
     public void update(EducationStep entity) {
-
+        educationStepDAO.save(entity);
     }
 
     @Override
-    public void remove(long id) {
-
+    public void remove(Long id) {
+        if (educationStepDAO.exists(id)) {
+            educationStepDAO.delete(id);
+        }
     }
 
     @Override
-    public EducationStep getById(long id) {
-        return null;
+    public EducationStep getById(Long id) {
+        return educationStepDAO.findOne(id);
     }
 
     @Override
     public List<EducationStep> getAll() {
-        return null;
+        return (List<EducationStep>)educationStepDAO.findAll();
     }
 
 }

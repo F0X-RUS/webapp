@@ -2,8 +2,6 @@ package ru.sgmu.seem.webapp.domains;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @AttributeOverride(name = "imageName", column = @Column(name = "image_name", insertable = false, updatable = false))
-public class EducationStep extends EntityDetails{
+public class Specialization extends EntityDetails{
 
     @Size(max = 255)
     private String name;
@@ -19,26 +17,16 @@ public class EducationStep extends EntityDetails{
     @Column(length = 65535)
     private String description;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "EducationStep_Course",
-            joinColumns = { @JoinColumn(name = "educationstep_id") },
-            inverseJoinColumns = { @JoinColumn(name = "course_id") }
-    )
+    @ManyToMany(mappedBy = "specializations")
+    private Set<EducationStep> educationSteps = new HashSet<>(0);
+
+    @ManyToMany(mappedBy = "specializations")
     private Set<Course> courses = new HashSet<>(0);
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "EducationStep_Course_Specialization",
-            joinColumns = { @JoinColumn(name = "educationstep_id") },
-            inverseJoinColumns = { @JoinColumn(name = "specialization_id") }
-    )
-    private Set<Specialization> specializations = new HashSet<>(0);
-
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
             name = "EducationStep_Course_Specialization_discipline",
-            joinColumns = { @JoinColumn(name = "educationstep_id") },
+            joinColumns = { @JoinColumn(name = "specialization_id") },
             inverseJoinColumns = { @JoinColumn(name = "discipline_id") }
     )
     private Set<Discipline> disciplines = new HashSet<>(0);
@@ -46,7 +34,7 @@ public class EducationStep extends EntityDetails{
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "EducationStep_Course_Specialization_discipline_thread",
-            joinColumns = { @JoinColumn(name = "educationstep_id") },
+            joinColumns = { @JoinColumn(name = "specialization_id") },
             inverseJoinColumns = { @JoinColumn(name = "thread_id") }
     )
     private Set<Thread> threads = new HashSet<>(0);
@@ -67,20 +55,20 @@ public class EducationStep extends EntityDetails{
         this.description = description;
     }
 
+    public Set<EducationStep> getEducationSteps() {
+        return educationSteps;
+    }
+
+    public void setEducationSteps(Set<EducationStep> educationSteps) {
+        this.educationSteps = educationSteps;
+    }
+
     public Set<Course> getCourses() {
         return courses;
     }
 
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
-    }
-
-    public Set<Specialization> getSpecializations() {
-        return specializations;
-    }
-
-    public void setSpecializations(Set<Specialization> specializations) {
-        this.specializations = specializations;
     }
 
     public Set<Discipline> getDisciplines() {

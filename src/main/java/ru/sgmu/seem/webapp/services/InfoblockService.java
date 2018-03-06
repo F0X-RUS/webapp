@@ -34,7 +34,7 @@ public class InfoblockService implements CrudService<Infoblock>{
 
     @Override
     @Transactional
-    public void remove(long id) {
+    public void remove(Long id) {
         Infoblock infoblock = infoblockDAO.findOne(id);
         if (infoblock != null) {
             infoblockDAO.delete(id);
@@ -42,7 +42,7 @@ public class InfoblockService implements CrudService<Infoblock>{
     }
 
     @Override
-    public Infoblock getById(long id) {
+    public Infoblock getById(Long id) {
         return infoblockDAO.findOne(id);
     }
 

@@ -30,7 +30,7 @@ public class PassageService implements CrudService<Passage>{
     }
 
     @Override
-    public void remove(long id) {
+    public void remove(Long id) {
         Passage passage = passageDAO.findOne(id);
         if (passage != null){
             passageDAO.delete(id);
@@ -38,7 +38,7 @@ public class PassageService implements CrudService<Passage>{
     }
 
     @Override
-    public Passage getById(long id) {
+    public Passage getById(Long id) {
         return passageDAO.findOne(id);
     }
 

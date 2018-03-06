@@ -34,7 +34,7 @@ public class ManService implements CrudService<Man> {
 
     @Override
     @Transactional
-    public void remove(long id) {
+    public void remove(Long id) {
         Man man = manDAO.findOne(id);
         if (man != null) {
             manDAO.delete(id);
@@ -42,7 +42,7 @@ public class ManService implements CrudService<Man> {
     }
 
     @Override
-    public Man getById(long id) {
+    public Man getById(Long id) {
         return manDAO.findOne(id);
     }
 

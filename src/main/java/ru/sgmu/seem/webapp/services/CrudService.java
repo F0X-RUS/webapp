@@ -8,9 +8,9 @@ public interface CrudService<T> {
 
     void update(T entity);
 
-    void remove(long id);
+    void remove(Long id);
 
-    T getById(long id);
+    T getById(Long id);
 
     List<T> getAll();
 }

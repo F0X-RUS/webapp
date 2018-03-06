@@ -1,12 +1,13 @@
 package ru.sgmu.seem.webapp.domains;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class EntityDetails {
+public abstract class EntityDetails implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
