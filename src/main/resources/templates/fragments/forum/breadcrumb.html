@@ -7,29 +7,24 @@
 <nav th:fragment="navbar" class="bg-transparent" style="display: inline-block;" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a th:href="@{/forum}">Форум</a></li>
-
-        <li class="breadcrumb-item" th:if="${educ_id}">
-            <a th:text="${educ_name}" th:if="${course_id}" th:href="@{'/forum/' + ${educ_id}}">Курсы</a>
-            <span th:text="${educ_name}" th:if="@{not ${course_id}}">Курсы</span>
+        <li class="breadcrumb-item" th:if="@{${educ} != null}">
+            <a th:text="${educ.name}" th:if="@{${course} != null}" th:href="@{'/forum/' + ${educ.id}}">Курсы</a>
+            <span th:text="${educ.name}" th:if="@{${course} == null}">Курсы</span>
         </li>
-
-        <li class="breadcrumb-item" th:if="${course_id}">
-            <a th:text="${course_name}" th:if="${spec_id}" th:href="@{'/forum/' + ${educ_id} + '/' + ${course_id}}">Специализация</a>
-            <span th:text="${course_name}" th:if="@{not ${spec_id}}">Специализация</span>
+        <li class="breadcrumb-item" th:if="@{${course} != null}">
+            <a th:text="${course.name}" th:if="@{${spec} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id}}">Специализация</a>
+            <span th:text="${course.name}" th:if="@{${spec} == null}">Специализация</span>
         </li>
-
-        <li class="breadcrumb-item" th:if="${spec_id}">
-            <a th:text="${spec_name}" th:if="${disc_id}" th:href="@{'/forum/' + ${educ_id} + '/' + ${course_id} + '/' + ${spec_id}}">Дисциплина</a>
-            <span th:text="${spec_name}" th:if="@{not ${disc_id}}">Дисциплина</span>
+        <li class="breadcrumb-item" th:if="@{${spec} != null}">
+            <a th:text="${spec.name}" th:if="@{${disc} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id} + '/' + ${spec.id}}">Дисциплина</a>
+            <span th:text="${spec.name}" th:if="@{${disc} == null}">Дисциплина</span>
         </li>
-
-        <li class="breadcrumb-item" th:if="${disc_id}">
-            <a th:text="${disc_name}" th:if="${thread_id}" th:href="@{'/forum/' + ${educ_id} + '/' + ${course_id} + '/' + ${spec_id} + '/' + ${disc_id}}">Темы</a>
-            <span th:text="${disc_name}" th:if="@{not ${thread_id}}">Темы</span>
+        <li class="breadcrumb-item" th:if="@{${disc} != null}">
+            <a th:text="${disc.name}" th:if="@{${thread} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id}}">Темы</a>
+            <span th:text="${disc.name}" th:if="@{${thread} == null}">Темы</span>
         </li>
-
-        <li class="breadcrumb-item" th:if="${thread_id}">
-            <span th:text="${thread_name}">Тема</span>
+        <li class="breadcrumb-item" th:if="@{${thread} != null}">
+            <span th:text="${thread.name}">Тема</span>
         </li>
     </ol>
 </nav>

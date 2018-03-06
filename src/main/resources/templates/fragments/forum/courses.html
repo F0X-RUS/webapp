@@ -9,11 +9,15 @@
     <hr class="my-4"/>
     <div class="my-3 p-3 bg-white rounded box-shadow">
         <nav th:replace="@{'fragments/forum/breadcrumb'} :: navbar"></nav>
-
+        <div th:if="@{${disc} != null}" style="float: right; display: inline-block; line-height: 38px" class="align-middle mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <a th:href="@{'./' + ${current_id} + '/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить тему</button></a>
+            </div>
+        </div>
         <div th:each='item : ${list}' class="media text-muted pt-3">
             <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 <a th:href="@{'./' + ${current_id} + '/' + ${item.id}}">
-                    <strong th:text="${item.name}" class="pl-3 d-block text-gray-dark"></strong>
+                    <span style="font-size: 12pt;" th:text="${item.name}" class="pl-3 d-block text-gray-dark"></span>
                 </a>
                 <span class="pl-4" th:if="${item.description}" th:text="${#strings.abbreviate(item.description,100)}"></span>
             </p>

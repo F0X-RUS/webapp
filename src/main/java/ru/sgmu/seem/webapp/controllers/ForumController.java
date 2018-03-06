@@ -55,8 +55,7 @@ public class ForumController {
         model.addAttribute(CONTENT.name(), forum)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
-                .addAttribute("list", educationSteps)
-                .addAttribute("title", "Форум");
+                .addAttribute("list", educationSteps);
         return "layouts/main";
     }
 
@@ -70,7 +69,7 @@ public class ForumController {
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", courses)
                 .addAttribute("current_id", educ_id)
-                .addAttribute("educ_name", educationStepService.getById(educ_id).getName());
+                .addAttribute("educ", educationStepService.getById(educ_id));
         return "layouts/main";
     }
 
@@ -88,10 +87,9 @@ public class ForumController {
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", courseSpecList)
-                .addAttribute("educ_id", educ_id)
                 .addAttribute("current_id", course_id)
-                .addAttribute("educ_name", educationStepService.getById(educ_id).getName())
-                .addAttribute("course_name", courseCrudService.getById(course_id).getName());
+                .addAttribute("educ", educationStepService.getById(educ_id))
+                .addAttribute("course", courseCrudService.getById(course_id));
         return "layouts/main";
     }
 
@@ -113,12 +111,10 @@ public class ForumController {
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", specDiscList)
-                .addAttribute("educ_id", educ_id)
-                .addAttribute("course_id", course_id)
                 .addAttribute("current_id",spec_id)
-                .addAttribute("educ_name", educationStepService.getById(educ_id).getName())
-                .addAttribute("course_name", courseCrudService.getById(course_id).getName())
-                .addAttribute("spec_name", specializationCrudService.getById(spec_id).getName());
+                .addAttribute("educ", educationStep)
+                .addAttribute("course", course)
+                .addAttribute("spec", specialization);
         return "layouts/main";
     }
 
@@ -144,15 +140,11 @@ public class ForumController {
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
                 .addAttribute("list", discThreadList)
-                .addAttribute("educ_id", educ_id)
-                .addAttribute("course_id", course_id)
-                .addAttribute("spec_id",spec_id)
                 .addAttribute("current_id",disc_id)
-                .addAttribute("threads","threads")
-                .addAttribute("educ_name", educationStepService.getById(educ_id).getName())
-                .addAttribute("course_name", courseCrudService.getById(course_id).getName())
-                .addAttribute("spec_name", specializationCrudService.getById(spec_id).getName())
-                .addAttribute("disc_name", disciplineCrudService.getById(disc_id).getName());
+                .addAttribute("educ", educationStep)
+                .addAttribute("course", course)
+                .addAttribute("spec", specialization)
+                .addAttribute("disc", discipline);
         return "layouts/main";
     }
 
@@ -164,19 +156,46 @@ public class ForumController {
                               @PathVariable("disc_id") Long disc_id,
                               @PathVariable("thread_id") Long thread_id) {
         Thread currentThread = threadCrudService.getById(thread_id);
+        EducationStep educationStep = educationStepService.getById(educ_id);
+        Course course = courseCrudService.getById(course_id);
+        Specialization specialization = specializationCrudService.getById(spec_id);
+        Discipline discipline = disciplineCrudService.getById(disc_id);
         model.addAttribute(CONTENT.name(), threadFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name())
-                .addAttribute("educ_id", educ_id)
-                .addAttribute("course_id", course_id)
-                .addAttribute("spec_id",spec_id)
-                .addAttribute("disc_id",disc_id)
-                .addAttribute("educ_name", educationStepService.getById(educ_id).getName())
-                .addAttribute("course_name", courseCrudService.getById(course_id).getName())
-                .addAttribute("spec_name", specializationCrudService.getById(spec_id).getName())
-                .addAttribute("disc_name", disciplineCrudService.getById(disc_id).getName())
-                .addAttribute("thread_name", threadCrudService.getById(thread_id).getName())
-                .addAttribute("thread", currentThread);
+                .addAttribute("thread", currentThread)
+                .addAttribute("educ", educationStep)
+                .addAttribute("course", course)
+                .addAttribute("spec", specialization)
+                .addAttribute("disc", discipline);
+        return "layouts/main";
+    }
+
+    @RequestMapping(value = "/{educ_id}/{course_id}/{spec_id}/{disc_id}/{thread_id}/add", method = RequestMethod.GET)
+    public String threadAdd(Model model,
+                         @PathVariable("educ_id") Long educ_id,
+                         @PathVariable("course_id") Long course_id,
+                         @PathVariable("spec_id") Long spec_id,
+                         @PathVariable("disc_id") Long disc_id,
+                         @PathVariable("thread_id") Long thread_id,
+                         Thread thread) {
+
+        Thread currentThread = threadCrudService.getById(thread_id);
+        EducationStep educationStep = educationStepService.getById(educ_id);
+        Course course = courseCrudService.getById(course_id);
+        Specialization specialization = specializationCrudService.getById(spec_id);
+        Discipline discipline = disciplineCrudService.getById(disc_id);
+
+
+
+        model.addAttribute(CONTENT.name(), threadFragment)
+                .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
+                .addAttribute(CURRENT_PAGE.name(), FORUM.name())
+                .addAttribute("thread", currentThread)
+                .addAttribute("educ", educationStep)
+                .addAttribute("course", course)
+                .addAttribute("spec", specialization)
+                .addAttribute("disc", discipline);
         return "layouts/main";
     }
 }

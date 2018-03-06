@@ -18,7 +18,7 @@
 
                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                     <a th:href="@{'/forum/' + ${item.id}}">
-                        <strong th:text="${item.name}" class="pl-3 d-block text-gray-dark"></strong>
+                        <span style="font-size: 12pt;" class="pl-3 d-block text-gray-dark" th:text="${item.name}"></span>
                     </a>
                     <span class="pl-4" th:text="${item.description}"></span>
                 </p>
