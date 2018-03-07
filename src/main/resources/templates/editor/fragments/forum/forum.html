@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Форум</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <a th:href="@{'forum/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить уровень образования</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div th:each='item : ${EDUCATIONSTEPS_LIST}'>
+
+            <div class="pb-3 alert alert-primary"
+                 data-toggle="collapse"
+                 th:href="'#elem' + ${item.name}"
+                 role="button"
+                 aria-expanded="false"
+                 th:attr="aria-controls='#elem' + ${item.name}">
+                <span class="align-middle" th:text="@{${#lists.size(item.courses)} == 0 ? ${item.name} : '+ ' + ${item.name}}"></span>
+                <button type="button" class="align-middle float-right btn btn-light btn-sm">
+                    <span aria-hidden="true">Удалить</span>
+                </button>
+                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                    <span aria-hidden="true">Изменить</span>
+                </button>
+                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                    <span aria-hidden="true">Добавить курс</span>
+                </button>
+
+            </div>
+
+            <div class="collapse" th:id="'elem' + ${item.name}">
+
+                <div th:each="course, iterStat : ${item.courses}">
+
+                    <div class="pb-3 ml-5 alert alert-info"
+                         data-toggle="collapse"
+                         th:href="'#elem' + ${item.name} +  ${iterStat.index} + ${course.name} "
+                         role="button"
+                         aria-expanded="false"
+                         th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${course.name}">
+                        <span class="align-middle" th:text="@{${#lists.size(course.specializations)} == 0 ? ${course.name} : '+ ' + ${course.name}}"></span>
+                        <button type="button" class="align-middle float-right btn btn-light btn-sm">
+                            <span aria-hidden="true">Удалить</span>
+                        </button>
+                        <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                            <span aria-hidden="true">Изменить</span>
+                        </button>
+                        <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                            <span aria-hidden="true">Добавить специализацию</span>
+                        </button>
+
+                    </div>
+
+                    <div class="collapse" th:id="'elem' + ${item.name} + ${iterStat.index} + ${course.name}">
+
+                        <div th:each="spec : ${course.specializations}">
+
+                            <div class="pb-3 ml-7 alert alert-success"
+                                 data-toggle="collapse"
+                                 th:href="'#elem' + ${item.name} + ${iterStat.index} + ${spec.name}"
+                                 role="button"
+                                 aria-expanded="false"
+                                 th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${spec.name}">
+                                <span class="align-middle" th:text="@{${#lists.size(spec.disciplines)} == 0 ? ${spec.name} : '+ ' + ${spec.name}}"></span>
+                                <button type="button" class="align-middle float-right btn btn-light btn-sm">
+                                    <span aria-hidden="true">Удалить</span>
+                                </button>
+                                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                                    <span aria-hidden="true">Изменить</span>
+                                </button>
+                                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                                    <span aria-hidden="true">Добавить дисциплину</span>
+                                </button>
+
+                            </div>
+
+                            <div class="collapse" th:id="'elem' + ${item.name} + ${iterStat.index} + ${spec.name}">
+
+                                <div th:each="disc : ${spec.disciplines}">
+                                    <a class="text-secondary" th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id}}">
+                                        <div class="pb-3 ml-8 alert alert-secondary">
+                                            <span class="text-secondary align-middle" th:text="@{'+ ' + ${disc.name}}"></span>
+                                            <a th:href="${'/forum'}">
+                                                <button type="button" class="align-middle float-right btn btn-light btn-sm">
+                                                    <span aria-hidden="true">Удалить</span>
+                                                </button>
+                                            </a>
+                                            <a th:href="${'/forum'}">
+                                                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                                                    <span aria-hidden="true">Изменить</span>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </a>
+                                    <!--<div class="ml-8 alert alert-secondary"
+                                         th:text="@{${#lists.size(item.threads)} == 0 ? ${disc.name} : '+ ' + ${disc.name}}"
+                                         data-toggle="collapse"
+                                         th:href="'#elem' + ${item.name} + ${iterStat.index} + ${disc.name}"
+                                         role="button"
+                                         aria-expanded="false"
+                                         th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${disc.name}"></div>
+
+                                    <div class="collapse" th:id="'elem' + ${item.name} + ${iterStat.index} + ${disc.name}">
+                                        <div class="ml-9 alert alert-danger"
+                                             th:each="thread : ${item.threads}"
+                                             th:text="${thread.name}">
+                                        </div>
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

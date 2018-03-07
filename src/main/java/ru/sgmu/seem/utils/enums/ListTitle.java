@@ -9,4 +9,5 @@ public enum ListTitle {
     ADDRESS_LIST,
     PASSAGE_LIST,
     STAFF_LIST,
+    EDUCATIONSTEPS_LIST
 }

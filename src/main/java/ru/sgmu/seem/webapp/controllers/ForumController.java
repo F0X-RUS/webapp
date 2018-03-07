@@ -79,16 +79,23 @@ public class ForumController {
         return "layouts/main";
     }
 
+
+    //TODO: REMADE
     @RequestMapping(value = "/{educ_id}/{course_id}", method = RequestMethod.GET)
     public String specializations(Model model,
                                   @PathVariable("educ_id") Long educ_id,
                                   @PathVariable("course_id") Long course_id) {
+
         EducationStep educationStep = educationStepService.getById(educ_id);
         Course course = courseCrudService.getById(course_id);
+
         Set<Specialization> educSpecList = educationStep.getSpecializations();
         SortedSet<Specialization> courseSpecList = new TreeSet<>(Comparator.comparing(EntityDetails::getId));
+
         courseSpecList.addAll(course.getSpecializations());
         courseSpecList.retainAll(educSpecList);     // RETAIN SPECS FROM COURSE IN CURRENT EDUC_STEP
+
+
         model.addAttribute(CONTENT.name(), forumLayout)
                 .addAttribute("FORUM_CONTENT", coursesFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
@@ -211,7 +218,7 @@ public class ForumController {
                              @PathVariable("course_id") Long course_id,
                              @PathVariable("spec_id") Long spec_id,
                              @PathVariable("disc_id") Long disc_id) {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute(CONTENT.name(), forumLayout)
                     .addAttribute("FORUM_CONTENT", addThreadFragment)
                     .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
@@ -233,14 +240,14 @@ public class ForumController {
         threadCrudService.add(thread);
         educationStep.getThreads().add(thread);
         educationStepService.update(educationStep);
-//        course.getThreads().add(thread);
-//        courseCrudService.update(course);
-//        specialization.getThreads().add(thread);
-//        specializationCrudService.update(specialization);
+        course.getThreads().add(thread);
+        courseCrudService.update(course);
+        specialization.getThreads().add(thread);
+        specializationCrudService.update(specialization);
         model.addAttribute(CONTENT.name(), forumLayout)
                 .addAttribute("FORUM_CONTENT", threadFragment)
                 .addAttribute(TITLE.name(), PageTitle.FORUM.getText())
                 .addAttribute(CURRENT_PAGE.name(), FORUM.name());
-        return "layouts/main";
+        return "redirect:/forum/" + educ_id + "/" + course_id + "/" + spec_id + "/" + disc_id + "/" + thread.getId();
     }
 }

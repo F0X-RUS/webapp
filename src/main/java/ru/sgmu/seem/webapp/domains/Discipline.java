@@ -27,7 +27,7 @@ public class Discipline extends EntityDetails {
     private Set<Specialization> specializations = new HashSet<>(0);
 
     @OneToMany(mappedBy = "discipline")
-    private Set<Thread> threads;
+    private Set<Thread> threads = new HashSet<>(0);
 
     public String getName() {
         return name;

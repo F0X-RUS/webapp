@@ -25,7 +25,7 @@ public class Specialization extends EntityDetails{
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "EducationStep_Course_Specialization_discipline",
+            name = "Specialization_Discipline",
             joinColumns = { @JoinColumn(name = "specialization_id") },
             inverseJoinColumns = { @JoinColumn(name = "discipline_id") }
     )
@@ -33,7 +33,7 @@ public class Specialization extends EntityDetails{
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "EducationStep_Course_Specialization_discipline_thread",
+            name = "Specialization_Thread",
             joinColumns = { @JoinColumn(name = "specialization_id") },
             inverseJoinColumns = { @JoinColumn(name = "thread_id") }
     )
