@@ -2,14 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Новости</title>
+    <title th:text="#{menuoption_news}"></title>
 </head>
 <body>
-    <div th:fragment="main" role="main" class="container mt-4">
-        <h1 class="display-4 ml-3 mr-3">Новости</h1>
-        <hr class="my-4"/>
-        <div class="row justify-content-center" th:if="${not #lists.isEmpty(NEWS_LIST)}">
-            <ul class="pagination">
+
+<div th:fragment="main" role="main" class="container mt-4">
+    <h1 class="display-4 ml-3 mr-3" th:text="#{menuoption_news}"></h1>
+    <hr class="my-4"/>
+    <nav id="navbar-example2" class="navbar navbar-light bg-light rounded border mb-3 mt-3">
+        <div class="row justify-content-center mx-auto" th:if="${not #lists.isEmpty(NEWS_LIST)}">
+            <ul class="pagination mb-0">
                 <li th:class="${page.firstPage}?'page-item disabled':'page-item'">
                     <span class="page-link" th:if='${page.firstPage}'>←</span>
                     <a class="page-link" th:if='${not page.firstPage}'
@@ -20,9 +22,9 @@
                     <a class="page-link" th:if='${page.hasPreviousPage}'
                        th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'>«</a>
                 </li>
-                <li th:each='item : ${page.items}' th:class="${item.active}? 'page-item active' : 'page-item'">
-                    <span class="page-link" th:if='${item.active}' th:text='${item.number}'>1</span>
-                    <a class="page-link" th:if='${not item.active}'
+                <li th:each='item : ${page.items}' th:class="${item.enable}? 'page-item enable' : 'page-item'">
+                    <span class="page-link" th:if='${item.enable}' th:text='${item.number}'>1</span>
+                    <a class="page-link" th:if='${not item.enable}'
                        th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'>
                         <span th:text='${item.number}'>1</span>
                     </a>
@@ -39,12 +41,15 @@
                 </li>
             </ul>
         </div>
+
+    </nav>
+    <div class="my-3 pl-3 pr-3 pb-3 pt-5 bg-white rounded box-shadow border">
         <div class="mx-auto col-md-9" th:if="${#lists.isEmpty(NEWS_LIST)}">
             <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">Тут пусто!</h4>
-                <p>В этом разделе отсутствуют новости!</p>
+                <h4 class="alert-heading" th:text="#{empty_msg}"></h4>
+                <p th:text="#{empty_news_msg}"></p>
                 <hr/>
-                <p class="mb-0">Подождите, пока администратор добавит их.</p>
+                <p class="mb-0" th:text="#{wait_admin}"></p>
             </div>
         </div>
         <div class="row mx-auto">
@@ -58,20 +63,26 @@
                         </header>
                     </div>
                     <div class="card-body">
-                        <p class="card-text" th:text="${#strings.abbreviate(item.content,140)}"></p>
+                        <p class="card-text"
+                           th:text="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(item.content).text(),150)}"></p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group ">
                                 <a th:href="@{'/news/' + ${item.id}}">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary mr-2">Подробнее</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary mr-2"
+                                            th:text="#{view}"></button>
                                 </a>
                             </div>
-                            <small class="text-muted" th:text="@{${#dates.format(item.time, 'HH:mm')} + ' ' + ${#dates.format(item.date, 'dd.MM.yyyy')}}">01.06.2018</small>
+                            <small class="text-muted"
+                                   th:text="@{${#dates.format(item.time, 'HH:mm')} + ' ' + ${#dates.format(item.date, 'dd.MM.yyyy')}}">
+                                01.06.2018
+                            </small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
+</div>
 </body>
 </html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="title(title_str)">
+    <!--FAVICONS-->
+    <!--<meta name="viewport" content="width=1024"/>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="apple-touch-icon" sizes="57x57" th:href="@{/favicons/apple-icon-57x57.png}"/>
+    <link rel="apple-touch-icon" sizes="60x60" th:href="@{/favicons/apple-icon-60x60.png}"/>
+    <link rel="apple-touch-icon" sizes="72x72" th:href="@{/favicons/apple-icon-72x72.png}"/>
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/favicons/apple-icon-76x76.png}"/>
+    <link rel="apple-touch-icon" sizes="114x114" th:href="@{/favicons/apple-icon-114x114.png}"/>
+    <link rel="apple-touch-icon" sizes="120x120" th:href="@{/favicons/apple-icon-120x120.png}"/>
+    <link rel="apple-touch-icon" sizes="144x144" th:href="@{/favicons/apple-icon-144x144.png}"/>
+    <link rel="apple-touch-icon" sizes="152x152" th:href="@{/favicons/apple-icon-152x152.png}"/>
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/favicons/apple-icon-180x180.png}"/>
+    <link rel="icon" type="image/png" sizes="192x192" th:href="@{/favicons/android-icon-192x192.png}"/>
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicons/favicon-32x32.png}"/>
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/favicons/favicon-96x96.png}"/>
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/favicons/favicon-16x16.png}"/>
+    <link rel="manifest" th:href="@{/favicons/manifest.json}"/>
+    <!--FAVICONS-->
+    <title th:if="${title_str == 'MAIN'}" th:text="#{menuoption_main}"></title>
+    <title th:if="${title_str == 'FORUM'}" th:text="#{menuoption_forum}"></title>
+    <title th:if="${title_str == 'EDITOR'}" th:text="#{menuoption_editor}"></title>
+    <title th:if="${title_str == 'NEWS'}" th:text="#{menuoption_news}"></title>
+    <title th:if="${title_str == 'ABOUT'}" th:text="#{menuoption_about}"></title>
+    <title th:if="${title_str == 'STAFF'}" th:text="#{menuoption_staff}"></title>
+    <title th:if="${title_str == 'CONTACTS'}" th:text="#{menuoption_contacts}"></title>
+    <title th:if="${title_str == 'LOGIN'}" th:text="#{menuoption_contacts}"></title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous"/>
+    <link th:href="@{/css/carousel_my.css}" rel="stylesheet"/>
+    <link th:href="@{/css/my-own.css}" rel="stylesheet"/>
+    <link th:href="@{/css/forum.css}" rel="stylesheet" media="screen"/>
+    <!--<link th:href="@{/css/auth.css}" rel="stylesheet"/>-->
+    <!-- SUMMERNOTE -->
+    <link rel="stylesheet" th:href="@{/css/trumbowyg.min.css}"/>
+    <!-- SUMMERNOTE -->
+
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#locales").change(function () {
+                var selectedOption = $('#locales').val();
+                if (selectedOption !== '') {
+                    window.location.replace('?lang=' + selectedOption);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 0) {
+                    $('#scroller').fadeIn();
+                } else {
+                    $('#scroller').fadeOut();
+                }
+            });
+            $('#scroller').click(function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 400);
+                return false;
+            });
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

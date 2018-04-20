@@ -9,4 +9,5 @@ public enum MenuOption {
     STAFF,
     VIEW,
     CONTACTS,
+    USERS
 }

@@ -1,23 +1,29 @@
 package ru.sgmu.seem.webapp.domains;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.cache.annotation.CacheConfig;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-@AttributeOverride(name = "imageName", column = @Column(name = "image_name", insertable = false, updatable = false))
 public class Passage extends EntityDetails{
 
     @Column(length = 400)
-    @Size(min = 10, max = 400)
+    @Size(min = 4, max = 250)
     private String title;
 
+    @Size(min = 1, max = 20)
     @NotEmpty
-    @Column(length = 65535)
-    @Size(min = 20)
+    @NotNull
+    private String shortcut;
+
+    @NotEmpty
+    @Column(columnDefinition = "text")
+    @Size(min = 15)
     private String content;
 
     public String getTitle() {
@@ -34,5 +40,13 @@ public class Passage extends EntityDetails{
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getShortcut() {
+        return shortcut;
+    }
+
+    public void setShortcut(String shortcut) {
+        this.shortcut = shortcut;
     }
 }

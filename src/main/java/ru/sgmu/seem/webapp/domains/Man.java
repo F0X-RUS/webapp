@@ -1,5 +1,7 @@
 package ru.sgmu.seem.webapp.domains;
 
+import org.springframework.cache.annotation.CacheConfig;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,6 +24,15 @@ public class Man extends EntityDetails{
     @Column(length = 65535)
     @Size(min=5)
     private String description;
+
+    public Man(){}
+
+    public Man(String name, String surname, String patronymic, String description) {
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.description = description;
+    }
 
     public String getName() {
         return name;

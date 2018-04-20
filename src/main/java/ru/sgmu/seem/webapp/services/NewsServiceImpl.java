@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.News;
+import ru.sgmu.seem.webapp.domains.cache.NewsCache;
 import ru.sgmu.seem.webapp.repositories.NewsDAO;
 
 import javax.transaction.Transactional;
@@ -15,13 +16,16 @@ import java.util.List;
 
 @Service
 @Transactional
-public class NewsServiceImpl implements NewsService {
+public class NewsServiceImpl implements PageableService<News> {
 
     private final NewsDAO newsDAO;
+//    private NewsCache newsCache;
 
     @Autowired
-    public NewsServiceImpl(NewsDAO newsDAO) {
+    public NewsServiceImpl(NewsDAO newsDAO,
+                           NewsCache newsCache) {
         this.newsDAO = newsDAO;
+//        this.newsCache = newsCache;
     }
 
     @Override

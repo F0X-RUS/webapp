@@ -3,6 +3,7 @@ package ru.sgmu.seem.webapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.Passage;
+import ru.sgmu.seem.webapp.domains.cache.PassageCache;
 import ru.sgmu.seem.webapp.repositories.PassageDAO;
 
 import javax.transaction.Transactional;
@@ -13,10 +14,13 @@ import java.util.List;
 public class PassageService implements CrudService<Passage>{
 
     private final PassageDAO passageDAO;
+//    private PassageCache passageCache;
 
     @Autowired
-    public PassageService(PassageDAO passageDAO){
+    public PassageService(PassageDAO passageDAO,
+                          PassageCache passageCache){
         this.passageDAO = passageDAO;
+//        this.passageCache = passageCache;
     }
 
     @Override

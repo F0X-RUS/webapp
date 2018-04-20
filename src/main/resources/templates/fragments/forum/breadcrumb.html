@@ -4,29 +4,37 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-<nav th:fragment="navbar" class="bg-transparent" style="display: inline-block;" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/forum}">Форум</a></li>
-        <li class="breadcrumb-item" th:if="@{${educ} != null}">
-            <a th:text="${educ.name}" th:if="@{${course} != null}" th:href="@{'/forum/' + ${educ.id}}">Курсы</a>
-            <span th:text="${educ.name}" th:if="@{${course} == null}">Курсы</span>
+<nav th:fragment="navbar" class="col-12 navbar navbar-light bg-light rounded border" style="display: inline-block;" aria-label="breadcrumb">
+    <ul class="nav nav-pills">
+        <li class="nav-item mt-2">
+            <a class="btn btn-outline-primary" th:href="@{/forum}" th:text="#{menuoption_forum}" th:if="@{${educ} != null}"></a>
+            <span class="btn btn-primary" th:text="#{menuoption_forum}" th:if="@{${educ} == null}">Курсы</span>
         </li>
-        <li class="breadcrumb-item" th:if="@{${course} != null}">
-            <a th:text="${course.name}" th:if="@{${spec} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id}}">Специализация</a>
-            <span th:text="${course.name}" th:if="@{${spec} == null}">Специализация</span>
+        <li class="nav-item mt-2" th:if="@{${educ} != null}">
+            <span class="ml-1" th:text="#{forumnav_separator}"></span>
+            <a class="btn btn-outline-primary" th:text="${educ.name}" th:if="@{${course} != null}" th:href="@{'/forum/' + ${educ.id}}">Курсы</a>
+            <span class="btn btn-primary" th:text="${educ.name}" th:if="@{${course} == null}">Курсы</span>
         </li>
-        <li class="breadcrumb-item" th:if="@{${spec} != null}">
-            <a th:text="${spec.name}" th:if="@{${disc} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id} + '/' + ${spec.id}}">Дисциплина</a>
-            <span th:text="${spec.name}" th:if="@{${disc} == null}">Дисциплина</span>
+        <li class="nav-item mt-2" th:if="@{${course} != null}">
+            <span class="ml-1" th:text="#{forumnav_separator}"></span>
+            <a class="btn btn-outline-primary" th:text="${course.name}" th:if="@{${spec} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id}}">Специализация</a>
+            <span class="btn btn-primary" th:text="${course.name}" th:if="@{${spec} == null}">Специализация</span>
         </li>
-        <li class="breadcrumb-item" th:if="@{${disc} != null}">
-            <a th:text="${disc.name}" th:if="@{${thread} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id}}">Темы</a>
-            <span th:text="${disc.name}" th:if="@{${thread} == null}">Темы</span>
+        <li class="nav-item mt-2" th:if="@{${spec} != null}">
+            <span class="ml-1" th:text="#{forumnav_separator}"></span>
+            <a class="btn btn-outline-primary" th:text="${spec.name}" th:if="@{${disc} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id} + '/' + ${spec.id}}">Дисциплина</a>
+            <span class="btn btn-primary" th:text="${spec.name}" th:if="@{${disc} == null}">Дисциплина</span>
         </li>
-        <li class="breadcrumb-item" th:if="@{${thread} != null}">
-            <span th:text="${thread.name}">Тема</span>
+        <li class="nav-item mt-2" th:if="@{${disc} != null}">
+            <span class="ml-1" th:text="#{forumnav_separator}"></span>
+            <a class="btn btn-outline-primary" th:text="${disc.name}" th:if="@{${thread} != null}" th:href="@{'/forum/' + ${educ.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id}}">Темы</a>
+            <span class="btn btn-primary" th:text="${disc.name}" th:if="@{${thread} == null}">Темы</span>
         </li>
-    </ol>
+        <li class="nav-item mt-2" th:if="@{${thread} != null}">
+            <span class="ml-1" th:text="#{forumnav_separator}"></span>
+            <span class="btn btn-primary" th:text="${thread.name}">Тема</span>
+        </li>
+    </ul>
 </nav>
 </body>
 </html>

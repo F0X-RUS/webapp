@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>404</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+    <link th:href="@{/css/auth.css}" rel="stylesheet"/>
+</head>
+<body>
+<div th:fragment="main" role="main" class="mx-auto col-sm-8 mt-5">
+    <div class=" alert alert-info mx-auto mt-5 align-middle" role="alert">
+        <h4 class="alert-heading" th:text="#{error}"></h4>
+        <p th:text="#{file_upload_size_error}"></p>
+        <hr/>
+        <p th:text="@{#{return_to} + ' '}" class="mb-0"></p> <a href="/forum" th:text="#{menuoption_forum}"></a>
+    </div>
+</div>
+</body>
+</html>

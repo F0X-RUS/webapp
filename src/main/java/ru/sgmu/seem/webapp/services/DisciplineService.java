@@ -1,8 +1,12 @@
 package ru.sgmu.seem.webapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.Discipline;
+import ru.sgmu.seem.webapp.domains.Thread;
 import ru.sgmu.seem.webapp.repositories.DisciplineDAO;
 
 import javax.transaction.Transactional;
@@ -47,4 +51,5 @@ public class DisciplineService implements CrudService<Discipline>{
     public List<Discipline> getAll() {
         return (List<Discipline>)disciplineDAO.findAll();
     }
+
 }

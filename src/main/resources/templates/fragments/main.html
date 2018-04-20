@@ -1,57 +1,133 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:include="layouts/main::headFrag">
     <meta charset="UTF-8"/>
+    <title id="pageTitle" th:text="#{menuoption_main}"></title>
 </head>
 <body>
-    <div th:fragment="main" role="main">
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li th:each="item, iterStat : ${NEWS_LIST}" data-target="#myCarousel" th:attr="data-slide-to=${iterStat.index}" th:class="@{${NEWS_LIST[0].id} == ${item.id} ? 'active' : ''}"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div th:class="@{${NEWS_LIST[0].id} == ${item.id} ? 'carousel-item crop-slider active' : 'carousel-item crop-slider'}" th:each='item, iterStat : ${NEWS_LIST}'>
-                    <img class="first-slide" th:src="@{${news_images_path} + '/' + ${item.imageName}}"/>
-                    <div class="container">
-                        <div class="carousel-caption" th:classappend="text-center">
-                            <h1 th:text="${item.title}"></h1>
-                            <p th:text="${#strings.abbreviate(item.content,140)}"></p>
-                            <p><a class="btn btn-lg btn-primary" th:href="${'/news/' + item.id}" role="button">Далее</a></p>
+<div th:fragment="main" role="main">
+    <div class="mx-auto col-sm-8 mt-5">
+        <a class="navbar-brand" href="#">
+            <img class="img-fluid logoresize" th:src="${'/images/logo-long.png'}"/>
+        </a>
+    </div>
+    <div class="container marketing mt-5">
+        <div class="row">
+            <div id="myCarousel" class="img-fluid col-md-6 mx-auto my-auto carousel slide mb-0" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li th:each="item, iterStat : ${NEWS_LIST}" data-target="#myCarousel"
+                        th:attr="data-slide-to=${iterStat.index}"
+                        th:class="@{${NEWS_LIST[0].id} == ${item.id} ? 'active' : ''}"></li>
+                </ol>
+                <div class="carousel-inner card box-shadow rounded border">
+                    <div th:class="@{${NEWS_LIST[0].id} == ${item.id} ? 'row carousel-item crop-slider active' : 'row carousel-item crop-slider'}"
+                         th:each='item, iterStat : ${NEWS_LIST}' th:classappend="${'mr-0 ml-0'}">
+                        <div class="pl-0 pr-0">
+                            <a th:href="${'/news/' + item.id}">
+                                <img class="first-slide" th:src="@{${news_images_path} + '/' + ${item.imageName}}"/>
+                            </a>
                         </div>
                     </div>
                 </div>
+                <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                <div class="carousel-control-prev-icon"></div>
-            </a>
-            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                <div class="carousel-control-next-icon"></div>
-            </a>
-        </div>
-        <div class="container marketing">
-            <div class="row">
-                <div class="col-lg-4" th:each='item : ${MAN_LIST}'>
-                    <div class="main-man-crop">
-                        <img class="rounded" th:width="250px" th:src="@{${man_images_path} + '/' + ${item.imageName}}"/>
-                    </div>
-                    <h3 th:text="@{${item.surname} + ' ' + ${item.name} + ' '} + @{${item.patronymic} ? ' ' + ${item.patronymic} : ''}"></h3>
-                    <p th:text="${item.description}"></p>
-                </div>
-            </div>
-            <div th:each='item : ${INFOBLOCK_LIST}'>
-                <hr class="featurette-divider"/>
-                <div class="row featurette">
-                    <div th:class="${INFOBLOCK_LIST[1].id} == ${item.id} ? 'col-md-7 order-md-2 text-right' : 'col-md-7'">
-                        <h2 th:text="${item.title}" class="featurette-heading"></h2>
-                        <h3 th:text="${item.slogan}" class="featurette-heading-my"><span class="text-muted"></span></h3>
-                        <p th:text="${item.description}" class="lead"></p>
-                    </div>
-                    <div class="col-md-5">
-                        <img width="500px" height="500px" class="featurette-image img-fluid mx-auto" th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[0].imageName}}"/>
-                    </div>
+            <div class="col-md-6 mx-auto my-auto">
+                <div th:each="item, iterStat : ${NEWS_LIST}" class="mt-2">
+                    <span class="slider-text" th:text="${#strings.abbreviate(item.title,50)}"></span>
+                    <p>
+                        <small class="card-text mb-auto"
+                              th:text="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(item.content).text(),130)}"></small>
+                        <small><a th:href="${'/news/' + item.id}" th:text="#{view} + ''"></a></small>
+                    </p>
+                    <hr class="featurette-divider mr-2 ml-2 mt-2 mb-2"/>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div class="container marketing">
+
+        <hr class="featurette-divider mt-5 mb-5"/>
+
+        <div class="row">
+            <div class="col-md-4 mx-auto" th:each="item : ${MAN_LIST}">
+                <div class="card box-shadow mb-4">
+                    <div class="main-man-crop">
+                        <img class="card-img-top" th:src="@{${man_images_path} + '/' + ${item.imageName}}"/>
+                    </div>
+                    <div class="card-body text-center">
+                        <span class="slider-text"
+                            th:text="@{${item.surname} + ' ' + ${item.name} + ' '} + @{${item.patronymic} ? ' ' + ${item.patronymic} : ''}"></span>
+                        <p class="desc-text" th:text="${item.description}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="featurette-divider mt-4 mb-5"/>
+
+        <div class="col-md-12 pl-0 pr-0">
+            <div class="card flex-md-row mb-4 box-shadow h-md-250">
+                <div class="card-body d-flex flex-column align-items-start">
+                    <strong class="d-inline-block mb-2 text-primary">Инфоблок</strong>
+                    <h3 class="mb-0">
+                        <span class="text-dark" th:text="${INFOBLOCK_LIST[0].title}"></span>
+                    </h3>
+                    <div class="mb-1 text-muted" th:text="${#dates.format(INFOBLOCK_LIST[0].date, 'dd.MM.yyyy')}"></div>
+                    <p class="card-text mb-auto" th:text="${INFOBLOCK_LIST[0].description}"></p>
+                </div>
+                <img th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[0].imageName}}"
+                     class="card-img-right flex-auto d-none d-lg-block"/>
+            </div>
+        </div>
+
+        <hr class="featurette-divider mt-5 mb-5"/>
+
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <div class="card flex-md-row mb-4 box-shadow">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <strong class="d-inline-block mb-2 text-primary">Ссылка</strong>
+                        <span class="mb-0">
+                            <a class="text-dark" th:text="'dadada dawd wad wad aw wa dwa  '"></a>
+                        </span>
+                    </div>
+                    <img th:width="100px" th:height="100px" class="card-img-right flex-auto d-none d-lg-block"
+                         th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[0].imageName}}"/>
+                </div>
+            </div>
+            <div class="col-md-4 mx-auto">
+                <div class="card flex-md-row mb-4 box-shadow">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <span class="mb-0">
+                            <a class="text-dark" th:text="'dadada'"></a>
+                        </span>
+                    </div>
+                    <img th:width="100px" th:height="100px" class="card-img-right flex-auto d-none d-lg-block"
+                         th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[0].imageName}}"/>
+                </div>
+            </div>
+            <div class="col-md-4 mx-auto">
+                <div class="card flex-md-row mb-4 box-shadow">
+                    <div class="card-body d-flex flex-column align-items-start">
+                        <span class="mb-0">
+                            <a class="text-dark" th:text="'dadada'"></a>
+                        </span>
+                    </div>
+                    <img th:width="100px" th:height="100px" class="card-img-right flex-auto d-none d-lg-block"
+                         th:src="@{${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[0].imageName}}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

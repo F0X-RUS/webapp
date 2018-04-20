@@ -1,31 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Редактирование - Обзор</title>
+    <title th:text="@{#{editor_title_prefix} + #{view}}"></title>
 </head>
 <body>
-<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+<div th:fragment="main" role="main" class="col-sm-10 pt-3">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Обзор последних изменений</h1>
+        <h1 class="h2" th:text="#{view_last_changes}"></h1>
     </div>
 
     <table class="table table-hover">
         <thead>
-        <td>Дата</td>
-        <td>Время</td>
-        <td>Объект</td>
-        <td>Кем</td>
+        <td>ID</td>
+        <td th:text="#{table}"></td>
+        <td th:text="#{date}"></td>
+        <td th:text="#{time}"></td>
+        <td th:text="#{user}"></td>
         </thead>
-        <tr th:each="item : ${changes}">
-            <td th:text="${item.title}"></td>
-            <td th:text="${item.content}"></td>
-            <td th:text="${item.date}"></td>
-            <td th:text="${item.time}"></td>
-            <td>
-                <img width="100px" th:src="@{'~/' + ${news_images_dir} + '/' + ${news_item.imageName}}"/>
-            </td>
+        <tr th:each="item : ${list}">
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.getClass().getSimpleName()}"></td>
+            <td th:text="${#dates.format(item.date, 'dd.MM.yyyy')}"></td>
+            <td th:text="${#dates.format(item.time, 'HH:mm:ss')}"></td>
+            <td th:text="${#strings.abbreviate(item.user.name + ' ' + item.user.surname, 15)}"></td>
         </tr>
     </table>
+    <!--type, name, title, -->
+
+    <!--<div class="row">-->
+        <!--<div class="col-12 col-lg-6">-->
+            <!--<div class="card">-->
+                <!--<div class="card-header">Latest Activity</div>-->
+                <!--<div class="card-body">-->
+                    <!--<ul class="user-timeline user-timeline-compact">-->
+                        <!--<li th:classappend="@{${item.id} == 30 ? 'latest' : ''}" th:each="item : ${list}">-->
+                            <!--<div th:text="${item.date}" class="user-timeline-date">Just Now</div>-->
+                            <!--<div th:text="${item.name}" class="user-timeline-title">Create New Page</div>-->
+                            <!--<div th:text="${item.description}" class="user-timeline-description">Vestibulum lectus nulla, maximus in eros non, tristique.</div>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
 </body>
 </html>

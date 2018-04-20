@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="apple-touch-icon" sizes="57x57" th:href="@{/favicons/apple-icon-57x57.png}"/>
+    <link rel="apple-touch-icon" sizes="60x60" th:href="@{/favicons/apple-icon-60x60.png}"/>
+    <link rel="apple-touch-icon" sizes="72x72" th:href="@{/favicons/apple-icon-72x72.png}"/>
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/favicons/apple-icon-76x76.png}"/>
+    <link rel="apple-touch-icon" sizes="114x114" th:href="@{/favicons/apple-icon-114x114.png}"/>
+    <link rel="apple-touch-icon" sizes="120x120" th:href="@{/favicons/apple-icon-120x120.png}"/>
+    <link rel="apple-touch-icon" sizes="144x144" th:href="@{/favicons/apple-icon-144x144.png}"/>
+    <link rel="apple-touch-icon" sizes="152x152" th:href="@{/favicons/apple-icon-152x152.png}"/>
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/favicons/apple-icon-180x180.png}"/>
+    <link rel="icon" type="image/png" sizes="192x192" th:href="@{/favicons/android-icon-192x192.png}"/>
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicons/favicon-32x32.png}"/>
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/favicons/favicon-96x96.png}"/>
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/favicons/favicon-16x16.png}"/>
+    <link rel="manifest" th:href="@{/favicons/manifest.json}"/>
+    <meta charset="UTF-8"/>
+    <title>404</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous"/>
+    <link th:href="@{/css/auth.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <nav th:replace="@{'fragments/navbar'} :: navbar(${MENU_OPTION})"></nav>
+</header>
+<div th:fragment="main" role="main">
+    <div class=" alert alert-info mx-auto mt-5 align-middle" role="alert">
+        <h4 class="alert-heading" th:text="#{error}"></h4>
+        <p th:text="#{wrong_page_msg}"></p>
+        <hr/>
+        <p th:text="@{#{return_to} + ' '}" class="mb-0"></p> <a href="/" th:text="#{menuoption_main}"></a>
+    </div>
+</div>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/delete-modal.js}"></script>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

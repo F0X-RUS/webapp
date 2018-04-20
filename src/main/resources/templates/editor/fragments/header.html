@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="title(title_str)">
+    <!--FAVICONS-->
+    <link rel="apple-touch-icon" sizes="57x57" th:href="@{/favicons/apple-icon-57x57.png}"/>
+    <link rel="apple-touch-icon" sizes="60x60" th:href="@{/favicons/apple-icon-60x60.png}"/>
+    <link rel="apple-touch-icon" sizes="72x72" th:href="@{/favicons/apple-icon-72x72.png}"/>
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/favicons/apple-icon-76x76.png}"/>
+    <link rel="apple-touch-icon" sizes="114x114" th:href="@{/favicons/apple-icon-114x114.png}"/>
+    <link rel="apple-touch-icon" sizes="120x120" th:href="@{/favicons/apple-icon-120x120.png}"/>
+    <link rel="apple-touch-icon" sizes="144x144" th:href="@{/favicons/apple-icon-144x144.png}"/>
+    <link rel="apple-touch-icon" sizes="152x152" th:href="@{/favicons/apple-icon-152x152.png}"/>
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/favicons/apple-icon-180x180.png}"/>
+    <link rel="icon" type="image/png" sizes="192x192" th:href="@{/favicons/android-icon-192x192.png}"/>
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicons/favicon-32x32.png}"/>
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/favicons/favicon-96x96.png}"/>
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/favicons/favicon-16x16.png}"/>
+    <link rel="manifest" th:href="@{/favicons/manifest.json}"/>
+    <!--FAVICONS-->
+    <title th:if="${title_str == 'VIEW'}" th:text="@{#{editor_title_prefix} + #{menuoption_view}}"></title>
+    <title th:if="${title_str == 'MAIN'}" th:text="@{#{editor_title_prefix} + #{menuoption_main}}"></title>
+    <title th:if="${title_str == 'NEWS'}" th:text="@{#{editor_title_prefix} + #{menuoption_news}}"></title>
+    <title th:if="${title_str == 'ABOUT'}" th:text="@{#{editor_title_prefix} + #{menuoption_about}}"></title>
+    <title th:if="${title_str == 'STAFF'}" th:text="@{#{editor_title_prefix} + #{menuoption_staff}}"></title>
+    <title th:if="${title_str == 'CONTACTS'}" th:text="@{#{editor_title_prefix} + #{menuoption_contacts}}"></title>
+    <title th:if="${title_str == 'FORUM'}" th:text="@{#{editor_title_prefix} + #{menuoption_forum}}"></title>
+    <title th:if="${title_str == 'USERS'}" th:text="@{#{editor_title_prefix} + #{menuoption_users}}"></title>
+    <title th:text="@{#{editor_title_prefix} + ${title_str}}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="Simulation education and emergency medicine web page"/>
+
+    <meta charset="UTF-8"/>
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/my-own.css}" rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
+    <!-- SUMMERNOTE -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet"/>
+    <script th:src="@{/js/summernote-bs4.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/trumbowyg.min.css}"/>
+    <!-- SUMMERNOTE -->
+</head>
+<body>
+
+</body>
+</html>

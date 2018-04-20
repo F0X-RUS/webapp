@@ -1,5 +1,7 @@
 package ru.sgmu.seem.webapp.domains;
 
+import org.springframework.cache.annotation.CacheConfig;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
@@ -20,7 +22,7 @@ public class Staff extends EntityDetails{
 
     private String patronymic;
 
-    @Column(length = 65535)
+    @Column(columnDefinition = "text")
     @Size(min=5)
     private String description;
 

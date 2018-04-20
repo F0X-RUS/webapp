@@ -5,23 +5,24 @@
 </head>
 <body>
 <div th:fragment="main" role="main" class="container mt-4">
-    <h1 class="display-4 ml-3 mr-3">Сотрудники кафедры</h1>
+    <h1 class="display-4 ml-3 mr-3" th:text="#{menuoption_staff}"></h1>
     <hr class="my-4"/>
-    <div class="col-12 ml-3 mr-3 row">
-        <div class="ml-2" th:each='item : ${STAFF_MAP}'>
-            <p>
+    <nav id="navbar-example2" class="navbar navbar-light bg-light rounded border mb-3 mt-3">
+        <ul class="nav nav-pills">
+            <li th:each="item : ${STAFF_MAP}" class="nav-item mr-1 mt-1 mb-1">
                 <a class="btn btn-primary" th:text="${item.key}" data-toggle="collapse"
-                    th:href="'#elem' + ${item.key}" role="button" aria-expanded="false"
-                    th:attr="aria-controls='#elem' + ${item.key}">
-                </a>
-            </p>
-        </div>
-    </div>
-    <div class="col-12 ml-3 mr-3" th:each='item : ${STAFF_MAP}'>
-        <div class="collapse" th:id="'elem' + ${item.key}">
-            <div th:each="staff : ${item.value}">
-                <a class="inline" th:href="'staff/' + ${staff.id}" th:text="${staff.surname} + ' ' + ${staff.name} + ' ' + ${staff.patronymic}"></a>
-                <span th:text="' - ' + ${staff.position}"></span>
+                   th:href="'#elem' + ${item.key}" role="button" aria-expanded="false"
+                   th:attr="aria-controls='#elem' + ${item.key}"></a>
+            </li>
+        </ul>
+    </nav>
+    <div class="col-12 my-3 pl-3 pr-3 pb-3 pt-1 bg-white rounded box-shadow border">
+        <div class="col-12 ml-3 mr-3" th:each='item : ${STAFF_MAP}'>
+            <div class="collapse" th:id="'elem' + ${item.key}">
+                <div th:each="staff : ${item.value}">
+                    <a class="inline" th:href="'staff/' + ${staff.id}"
+                       th:text="${staff.surname} + ' ' + ${staff.name} + ' ' + ${staff.patronymic}"></a>
+                </div>
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@ package ru.sgmu.seem.webapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.Staff;
+import ru.sgmu.seem.webapp.domains.cache.StaffCache;
 import ru.sgmu.seem.webapp.repositories.StaffDAO;
 
 import java.util.List;
@@ -11,10 +12,13 @@ import java.util.List;
 public class StaffService implements CrudService<Staff>{
 
     private final StaffDAO staffDAO;
+//    private StaffCache staffCache;
 
     @Autowired
-    public StaffService(StaffDAO staffDAO){
+    public StaffService(StaffDAO staffDAO,
+                        StaffCache staffCache){
         this.staffDAO = staffDAO;
+//        this.staffCache = staffCache;
     }
 
     @Override

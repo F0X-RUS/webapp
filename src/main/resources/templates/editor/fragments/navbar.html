@@ -1,57 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8"/>
-    <title>Title</title>
 </head>
 <body>
     <nav th:fragment="left_menu(activeTab)" class="col-md-2 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky">
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a th:class="${activeTab == 'VIEW'} ? 'active nav-link' : 'nav-link'" href="/editor">
-                        <span data-feather="home"></span>
-                        Обзор <span class="sr-only">(current)</span>
+                <li sec:authorize="hasAnyRole('ADMIN', 'MODER')" class="nav-item">
+                    <a th:text="#{menuoption_view}" th:class="${activeTab == 'VIEW'} ? 'active nav-link' : 'nav-link'" href="/editor">
+                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a th:class="${activeTab == 'MAIN'} ? 'active nav-link' : 'nav-link'" href="/editor/main">
-                        <span data-feather="file"></span>
-                        Главная страница
-                    </a>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                    <a th:text="#{menuoption_main}" th:class="${activeTab == 'MAIN'} ? 'active nav-link' : 'nav-link'" href="/editor/main"></a>
                 </li>
-                <li class="nav-item">
-                    <a th:class="${activeTab == 'NEWS'} ? 'active nav-link' : 'nav-link'" href="/editor/news">
-                        <span data-feather="shopping-cart"></span>
-                        Новости
-                    </a>
+                <li sec:authorize="hasAnyRole('ADMIN', 'MODER')" class="nav-item">
+                    <a th:text="#{menuoption_news}" th:class="${activeTab == 'NEWS'} ? 'active nav-link' : 'nav-link'" href="/editor/news"></a>
                 </li>
-                <li class="nav-item">
-                    <a th:class="${activeTab == 'ABOUT'} ? 'active nav-link' : 'nav-link'" href="/editor/about">
-                        <span data-feather="shopping-cart"></span>
-                        О кафедре
-                    </a>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                    <a th:text="#{menuoption_about}" th:class="${activeTab == 'ABOUT'} ? 'active nav-link' : 'nav-link'" href="/editor/about"></a>
                 </li>
-                <li class="nav-item">
-                    <a th:class="${activeTab == 'STAFF'} ? 'active nav-link' : 'nav-link'" href="/editor/staff">
-                        <span data-feather="shopping-cart"></span>
-                        Сотрудники
-                    </a>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                    <a th:text="#{menuoption_staff}" th:class="${activeTab == 'STAFF'} ? 'active nav-link' : 'nav-link'" href="/editor/staff"></a>
                 </li>
-                <li class="nav-item">
-                    <a th:class="${activeTab == 'CONTACTS'} ? 'active nav-link' : 'nav-link'" href="/editor/contacts">
-                        <span data-feather="shopping-cart"></span>
-                        Контакты
-                    </a>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                    <a th:text="#{menuoption_contacts}" th:class="${activeTab == 'CONTACTS'} ? 'active nav-link' : 'nav-link'" href="/editor/contacts"></a>
                 </li>
-            </ul>
-
-            <ul class="nav flex-column mb-2">
-                <li class="nav-item">
-                    <a th:class="${activeTab == 'FORUM'} ? 'active nav-link' : 'nav-link'" href="/editor/forum">
-                        <span data-feather="file-text"></span>
-                        Форум
-                    </a>
+                <li sec:authorize="hasAnyRole('ADMIN', 'MODER')" class="nav-item">
+                    <a th:text="#{menuoption_forum}" th:class="${activeTab == 'FORUM'} ? 'active nav-link' : 'nav-link'" href="/editor/forum"></a>
+                </li>
+                <li sec:authorize="hasAnyRole('ADMIN')" class="nav-item">
+                    <a th:text="#{menuoption_users}" th:class="${activeTab == 'USERS'} ? 'active nav-link' : 'nav-link'" href="/editor/users"></a>
                 </li>
             </ul>
 

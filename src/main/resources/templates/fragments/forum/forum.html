@@ -5,11 +5,6 @@
 </head>
 <body>
     <div th:fragment="main" role="main" class="container mt-4">
-        <nav style="display: inline-block;" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">Форум</li>
-            </ol>
-        </nav>
 
         <div th:each='item : ${list}' class="media text-muted pt-3">
 
@@ -17,7 +12,9 @@
                 <a th:href="@{'/forum/' + ${item.id}}">
                     <span style="font-size: 12pt;" class="pl-3 d-block text-gray-dark" th:text="${item.name}"></span>
                 </a>
-                <span class="pl-4" th:text="${item.description}"></span>
+                <th:block>
+                    <span th:if="${not #strings.isEmpty(item.description)}" class="pl-4" th:text="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(item.description).text(),150)}" ></span>
+                </th:block>
             </p>
         </div>
     </div>

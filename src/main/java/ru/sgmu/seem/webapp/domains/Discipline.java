@@ -11,22 +11,17 @@ import java.util.Set;
 @AttributeOverride(name = "imageName", column = @Column(name = "image_name", insertable = false, updatable = false))
 public class Discipline extends EntityDetails {
 
-    @Size(max = 255)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Column(length = 65535)
     private String description;
 
-    @ManyToMany(mappedBy = "disciplines")
-    private Set<EducationStep> educationSteps = new HashSet<>(0);
+    @ManyToOne
+    @JoinColumn(name = "specialization_id", nullable = false)
+    private Specialization specialization;
 
-    @ManyToMany(mappedBy = "disciplines")
-    private Set<Course> courses = new HashSet<>(0);
-
-    @ManyToMany(mappedBy = "disciplines")
-    private Set<Specialization> specializations = new HashSet<>(0);
-
-    @OneToMany(mappedBy = "discipline")
+    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL)
     private Set<Thread> threads = new HashSet<>(0);
 
     public String getName() {
@@ -45,28 +40,12 @@ public class Discipline extends EntityDetails {
         this.description = description;
     }
 
-    public Set<EducationStep> getEducationSteps() {
-        return educationSteps;
+    public Specialization getSpecialization() {
+        return specialization;
     }
 
-    public void setEducationSteps(Set<EducationStep> educationSteps) {
-        this.educationSteps = educationSteps;
-    }
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
-
-    public Set<Specialization> getSpecializations() {
-        return specializations;
-    }
-
-    public void setSpecializations(Set<Specialization> specializations) {
-        this.specializations = specializations;
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
     }
 
     public Set<Thread> getThreads() {

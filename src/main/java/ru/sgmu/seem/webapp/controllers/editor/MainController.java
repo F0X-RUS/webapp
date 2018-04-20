@@ -1,23 +1,26 @@
 package ru.sgmu.seem.webapp.controllers.editor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.sgmu.seem.utils.FormValidator;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.sgmu.seem.utils.ImageManager;
-import ru.sgmu.seem.utils.enums.FolderTitle;
 import ru.sgmu.seem.utils.enums.MenuOption;
 import ru.sgmu.seem.webapp.domains.Infoblock;
 import ru.sgmu.seem.webapp.domains.Man;
+import ru.sgmu.seem.webapp.domains.User;
 import ru.sgmu.seem.webapp.services.CrudService;
+import ru.sgmu.seem.webapp.services.CustomUserDetailsService;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.List;
 
 import static ru.sgmu.seem.utils.DateManager.getCurrentDate;
@@ -29,10 +32,8 @@ import static ru.sgmu.seem.utils.enums.ListTitle.MAN_LIST;
 import static ru.sgmu.seem.utils.enums.FolderTitle.INFOBLOCK_IMAGES;
 import static ru.sgmu.seem.utils.enums.FolderTitle.MAN_IMAGES;
 import static ru.sgmu.seem.utils.enums.PageAttribute.*;
-import static ru.sgmu.seem.utils.enums.PageTitle.EDIT_INFOBLOCK;
-import static ru.sgmu.seem.utils.enums.PageTitle.EDIT_MAN;
-import static ru.sgmu.seem.utils.enums.PageTitle.MAIN;
 
+@PreAuthorize("hasRole('ADMIN')")
 @Controller("EditorMainController")
 @RequestMapping(value = "/editor/main")
 public class MainController {
@@ -42,18 +43,18 @@ public class MainController {
     private Path editInfoblock = Paths.get("editor", "fragments", "main", "edit-infoblock");
     private CrudService<Man> manService;
     private CrudService<Infoblock> infoblockService;
-    private FormValidator formValidator;
     private ImageManager imageManager;
+    private CustomUserDetailsService userService;
 
     @Autowired
     public MainController(CrudService<Man> manService,
                           CrudService<Infoblock> infoblockService,
-                          FormValidator formValidator,
-                          ImageManager imageManager) {
+                          ImageManager imageManager,
+                          CustomUserDetailsService userService) {
         this.manService = manService;
         this.infoblockService = infoblockService;
-        this.formValidator = formValidator;
         this.imageManager = imageManager;
+        this.userService = userService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -66,22 +67,21 @@ public class MainController {
                 .addAttribute(INFOBLOCK_LIST.name(), infoblockList)
                 .addAttribute(CONTENT.toString(), main)
                 .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name())
-                .addAttribute(TITLE.toString(), MAIN.getText())
                 .addAttribute(MAN_IMAGES.getText(), MAN_IMAGES_URL)
                 .addAttribute(INFOBLOCK_IMAGES.getText(), INFOBLOCK_IMAGES_URL);
         return "editor/layouts/index";
     }
 
     @RequestMapping(value = "/man/{id}", method = RequestMethod.GET)
-    public String main(Man man,
-                       @PathVariable("id") Long id,
+    public String mainMan(@PathVariable("id") Long id,
                        Model model) {
-        man = manService.getById(id);
+        if (!model.containsAttribute("man")) {
+            Man man = manService.getById(id);
+            model.addAttribute("man", man);
+        }
         model.addAttribute(CONTENT.toString(), editMan)
-                .addAttribute(TITLE.toString(), EDIT_MAN.getText())
                 .addAttribute(MAN_IMAGES.getText(), MAN_IMAGES_URL)
-                .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name())
-                .addAttribute("man", man);
+                .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name());
         return "editor/layouts/index";
     }
 
@@ -89,30 +89,29 @@ public class MainController {
     public String main(@Valid Man man,
                        BindingResult bindingResult,
                        @RequestParam("image") MultipartFile file,
-                       Model model) {
+                       RedirectAttributes redirectAttributes,
+                       Principal principal) throws IOException{
         String oldImageName = manService.getById(man.getId()).getImageName();
-        String fileExtention = file.getContentType().split("/")[1].toUpperCase();
-        if (!imageManager.checkExtention(fileExtention) && !file.isEmpty()){
-            model.addAttribute("image_err", IMAGE_UPLOAD_ERROR);
-        }
-        if (bindingResult.hasErrors() || model.containsAttribute("image_err")) {
-            man.setImageName(oldImageName);
-            model.addAttribute(CONTENT.name(), editMan)
-                    .addAttribute(TITLE.name(), EDIT_MAN.getText())
-                    .addAttribute(CURRENT_PAGE.name(), MenuOption.MAIN.toString())
-                    .addAttribute("man", man)
-                    .addAttribute(FolderTitle.MAN_IMAGES.getText(), MAN_IMAGES_URL);
-            return "/editor/layouts/index";
-        }
-        String imageName = (!file.isEmpty()) ? imageManager.getImageName(file, manImagesPath) : oldImageName;
-        if (!imageName.equals(oldImageName)){
-            try {
-                imageManager.deleteImage(Paths.get(manImagesPath.toString(), oldImageName));
-            } catch (IOException e) {
-                e.printStackTrace();
+        String imageName = oldImageName;
+        if (!file.isEmpty()) {
+            if (!imageManager.checkExtention(file)) {
+                redirectAttributes.addFlashAttribute("image_err", IMAGE_UPLOAD_ERROR);
+            } else {
+                imageName = imageManager.getImageName(file, manImagesPath);
             }
         }
+        if (bindingResult.hasErrors() || !redirectAttributes.getFlashAttributes().isEmpty()) {
+            man.setImageName(oldImageName);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.man", bindingResult);
+            redirectAttributes.addFlashAttribute("man", man);
+            return "redirect:/editor/main/man/" + man.getId();
+        }
+        if (imageName != null && oldImageName != null && !imageName.equals(oldImageName)) {
+            imageManager.deleteImage(Paths.get(manImagesPath.toString(), oldImageName));
+        }
         man.setImageName(imageName);
+        User user = userService.getByUsername(principal.getName());
+        man.setUser(user);
         man.setDate(getCurrentDate());
         man.setTime(getCurrentTime());
         manService.update(man);
@@ -120,15 +119,15 @@ public class MainController {
     }
 
     @RequestMapping(value = "/infoblock/{id}", method = RequestMethod.GET)
-    public String main(Infoblock infoblock,
-                       @PathVariable("id") Long id,
+    public String main(@PathVariable("id") Long id,
                        Model model) {
-        infoblock = infoblockService.getById(id);
+        if (!model.containsAttribute("infoblock")) {
+            Infoblock infoblock = infoblockService.getById(id);
+            model.addAttribute("infoblock", infoblock);
+        }
         model.addAttribute(CONTENT.toString(), editInfoblock)
-                .addAttribute(TITLE.toString(), EDIT_INFOBLOCK.getText())
                 .addAttribute(INFOBLOCK_IMAGES.getText(), INFOBLOCK_IMAGES_URL)
-                .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name())
-                .addAttribute("infoblock", infoblock);
+                .addAttribute(MENU_OPTION.toString(), MenuOption.MAIN.name());
         return "editor/layouts/index";
     }
 
@@ -136,30 +135,29 @@ public class MainController {
     public String main(@Valid Infoblock infoblock,
                        BindingResult bindingResult,
                        @RequestParam("image") MultipartFile file,
-                       Model model) {
+                       RedirectAttributes redirectAttributes,
+                       Principal principal) throws IOException{
         String oldImageName = infoblockService.getById(infoblock.getId()).getImageName();
-        String fileExtention = file.getContentType().split("/")[1].toUpperCase();
-        if (!imageManager.checkExtention(fileExtention) && !file.isEmpty()){
-            model.addAttribute("image_err", IMAGE_UPLOAD_ERROR);
-        }
-        if (bindingResult.hasErrors() || model.containsAttribute("image_err")) {
-            infoblock.setImageName(oldImageName);
-            model.addAttribute(CONTENT.name(), editInfoblock)
-                    .addAttribute(TITLE.name(), EDIT_INFOBLOCK.getText())
-                    .addAttribute(CURRENT_PAGE.name(), MenuOption.MAIN.toString())
-                    .addAttribute("infoblock", infoblock)
-                    .addAttribute(FolderTitle.INFOBLOCK_IMAGES.getText(), INFOBLOCK_IMAGES_URL);
-            return "/editor/layouts/index";
-        }
-        String imageName = (!file.isEmpty()) ? imageManager.getImageName(file, infoblockImagesPath) : oldImageName;
-        if (!imageName.equals(oldImageName)){
-            try {
-                imageManager.deleteImage(Paths.get(infoblockImagesPath.toString(), oldImageName));
-            } catch (IOException e) {
-                e.printStackTrace();
+        String imageName = oldImageName;
+        if (!file.isEmpty()) {
+            if (!imageManager.checkExtention(file)) {
+                redirectAttributes.addFlashAttribute("image_err", IMAGE_UPLOAD_ERROR);
+            } else {
+                imageName = imageManager.getImageName(file, infoblockImagesPath);
             }
         }
+        if (bindingResult.hasErrors() || !redirectAttributes.getFlashAttributes().isEmpty()) {
+            infoblock.setImageName(oldImageName);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.infoblock", bindingResult);
+            redirectAttributes.addFlashAttribute("infoblock", infoblock);
+            return "redirect:/editor/main/infoblock/" + infoblock.getId();
+        }
+        if (imageName != null && oldImageName != null && !imageName.equals(oldImageName)) {
+            imageManager.deleteImage(Paths.get(infoblockImagesPath.toString(), oldImageName));
+        }
         infoblock.setImageName(imageName);
+        User user = userService.getByUsername(principal.getName());
+        infoblock.setUser(user);
         infoblock.setDate(getCurrentDate());
         infoblock.setTime(getCurrentTime());
         infoblockService.update(infoblock);

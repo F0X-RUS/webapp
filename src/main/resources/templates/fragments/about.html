@@ -4,15 +4,36 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-    <div th:fragment="main" role="main" class="container mt-4">
-        <h1 class="display-4 ml-3 mr-3">Кафедра</h1>
-        <hr class="my-4"/>
-        <div class="col-12 ml-3 mr-3">
-            <div class="ml-3 mr-3" th:each='item : ${PASSAGE_LIST}'>
-                <h4 th:text="${item.title}"></h4>
-                <p th:text="${item.content}"></p>
+<div th:fragment="main" role="main" class="container mt-4">
+    <h1 class="display-4 ml-3 mr-3" th:text="#{menuoption_about}"></h1>
+    <hr class="my-4"/>
+    <nav id="navbar-example2" class="navbar navbar-light bg-light rounded border mb-3 mt-3">
+        <ul class="nav nav-pills">
+            <li th:each="item, iter : ${PASSAGE_LIST}" th:if="@{${iter.index} &lt; 4}" class="nav-item">
+                <a th:text="${#strings.abbreviate(item.shortcut,20)}" class="nav-link mr-2 ml-2"
+                   th:classappend="@{${item.id == passage.id} ? 'active' : ''}"
+                   th:href="@{'/about/' + ${item.id}}"></a>
+            </li>
+            <li class="nav-item dropdown" th:if="@{${#lists.size(PASSAGE_LIST)} &gt; 4}">
+                <a th:text="#{more}" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                   aria-haspopup="true" aria-expanded="false"></a>
+                <div class="dropdown-menu">
+                    <a th:text="${#strings.abbreviate(item.shortcut,25)}" th:each="item, iter : ${PASSAGE_LIST}"
+                       th:if="@{${iter.index} &gt; 3}" class="dropdown-item" th:href="@{'/about/' + ${item.id}}"></a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="col-12 my-3 pl-3 pr-3 pb-3 pt-1 bg-white rounded box-shadow border">
+        <div class="m-3">
+            <div class="newsitem-crop text-center rounded border mb-3 mx-auto" style="width:350px">
+                <img th:if="${passage.imageName}" th:width="350px"
+                     th:src="@{'/' + ${PASSAGE_IMAGES} + '/' + ${passage.imageName}}"/>
             </div>
+            <h4 th:text="${passage.title}"></h4>
+            <p th:utext="${passage.content}"></p>
         </div>
     </div>
+</div>
 </body>
 </html>

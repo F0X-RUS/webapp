@@ -95,19 +95,19 @@ public class PageWrapper<T> {
 
     public class PageItem {
         private int number;
-        private boolean active;
+        private boolean enable;
 
-        public PageItem(int number, boolean active) {
+        public PageItem(int number, boolean enable) {
             this.number = number;
-            this.active = active;
+            this.enable = enable;
         }
 
         public int getNumber() {
             return number;
         }
 
-        public boolean isActive() {
-            return active;
+        public boolean isEnable() {
+            return enable;
         }
     }
 }

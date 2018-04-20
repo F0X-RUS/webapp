@@ -1,56 +1,45 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-
-    <!-- <link rel="icon" href="../../../../favicon.ico"> -->
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></link>
-    <link th:href="@{/css/carousel_my.css}" rel="stylesheet"/>
-    <link th:href="@{/css/my-own.css}" rel="stylesheet"/>
-    <link th:href="@{/css/forum.css}" rel="stylesheet" media="screen"/>
-    <title th:text="${TITLE}"></title>
-    <script>
-        $(function () {
-            $(".go-top").click(function (event) {
-                event.preventDefault();
-                $("body").animate({"scrollTop" : "0px"}, 1000);
-            })
-        });
-    </script>
-</head>
+<head th:replace="@{'fragments/header'} :: title(${MENU_OPTION})"></head>
 <body>
-
-<!--    TOP NAVBAR  -->
 <header>
-    <nav th:replace="@{'fragments/navbar'} :: navbar(${CURRENT_PAGE})"></nav>
+    <nav th:replace="@{'fragments/navbar'} :: navbar(${MENU_OPTION})"></nav>
 </header>
-
 <main role="main">
-
-    <!--CORE-->
     <div th:replace="${CONTENT}"></div>
-
     <div class="mx-auto col-10">
         <hr class="featurette-divider"/>
     </div>
-    <!-- FOOTER -->
     <footer class="container">
-        <p class="float-right">
-            <a class="go-top" href="#/" >Наверх</a>
-        </p>
-        <p>&copy; 2018. Кафедра симуляционных технологий и неотложной медицины.</p>
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <p class="float-left"
+                   th:text="@{'© ' + ${#dates.year(#dates.createNow())} +'. ' + #{organization_title}}"></p>
+            </div>
+            <div class="col-md-6 mx-auto">
+                <div class="input-group-prepend ml-2 float-right">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span th:text="#{language}"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="?lang=ru" th:text="#{lang.ru}"></a>
+                        <a class="dropdown-item" href="?lang=en" th:text="#{lang.en}"></a>
+                    </div>
+                </div>
+                <!--<a id="scroller" th:text="#{go_top}" class="ml-5 align-middle my-auto go-top" href="#/"></a>-->
+            </div>
+        </div>
     </footer>
-
 </main>
-
-<!-- ================================================== -->
-<script>
+<script type="text/javascript">
     function takeMap() {
-        var mapProp= {
-            center:new google.maps.LatLng(51.531761, 45.983373),
-            zoom:16,
+        var mapProp = {
+            center: new google.maps.LatLng(51.531761, 45.983373),
+            zoom: 16,
         };
-        var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(51.531761, 45.983373),
             map: map
@@ -58,10 +47,17 @@
     }
 </script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script th:src="@{/js/delete-modal.js}"></script>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://maps.googleapis.com/maps/api/js?callback=takeMap"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script th:src="@{'https://maps.googleapis.com/maps/api/js?key=AIzaSyDyNic8PTw3fE1fNhaqCHm9McS8nC7huoY&amp;callback=takeMap'}"></script>
+<script th:src="@{/js/trumbowyg.min.js}"></script>
+<script>$('#trumbowyg').trumbowyg();</script>
 </body>
 </html>

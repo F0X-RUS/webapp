@@ -43,4 +43,5 @@ public class ContactService implements CrudService<Contact>{
     public List<Contact> getAll() {
         return (List<Contact>) contactDAO.findAll();
     }
+
 }

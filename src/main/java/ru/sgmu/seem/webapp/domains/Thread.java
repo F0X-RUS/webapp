@@ -2,30 +2,37 @@ package ru.sgmu.seem.webapp.domains;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.*;
 
 @Entity
-@AttributeOverride(name = "imageName", column = @Column(name = "image_name", insertable = false, updatable = false))
-public class Thread extends EntityDetails {
+public class Thread {
 
-    @Size(max = 255)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private Date date;
+
+    private Time time;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Size(min = 3, max = 255)
     private String name;
 
-    @Column(length = 65535)
+    @Column(columnDefinition = "text")
     private String description;
 
-//    private List<String> fileNames;
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    @OrderBy("origin_name")
+    private SortedSet<File> files = new TreeSet<>();
 
-    @ManyToMany(mappedBy = "threads")
-    private Set<EducationStep> educationSteps = new HashSet<>(0);
-
-    @ManyToMany(mappedBy = "threads")
-    private Set<Course> courses = new HashSet<>(0);
-
-    @ManyToMany(mappedBy = "threads")
-    private Set<Specialization> specializations = new HashSet<>(0);
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    private Set<Post> posts = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "discipline_id", nullable = false)
@@ -37,38 +44,6 @@ public class Thread extends EntityDetails {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getContent() {
-        return description;
-    }
-
-    public void setContent(String content) {
-        this.description = content;
-    }
-
-    public Set<EducationStep> getEducationSteps() {
-        return educationSteps;
-    }
-
-    public void setEducationSteps(Set<EducationStep> educationSteps) {
-        this.educationSteps = educationSteps;
-    }
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
-
-    public Set<Specialization> getSpecializations() {
-        return specializations;
-    }
-
-    public void setSpecializations(Set<Specialization> specializations) {
-        this.specializations = specializations;
     }
 
     public Discipline getDiscipline() {
@@ -85,5 +60,53 @@ public class Thread extends EntityDetails {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public SortedSet<File> getFiles() {
+        return files;
+    }
+
+    public void setFiles(SortedSet<File> files) {
+        this.files = files;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 }

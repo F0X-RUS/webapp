@@ -4,12 +4,15 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+<div th:fragment="main" role="main" class="col-sm-10 pt-3">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Изменение данных для страницы "Контакты"</h1>
+        <h1 class="h2" th:text="#{menuoption_contacts}"></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a th:href="@{'/editor/contacts/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить контакт</button></a>
+                <a th:href="@{'/editor/contacts/add'}"><button class="btn btn-sm btn-outline-secondary" th:text="#{add}"></button></a>
+            </div>
+            <div class="btn-group mr-2">
+                <a th:href="@{'/editor/contacts/types'}"><button class="btn btn-sm btn-outline-secondary" th:text="#{contacttypes_list}"></button></a>
             </div>
         </div>
     </div>
@@ -17,34 +20,37 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Тип</th>
-            <th>Содержание</th>
-            <th>Дата изменения</th>
-            <th>Время изменения</th>
-            <th>Изменил(а)</th>
-            <th>Функции</th>
+            <th th:text="#{type}"></th>
+            <th th:text="#{content}"></th>
+            <th th:text="#{date}"></th>
+            <th th:text="#{time}"></th>
+            <th th:text="#{user}"></th>
+            <th th:text="#{functions}"></th>
         </tr>
         </thead>
         <tr th:each="item : ${CONTACTS_LIST}">
             <form method="post" action="/editor/contacts/update" th:object="${contact}">
-                <td class="align-middle" th:text="${item.type}">
-                </td>
+                <td class="align-middle" th:text="${item.type.name}"></td>
                 <td>
                     <input class="form-control" th:value="${item.content}" type="text" name="content" placeholder="..."/>
                 </td>
                 <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')}"></td>
                 <td class="align-middle" th:text="${#dates.format(item.time, 'HH:mm:ss')}"></td>
-                <td class="align-middle" th:text="${item.updatedBy}"></td>
+                <td class="align-middle" th:text="${#strings.abbreviate(item.user.name + ' ' + item.user.surname, 15)}"></td>
                 <td>
-                    <input type="hidden" id="type" name="type" th:value="${item.type}"/>
+                    <input type="hidden" id="type" name="type" th:value="${item.type.id}"/>
                     <input type="hidden" name="id" th:value="${item.id}"/>
-                    <button type="submit" class="btn btn-primary">Обновить</button>
+                    <button type="submit" class="btn btn-primary" th:text="#{update}"></button>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                            th:attr="data-id=${item.id},data-title=${item.content},
-                                data-date=${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}">
-                        Удалить
+                            th:attr="data-id=${item.id},
+                            data-title=${item.type},
+                            data-content=${item.content},
+                            data-action=@{'/editor/contacts/delete'},
+                    data-date=${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}"
+                    th:text="#{remove}">
                     </button>
                 </td>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             </form>
         </tr>
     </table>
@@ -54,24 +60,27 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Вы действительно хотите удалить контакт?</h5>
+                <h5 class="modal-title" id="exampleModalLabel" th:text="@{#{your_really_want_delete} + ' ' + #{contacts_item} + '?'}"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
-                    <h5 class="card-title">Содержание:</h5>
+                    <h5 class="card-title" th:text="#{type}"></h5>
                     <p id="title" class="card-text"></p>
-                    <p class="card-text"><small id="date" class="text-muted"></small></p>
+                    <h5 class="card-title" th:text="#{content}"></h5>
+                    <p id="content" class="card-text"></p>
+                    <small class="card-text" th:text="#{last_update_date} + ' '"></small><small id="date" class="text-muted"></small>
                 </form>
             </div>
             <div class="modal-footer">
-                <form method="post" enctype="multipart/form-data" action="/editor/contacts/delete">
+                <form method="post" enctype="multipart/form-data" id="action" action="/editor/contacts/delete">
                     <input type="hidden" id="id" name="id"/>
-                    <button type="submit" class="btn btn-danger">Удалить</button>
+                    <button type="submit" class="btn btn-danger" th:text="#{remove}"></button>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </form>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{cancel}"></button>
             </div>
         </div>
     </div>

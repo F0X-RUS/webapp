@@ -4,35 +4,38 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+<div th:fragment="main" role="main" class="col-sm-10 pt-3">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Форум</h1>
+        <h1 class="h2" th:text="#{menuoption_forum}"></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a th:href="@{'forum/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить уровень образования</button></a>
+                <a th:href="@{'/editor/forum/add'}"><button class="btn btn-sm btn-outline-secondary" th:text="#{add_educstep}"></button></a>
             </div>
         </div>
     </div>
 
     <div>
-        <div th:each='item : ${EDUCATIONSTEPS_LIST}'>
+        <div th:each="item : ${EDUCATIONSTEPS_LIST}">
 
-            <div class="pb-3 alert alert-primary"
-                 data-toggle="collapse"
-                 th:href="'#elem' + ${item.name}"
-                 role="button"
-                 aria-expanded="false"
-                 th:attr="aria-controls='#elem' + ${item.name}">
-                <span class="align-middle" th:text="@{${#lists.size(item.courses)} == 0 ? ${item.name} : '+ ' + ${item.name}}"></span>
-                <button type="button" class="align-middle float-right btn btn-light btn-sm">
-                    <span aria-hidden="true">Удалить</span>
+            <div class="pb-3 alert alert-primary" role="button" aria-expanded="false">
+                <a th:if="${#lists.size(item.courses)} > 0" data-toggle="collapse" th:href="'#elem' + ${item.name}" th:attr="aria-controls='#elem' + ${item.name}">
+                    <span class="text-primary align-middle" th:text="@{' + ' + ${item.name}}"></span>
+                </a>
+                <span th:if="${#lists.size(item.courses)} == 0" class="text-primary align-middle" th:text="${item.name}"></span>
+                <button type="button" class="align-middle float-right btn btn-light btn-sm" data-toggle="modal" data-target="#exampleModal"
+                        th:attr="data-id=${item.id},
+                                data-title=${item.name},
+                                data-content=${item.description},
+                                data-action=@{'/editor/forum/' + ${item.id} + '/delete'},
+                                data-date=${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}">
+                    <span aria-hidden="true" th:text="#{remove}"></span>
                 </button>
-                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
-                    <span aria-hidden="true">Изменить</span>
-                </button>
-                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
-                    <span aria-hidden="true">Добавить курс</span>
-                </button>
+                <a th:href="@{'forum/' + ${item.id} + '/edit'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                    <span aria-hidden="true" th:text="#{edit}"></span>
+                </a>
+                <a th:href="@{'/editor/forum/' + ${item.id} + '/add'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                    <span aria-hidden="true" th:text="#{add_course}"></span>
+                </a>
 
             </div>
 
@@ -40,22 +43,26 @@
 
                 <div th:each="course, iterStat : ${item.courses}">
 
-                    <div class="pb-3 ml-5 alert alert-info"
-                         data-toggle="collapse"
-                         th:href="'#elem' + ${item.name} +  ${iterStat.index} + ${course.name} "
-                         role="button"
-                         aria-expanded="false"
-                         th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${course.name}">
-                        <span class="align-middle" th:text="@{${#lists.size(course.specializations)} == 0 ? ${course.name} : '+ ' + ${course.name}}"></span>
-                        <button type="button" class="align-middle float-right btn btn-light btn-sm">
-                            <span aria-hidden="true">Удалить</span>
+                    <div class="pb-3 ml-5 alert alert-info" role="button" aria-expanded="false">
+                        <a th:if="${#lists.size(course.specializations)} > 0" data-toggle="collapse" th:href="'#elem' + ${item.name} +  ${iterStat.index} + ${course.name}"
+                           th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${course.name}">
+                            <span class="text-info align-middle" th:text="@{' + ' + ${course.name}}"></span>
+                        </a>
+                        <span th:if="${#lists.size(course.specializations)} == 0" class="text-info align-middle" th:text="${course.name}"></span>
+                        <button type="button" class="align-middle float-right btn btn-light btn-sm" data-toggle="modal" data-target="#exampleModal"
+                                th:attr="data-id=${course.id},
+                                data-title=${course.name},
+                                data-content=${course.description},
+                                data-action=@{'/editor/forum/' + ${item.id} + '/' + ${course.id} + '/delete'},
+                                data-date=${#dates.format(course.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(course.time, 'HH:mm:ss')}">
+                            <span aria-hidden="true" th:text="#{remove}"></span>
                         </button>
-                        <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
-                            <span aria-hidden="true">Изменить</span>
-                        </button>
-                        <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
-                            <span aria-hidden="true">Добавить специализацию</span>
-                        </button>
+                        <a th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/edit'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                            <span aria-hidden="true" th:text="#{edit}"></span>
+                        </a>
+                        <a th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/add'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                            <span aria-hidden="true" th:text="#{add_spec}"></span>
+                        </a>
 
                     </div>
 
@@ -63,61 +70,88 @@
 
                         <div th:each="spec : ${course.specializations}">
 
-                            <div class="pb-3 ml-7 alert alert-success"
-                                 data-toggle="collapse"
-                                 th:href="'#elem' + ${item.name} + ${iterStat.index} + ${spec.name}"
-                                 role="button"
-                                 aria-expanded="false"
-                                 th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${spec.name}">
-                                <span class="align-middle" th:text="@{${#lists.size(spec.disciplines)} == 0 ? ${spec.name} : '+ ' + ${spec.name}}"></span>
-                                <button type="button" class="align-middle float-right btn btn-light btn-sm">
-                                    <span aria-hidden="true">Удалить</span>
+                            <div class="pb-3 ml-7 alert alert-success" role="button" aria-expanded="false">
+                                <a th:if="${#lists.size(spec.disciplines)} > 0"
+                                   th:href="'#elem' + ${item.name} + ${iterStat.index} + ${spec.name}"
+                                   th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${spec.name}"
+                                   data-toggle="collapse">
+                                    <span class="text-success align-middle" th:text="@{' + ' +  ${spec.name}}"></span>
+                                </a>
+                                <span th:if="${#lists.size(spec.disciplines)} == 0" class="text-info align-middle" th:text="${spec.name}"></span>
+                                <button type="button" class="align-middle float-right btn btn-light btn-sm" data-toggle="modal" data-target="#exampleModal"
+                                        th:attr="data-id=${spec.id},
+                                data-title=${spec.name},
+                                data-content=${spec.description},
+                                data-action=@{'/editor/forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/delete'},
+                                data-date=${#dates.format(spec.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}">
+                                    <span aria-hidden="true" th:text="#{remove}"></span>
                                 </button>
-                                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
-                                    <span aria-hidden="true">Изменить</span>
-                                </button>
-                                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
-                                    <span aria-hidden="true">Добавить дисциплину</span>
-                                </button>
+                                <a th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/edit'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                                    <span aria-hidden="true" th:text="#{edit}"></span>
+                                </a>
+                                <a th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/add'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                                    <span aria-hidden="true" th:text="#{add_disc}"></span>
+                                </a>
 
                             </div>
 
                             <div class="collapse" th:id="'elem' + ${item.name} + ${iterStat.index} + ${spec.name}">
-
                                 <div th:each="disc : ${spec.disciplines}">
-                                    <a class="text-secondary" th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id}}">
-                                        <div class="pb-3 ml-8 alert alert-secondary">
-                                            <span class="text-secondary align-middle" th:text="@{'+ ' + ${disc.name}}"></span>
-                                            <a th:href="${'/forum'}">
-                                                <button type="button" class="align-middle float-right btn btn-light btn-sm">
-                                                    <span aria-hidden="true">Удалить</span>
-                                                </button>
-                                            </a>
-                                            <a th:href="${'/forum'}">
-                                                <button type="button" class="mr-2 align-middle float-right btn btn-light btn-sm">
-                                                    <span aria-hidden="true">Изменить</span>
-                                                </button>
-                                            </a>
-                                        </div>
-                                    </a>
-                                    <!--<div class="ml-8 alert alert-secondary"
-                                         th:text="@{${#lists.size(item.threads)} == 0 ? ${disc.name} : '+ ' + ${disc.name}}"
-                                         data-toggle="collapse"
-                                         th:href="'#elem' + ${item.name} + ${iterStat.index} + ${disc.name}"
-                                         role="button"
-                                         aria-expanded="false"
-                                         th:attr="aria-controls='#elem' + ${item.name} + ${iterStat.index} + ${disc.name}"></div>
-
-                                    <div class="collapse" th:id="'elem' + ${item.name} + ${iterStat.index} + ${disc.name}">
-                                        <div class="ml-9 alert alert-danger"
-                                             th:each="thread : ${item.threads}"
-                                             th:text="${thread.name}">
-                                        </div>
-                                    </div>-->
+                                    <div class="pb-3 ml-8 alert alert-secondary">
+                                        <a th:if="${#lists.size(disc.threads)} > 0" th:href="@{'/editor/forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id}}">
+                                            <span class="text-secondary align-middle" th:text="@{' + ' + ${disc.name} + ' - '}"></span><span class="text-secondary align-middle" th:text="#{thread_list}"></span>
+                                        </a>
+                                        <span th:if="${#lists.size(disc.threads)} == 0" class="text-secondary align-middle" th:text="${disc.name}"></span>
+                                        <button type="button" class="align-middle float-right btn btn-light btn-sm" data-toggle="modal" data-target="#exampleModal"
+                                                th:attr="data-id=${disc.id},
+                                                        data-title=${disc.name},
+                                                        data-content=${disc.description},
+                                                        data-action=@{'/editor/forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id} + '/delete'},
+                                                        data-date=${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}">
+                                            <span aria-hidden="true" th:text="#{remove}"></span>
+                                        </button>
+                                        <a th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id} + '/edit'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                                            <span aria-hidden="true" th:text="#{edit}"></span>
+                                        </a>
+                                        <a th:href="@{'forum/' + ${item.id} + '/' + ${course.id} + '/' + ${spec.id} + '/' + ${disc.id} + '/add'}" class="mr-2 align-middle float-right btn btn-light btn-sm">
+                                            <span aria-hidden="true" th:text="#{add_thread}"></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" th:text="@{#{your_really_want_delete} + ' ' + #{item} + '?'}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <h5 class="card-title" th:text="#{title}"></h5>
+                        <p id="title" class="card-text"></p>
+                        <h5 class="card-title" th:text="#{content}"></h5>
+                        <p id="content" class="card-text"></p>
+                        <small class="card-text" th:text="#{last_update_date} + ' '"></small>
+                        <small id="date" class="text-muted"></small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" enctype="multipart/form-data" id="action" action="">
+                        <input type="hidden" id="id" class="form-control" name="id"/>
+                        <button type="submit" class="btn btn-danger" th:text="#{remove}"></button>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{cancel}"></button>
                 </div>
             </div>
         </div>

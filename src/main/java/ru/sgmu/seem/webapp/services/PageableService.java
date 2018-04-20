@@ -7,12 +7,12 @@ import ru.sgmu.seem.webapp.domains.News;
 
 import java.util.List;
 
-public interface NewsService extends CrudService<News> {
+public interface PageableService<T> extends CrudService<T>{
 
-    List<News> getLast3();
+    List<T> getLast3();
 
-    Page<News> findAll(Pageable pageable);
+    Page<T> findAll(Pageable pageable);
 
-    Page<News> getPage(int pageNumber, int size, Sort.Direction direction, String... orderParam);
+    Page<T> getPage(int pageNumber, int size, Sort.Direction direction, String... orderParam);
 
 }

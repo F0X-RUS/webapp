@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="main" role="main" class="col-sm-9 pt-3">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2" th:text="#{add_contacttype}"></h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" action="save" th:object="${contactType}">
+        <div class="form-group">
+            <label for="name" th:text="#{name}"></label>
+            <input th:value="${contactType.name}" name="name" type="text" class="form-control" id="name" placeholder="..."/>
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="display:block;" class="invalid-feedback"></div>
+        </div>
+        <button name="submit" type="submit" class="btn btn-primary" th:text="#{add}"></button> |
+        <a th:href="${'/editor/contacts/types'}">
+            <button name="cancel" type="button" class="btn btn-primary" th:text="#{back}"></button>
+        </a>
+        <input th:if="${contactType.id}" type="hidden" id="id" class="form-control" name="id" th:value="${contactType.id}"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+</div>
+</body>
+</html>

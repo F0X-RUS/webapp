@@ -1,5 +1,7 @@
 package ru.sgmu.seem.webapp.domains;
 
+import org.springframework.cache.annotation.CacheConfig;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
@@ -19,7 +21,9 @@ public abstract class EntityDetails implements Serializable {
 
     private Time time;
 
-    private String updatedBy;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Long getId() {
         return id;
@@ -53,11 +57,13 @@ public abstract class EntityDetails implements Serializable {
         this.time = time;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public User getUser() {
+        return user;
     }
 
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setUser(User user) {
+        this.user = user;
     }
+
+
 }

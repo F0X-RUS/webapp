@@ -18,14 +18,15 @@ public class FolderManager {
     public static final Path infoblockImagesPath = Paths.get(home, "webapp", "images", "main", "infoblock");
     public static final Path newsImagesPath = Paths.get(home, "webapp", "images", "news");
     public static final Path staffImagesPath = Paths.get(home, "webapp", "images", "staff");
-
-    private final Path default_man_image_path = Paths.get(home, "webapp", "images", "main", "man", "default.png");
-    private final Path default_infoblock_image_path = Paths.get(home, "webapp", "images", "main", "infoblock", "default.png");
+    public static final Path passageImagesPath = Paths.get(home, "webapp", "images", "passage");
+    public static final Path threadFilesPath = Paths.get(home, "webapp", "files", "thread");
 
     public static final String INFOBLOCK_IMAGES_URL = "images/infoblock";
     public static final String MAN_IMAGES_URL = "images/man";
     public static final String NEWS_IMAGES_URL = "images/news";
     public static final String STAFF_IMAGES_URL = "images/staff";
+    public static final String PASSAGE_IMAGES_URL = "images/passage";
+    public static final String THREAD_FILES_URL = "files/thread";
 
     public static void createImageFolder() {
         try {
@@ -46,6 +47,12 @@ public class FolderManager {
             }
             if (!Files.exists(staffImagesPath)) {
                 Files.createDirectories(staffImagesPath);
+            }
+            if (!Files.exists(passageImagesPath)) {
+                Files.createDirectories(passageImagesPath);
+            }
+            if (!Files.exists(threadFilesPath)) {
+                Files.createDirectories(threadFilesPath);
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();

@@ -1,64 +1,76 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head></head>
 <body>
+<nav th:fragment="navbar(activeTab)" role="navigation" class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+    <div class="container d-flex justify-content-between">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a th:text="#{menuoption_main}" th:class="${activeTab == 'MAIN'} ? 'active nav-link' : 'nav-link'"
+                       th:href="@{'/'}">
+                        <span data-feather="home"></span>
+                        <!--Главная-->
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:text="#{menuoption_forum}" th:class="${activeTab == 'FORUM'} ? 'active nav-link' : 'nav-link'"
+                       th:href="@{'/forum'}">
+                        <span data-feather="file"></span>
+                        <!--Форум-->
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:text="#{menuoption_news}" th:class="${activeTab == 'NEWS'} ? 'active nav-link' : 'nav-link'"
+                       th:href="@{'/news'}">
+                        <span data-feather="shopping-cart"></span>
+                        <!--Новости-->
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:text="#{menuoption_about}" th:class="${activeTab == 'ABOUT'} ? 'active nav-link' : 'nav-link'"
+                       th:href="@{'/about'}">
+                        <span data-feather="shopping-cart"></span>
+                        <!--Кафедра-->
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:text="#{menuoption_staff}" th:class="${activeTab == 'STAFF'} ? 'active nav-link' : 'nav-link'"
+                       th:href="@{'/staff'}">
+                        <span data-feather="shopping-cart"></span>
+                        <!--Сотрудники-->
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a th:text="#{menuoption_contacts}"
+                       th:class="${activeTab == 'CONTACTS'} ? 'active nav-link' : 'nav-link'" th:href="@{'/contacts'}">
+                        <span data-feather="shopping-cart"></span>
+                        <!--Контакты-->
+                    </a>
+                </li>
+                <li sec:authorize="hasAnyRole('ADMIN','MODER')" class="nav-item">
+                    <a th:text="#{menuoption_editor}"
+                       th:class="${activeTab == 'EDITOR'} ? 'active nav-link' : 'nav-link'" th:href="@{'/editor'}">
+                        <span data-feather="shopping-cart"></span>
+                        <!--Редактор-->
+                    </a>
+                </li>
+            </ul>
 
-    <nav th:fragment="navbar(activeTab)" role="navigation" class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <div class="container d-flex justify-content-between">
-            <a class="navbar-brand" href="#">LOGO</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a th:class="${activeTab == 'MAIN'} ? 'active nav-link' : 'nav-link'" th:href="@{'/'}">
-                            <span data-feather="home"></span>
-                            Главная
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:class="${activeTab == 'FORUM'} ? 'active nav-link' : 'nav-link'" th:href="@{'/forum'}">
-                            <span data-feather="file"></span>
-                            Форум
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:class="${activeTab == 'EDITOR'} ? 'active nav-link' : 'nav-link'" th:href="@{'/editor'}">
-                            <span data-feather="shopping-cart"></span>
-                            Редактор
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:class="${activeTab == 'NEWS'} ? 'active nav-link' : 'nav-link'" th:href="@{'/news'}">
-                            <span data-feather="shopping-cart"></span>
-                            Новости
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:class="${activeTab == 'ABOUT'} ? 'active nav-link' : 'nav-link'" th:href="@{'/about'}">
-                            <span data-feather="shopping-cart"></span>
-                            О кафедре
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:class="${activeTab == 'STAFF'} ? 'active nav-link' : 'nav-link'" th:href="@{'/staff'}">
-                            <span data-feather="shopping-cart"></span>
-                            Сотрудники
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a th:class="${activeTab == 'CONTACTS'} ? 'active nav-link' : 'nav-link'" th:href="@{'/contacts'}">
-                            <span data-feather="shopping-cart"></span>
-                            Контакты
-                        </a>
-                    </li>
-                </ul>
-            </div>
         </div>
-    </nav>
+        <div sec:authorize="isAuthenticated()" class="row  ml-1">
+            <span th:text="#{msg_hi}" class="text-light my-auto mr-1"></span>
+            <span class="text-light my-auto mr-1" sec:authentication="principal.name"></span>
+            <span class="text-light my-auto" sec:authentication="principal.surname"></span>
+            <a class="btn btn-outline-light btn-sm mr-3 ml-3" th:text="#{exit}" th:href="@{'/logout'}"></a>
+        </div>
+    </div>
+
+</nav>
 
 </body>
 </html>

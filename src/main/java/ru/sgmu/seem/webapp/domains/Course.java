@@ -11,38 +11,18 @@ import java.util.Set;
 @AttributeOverride(name = "imageName", column = @Column(name = "image_name", insertable = false, updatable = false))
 public class Course extends EntityDetails{
 
-    @Size(max = 255)
+    @Size(min = 1, max = 255)
     private String name;
 
     @Column(length = 65535)
     private String description;
 
-    @ManyToMany(mappedBy = "courses")
-    private Set<EducationStep> educationSteps = new HashSet<>(0);
+    @ManyToOne
+    @JoinColumn(name = "educationStep_id", nullable = false)
+    private EducationStep educationStep;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "Course_Specialization",
-            joinColumns = { @JoinColumn(name = "course_id") },
-            inverseJoinColumns = { @JoinColumn(name = "specialization_id") }
-    )
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private Set<Specialization> specializations = new HashSet<>(0);
-
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "Course_Discipline",
-            joinColumns = { @JoinColumn(name = "course_id") },
-            inverseJoinColumns = { @JoinColumn(name = "discipline_id") }
-    )
-    private Set<Discipline> disciplines = new HashSet<>(0);
-
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "Course_Thread",
-            joinColumns = { @JoinColumn(name = "course_id") },
-            inverseJoinColumns = { @JoinColumn(name = "thread_id") }
-    )
-    private Set<Thread> threads = new HashSet<>(0);
 
     public String getName() {
         return name;
@@ -52,12 +32,12 @@ public class Course extends EntityDetails{
         this.name = name;
     }
 
-    public Set<EducationStep> getEducationSteps() {
-        return educationSteps;
+    public EducationStep getEducationStep() {
+        return educationStep;
     }
 
-    public void setEducationSteps(Set<EducationStep> educationSteps) {
-        this.educationSteps = educationSteps;
+    public void setEducationStep(EducationStep educationStep) {
+        this.educationStep = educationStep;
     }
 
     public Set<Specialization> getSpecializations() {
@@ -66,22 +46,6 @@ public class Course extends EntityDetails{
 
     public void setSpecializations(Set<Specialization> specializations) {
         this.specializations = specializations;
-    }
-
-    public Set<Discipline> getDisciplines() {
-        return disciplines;
-    }
-
-    public void setDisciplines(Set<Discipline> disciplines) {
-        this.disciplines = disciplines;
-    }
-
-    public Set<Thread> getThreads() {
-        return threads;
-    }
-
-    public void setThreads(Set<Thread> threads) {
-        this.threads = threads;
     }
 
     public String getDescription() {

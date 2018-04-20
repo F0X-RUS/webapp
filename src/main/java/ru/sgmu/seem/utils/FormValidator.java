@@ -27,7 +27,7 @@ public class FormValidator {
         this.imageManager = imageManager;
     }
 
-    public boolean check(MultipartFile file, BindingResult bindingResult, Model model){
+    public boolean checkImage(MultipartFile file, BindingResult bindingResult, Model model){
         if (!imageManager.checkSelectedImage(file)){
             model.addAttribute("image_err", IMAGE_UPLOAD_ERROR);
         }

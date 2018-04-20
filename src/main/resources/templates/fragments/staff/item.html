@@ -5,16 +5,29 @@
 </head>
 <body>
 <div th:fragment="main" role="main" class="container mt-4">
-    <h1 class="display-4 ml-3 mr-3">Сотрудники кафедры</h1>
+    <h1 class="display-4 ml-3 mr-3" th:text="#{menuoption_staff}"></h1>
     <hr class="my-4"/>
-    <div>
-        <div class="mx-auto main-man-crop text-center">
-            <img class="rounded" th:if="${staff?.imageName}" th:width="250px" th:src="@{'/' + ${staff_images_path} + '/' + ${staff.imageName}}"/>
+    <!--<div class="col-12 my-3 p-5 bg-white rounded box-shadow border">-->
+    <div class="card bg-light mb-3 col-12 my-3 bg-white rounded box-shadow border pr-0 pl-0">
+        <div class="card-header row mr-0 ml-0 pt-4 pb-4">
+            <div class="mx-auto staff-crop border rounded pl-0 pr-0 d-inline" style="width:150px">
+                <img class="mr-0" th:width="150px"
+                     th:src="@{'/' + ${staff_images_path} + '/' + ${staff.imageName}}"/>
+            </div>
+            <div class="col-md-10 my-auto">
+                <div>
+                    <h4 th:text="@{${staff.surname} + ' ' + ${staff.name} + ' ' + ${staff?.patronymic}}"></h4>
+                </div>
+                <div>
+                    <small th:text="#{position} + ': ' + ${staff.position}"></small>
+                </div>
+            </div>
         </div>
-        <h3 class="text-center" th:text="@{${staff.surname} + ' ' + ${staff.name} + ' ' + ${staff?.patronymic}}"></h3>
-        <h6 class="text-center" th:text="${staff.position}"></h6>
-        <p th:text="${staff.description}"></p>
+        <div class="card-body">
+            <p th:utext="${staff.description}" class="card-text"></p>
+        </div>
     </div>
+    <!--</div>-->
 </div>
 </body>
 </html>

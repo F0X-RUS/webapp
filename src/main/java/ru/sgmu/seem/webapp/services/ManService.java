@@ -3,6 +3,7 @@ package ru.sgmu.seem.webapp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sgmu.seem.webapp.domains.Man;
+import ru.sgmu.seem.webapp.domains.cache.ManCache;
 import ru.sgmu.seem.webapp.repositories.ManDAO;
 
 import javax.transaction.Transactional;
@@ -12,11 +13,14 @@ import java.util.List;
 @Transactional
 public class ManService implements CrudService<Man> {
 
-    private final ManDAO manDAO;
+    private ManDAO manDAO;
+//    private ManCache manCache;
 
     @Autowired
-    public ManService(ManDAO manDAO) {
+    public ManService(ManDAO manDAO,
+                      ManCache manCache) {
         this.manDAO = manDAO;
+//        this.manCache = manCache;
     }
 
     @Override

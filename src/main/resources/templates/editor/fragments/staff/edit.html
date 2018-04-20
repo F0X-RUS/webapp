@@ -6,49 +6,68 @@
 <body>
 <div th:fragment="main" role="main" class="col-sm-10 p-3 m-4 mr-auto ml-auto mb-5">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Изменение данных сотрудника</h1>
+        <h1 class="h2" th:text="#{edit_staff}"></h1>
     </div>
-    <div class="man-edit text-center">
-        <img class="border rounded p-2" th:src="@{'~/' + ${staff_images_path} + '/' + ${staff.imageName}}"/>
-    </div>
+
 
     <div class="m-1 p-2">
         <form method="post" enctype="multipart/form-data" action="/editor/staff/edit" th:object="${staff}">
-            <div class="form-group">
-                <label for="surname">Фамилия</label>
-                <input th:value="${staff.surname}" class="form-control" id="surname" th:field="*{surname}" type="text"  name="surname" placeholder="..."/>
-                <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" style="display:block;" class="invalid-feedback"></div>
+            <div class="text-center">
+                <div>
+                    <img th:width="200px" class="border rounded p-2"
+                         th:src="@{'~/' + ${staff_images_path} + '/' + ${staff.imageName}}"/>
+                </div>
+                <label th:if="${staff.imageName}" class="form-check-label mr-4" for="enable"
+                       th:text="#{remove}"></label>
+                <input th:if="${staff.imageName}" name="clear" class="form-check-input" type="checkbox" id="enable"/>
             </div>
             <div class="form-group">
-                <label for="name">Имя</label>
-                <input th:value="${staff.name}" class="form-control" id="name" th:field="*{name}" type="text"  name="name" placeholder="..."/>
-                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="display:block;" class="invalid-feedback"></div>
-            </div>
-            <div class="form-group">
-                <label for="patronymic">Отчество</label>
-                <input th:value="${staff.patronymic}" class="form-control" id="patronymic" th:field="*{patronymic}" type="text"  name="patronymic" placeholder="..."/>
-                <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}" style="display:block;" class="invalid-feedback"></div>
-            </div>
-            <div class="form-group">
-                <label for="description">Содержание</label>
-                <textarea th:text="${staff.description}" id="description" name="description" th:field="*{description}" class="form-control" rows="3"></textarea>
-                <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="display:block;" class="invalid-feedback"></div>
-            </div>
-            <div class="form-group">
-                <label for="position">Должность</label>
-                <input th:value="${staff.position}" class="form-control" id="position" th:field="*{position}" type="text"  name="position" placeholder="..."/>
-                <div th:if="${#fields.hasErrors('position')}" th:errors="*{position}" style="display:block;" class="invalid-feedback"></div>
-            </div>
-            <div class="form-group">
-                <label for="image">Изображение</label>
+                <label for="image" th:text="#{photo}"></label>
                 <input accept="image/jpeg,image/png,image/gif,image/jpg" id="image" name="image" type="file"/>
                 <div th:if="${#vars['image_err']}" style="display:block;" class="invalid-feedback">
                     <span th:text="${image_err}"></span>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="surname" th:text="#{surname}"></label>
+                <input th:value="${staff.surname}" class="form-control" id="surname" th:field="*{surname}" type="text"
+                       name="surname" placeholder="..."/>
+                <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" style="display:block;"
+                     class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="name" th:text="#{name}"></label>
+                <input th:value="${staff.name}" class="form-control" id="name" th:field="*{name}" type="text"
+                       name="name" placeholder="..."/>
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="display:block;"
+                     class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="patronymic" th:text="#{patronymic}"></label>
+                <input th:value="${staff.patronymic}" class="form-control" id="patronymic" th:field="*{patronymic}"
+                       type="text" name="patronymic" placeholder="..."/>
+                <div th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}" style="display:block;"
+                     class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="summernote" th:text="#{content}"></label>
+                <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="display:block;" class="mb-2 invalid-feedback"></div>
+                <textarea id="summernote" th:text="${staff.description}" name="description" th:field="*{description}"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="position" th:text="#{position}"></label>
+                <input th:value="${staff.position}" class="form-control" id="position" th:field="*{position}"
+                       type="text" name="position" placeholder="..."/>
+                <div th:if="${#fields.hasErrors('position')}" th:errors="*{position}" style="display:block;"
+                     class="invalid-feedback"></div>
+            </div>
             <input type="hidden" id="id" class="form-control" name="id" th:value="${staff.id}"/>
-            <button name="submit" type="submit" class="btn btn-primary">Сохранить</button> |
-            <a href="/editor/staff"><button type="button" class="btn btn-secondary">Назад</button></a>
+            <button name="submit" type="submit" class="btn btn-primary" th:text="#{save}"></button>
+            |
+            <a href="/editor/staff">
+                <button type="button" class="btn btn-secondary" th:text="#{back}"></button>
+            </a>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         </form>
     </div>
 </div>

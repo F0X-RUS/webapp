@@ -41,4 +41,5 @@ public class CourseService implements CrudService<Course>{
     public List<Course> getAll() {
         return (List<Course>)courseDAO.findAll();
     }
+
 }

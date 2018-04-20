@@ -6,31 +6,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import ru.sgmu.seem.utils.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import ru.sgmu.seem.utils.PageWrapper;
 import ru.sgmu.seem.utils.enums.MenuOption;
 import ru.sgmu.seem.webapp.domains.News;
 import ru.sgmu.seem.webapp.services.NewsServiceImpl;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.*;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
-import static ru.sgmu.seem.utils.DateManager.*;
-import static ru.sgmu.seem.utils.FolderManager.*;
-import static ru.sgmu.seem.utils.FormValidator.IMAGE_CHOOSE_FILE;
-import static ru.sgmu.seem.utils.FormValidator.IMAGE_WRONG_FORMAT;
-import static ru.sgmu.seem.utils.ImageManager.*;
-import static ru.sgmu.seem.utils.enums.PageAttribute.*;
-import static ru.sgmu.seem.utils.enums.FolderTitle.*;
-import static ru.sgmu.seem.utils.enums.ListTitle.*;
-import static ru.sgmu.seem.utils.enums.PageTitle.*;
+import static ru.sgmu.seem.utils.FolderManager.NEWS_IMAGES_URL;
+import static ru.sgmu.seem.utils.enums.FolderTitle.NEWS_IMAGES;
+import static ru.sgmu.seem.utils.enums.ListTitle.NEWS_LIST;
+import static ru.sgmu.seem.utils.enums.PageAttribute.CONTENT;
+import static ru.sgmu.seem.utils.enums.PageAttribute.MENU_OPTION;
 
 @Controller
 @RequestMapping(value = "/news")
@@ -47,7 +38,8 @@ public class NewsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getList(Model model, Pageable pageable) {
+    public String getList(Model model,
+                          Pageable pageable) {
         Page<News> newsPage = newsService.getPage(pageable.getPageNumber(), 9,
                 Sort.Direction.DESC, "date", "time");
         PageWrapper<News> page = new PageWrapper<>(newsPage, "news", 5);
@@ -55,8 +47,7 @@ public class NewsController {
                 .addAttribute("page", page)
                 .addAttribute(NEWS_IMAGES.getText(), NEWS_IMAGES_URL)
                 .addAttribute(CONTENT.name(), newsListFragmentPath)
-                .addAttribute(TITLE.name(), NEWS.getText())
-                .addAttribute(CURRENT_PAGE.name(), MenuOption.NEWS.toString());
+                .addAttribute(MENU_OPTION.name(), MenuOption.NEWS.toString());
         return "layouts/main";
     }
 
@@ -67,8 +58,7 @@ public class NewsController {
         model.addAttribute(NEWS_IMAGES.getText(), NEWS_IMAGES_URL)
                 .addAttribute("news", news)
                 .addAttribute(CONTENT.toString(), newsItemFragmentPath)
-                .addAttribute(TITLE.toString(), NEWS.getText() + " - " + news.getTitle())
-                .addAttribute(CURRENT_PAGE.toString(), MenuOption.NEWS.toString());
+                .addAttribute(MENU_OPTION.toString(), MenuOption.NEWS.toString());
         return "layouts/main";
     }
 

@@ -1,23 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8"/>
 </head>
 <body>
 <div th:fragment="main" role="main" class="container mt-4">
-    <nav th:replace="@{'fragments/forum/breadcrumb'} :: navbar"></nav>
     <div th:if="@{${disc} != null}" style="float: right; display: inline-block; line-height: 38px" class="align-middle mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-            <a th:href="@{'./' + ${current_id} + '/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить тему</button></a>
+        <div sec:authorize="hasAnyRole('ADMIN','MODER','TEACHER')" class="btn-group mr-2">
+            <a th:href="@{'./' + ${current_id} + '/add'}"><button class="btn btn-sm btn-outline-secondary" th:text="#{add_thread}"></button></a>
         </div>
     </div>
+
+
+    <div th:if="@{${disc} != null}" class="row justify-content-center">
+        <ul class="pagination">
+            <li th:class="${page.firstPage}?'page-item disabled':'page-item'">
+                <span class="page-link" th:if='${page.firstPage}'>←</span>
+                <a class="page-link" th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>←</a>
+            </li>
+            <li th:class="${page.hasPreviousPage}? 'page-item' : 'page-item disabled'">
+                <span class="page-link" th:if='${not page.hasPreviousPage}'>«</span>
+                <a class="page-link" th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'>«</a>
+            </li>
+            <li th:each='item : ${page.items}' th:class="${item.enable}? 'page-item enable' : 'page-item'">
+                <span class="page-link" th:if='${item.enable}' th:text='${item.number}'>1</span>
+                <a class="page-link" th:if='${not item.enable}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'>
+                    <span th:text='${item.number}'>1</span>
+                </a>
+            </li>
+            <li th:class="${page.hasNextPage}? 'page-item' : 'page-item disabled'">
+                <span class="page-link" th:if='${not page.hasNextPage}'>»</span>
+                <a class="page-link" th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}'>»</a>
+            </li>
+            <li th:class="${page.lastPage}? 'page-item disabled' : 'page-item'">
+                <span class="page-link" th:if='${page.lastPage}'>→</span>
+                <a class="page-link" th:if='${not page.lastPage}' th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'>→</a>
+            </li>
+        </ul>
+    </div>
+
     <div th:each='item : ${list}' class="media text-muted pt-3">
         <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
             <a th:href="@{'./' + ${current_id} + '/' + ${item.id}}">
-                <span style="font-size: 12pt;" th:text="${item.name}" class="pl-3 d-block text-gray-dark"></span>
+                <span style="font-size: 12pt;" th:text="${#strings.abbreviate(item.name,120)}" class="pl-3 d-block text-gray-dark"></span>
             </a>
-            <span class="pl-4" th:if="${item.description}" th:text="${#strings.abbreviate(item.description,100)}"></span>
+            <th:block>
+                <span th:if="${not #strings.isEmpty(item.description)}" class="pl-4" th:text="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(item.description).text(),150)}" ></span>
+            </th:block>
         </p>
+    </div>
+
+    <div th:if="@{${disc} != null}" class="row justify-content-center mt-5">
+        <ul class="pagination">
+            <li th:class="${page.firstPage}?'page-item disabled':'page-item'">
+                <span class="page-link" th:if='${page.firstPage}'>←</span>
+                <a class="page-link" th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>←</a>
+            </li>
+            <li th:class="${page.hasPreviousPage}? 'page-item' : 'page-item disabled'">
+                <span class="page-link" th:if='${not page.hasPreviousPage}'>«</span>
+                <a class="page-link" th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'>«</a>
+            </li>
+            <li th:each='item : ${page.items}' th:class="${item.enable}? 'page-item enable' : 'page-item'">
+                <span class="page-link" th:if='${item.enable}' th:text='${item.number}'>1</span>
+                <a class="page-link" th:if='${not item.enable}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'>
+                    <span th:text='${item.number}'>1</span>
+                </a>
+            </li>
+            <li th:class="${page.hasNextPage}? 'page-item' : 'page-item disabled'">
+                <span class="page-link" th:if='${not page.hasNextPage}'>»</span>
+                <a class="page-link" th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}'>»</a>
+            </li>
+            <li th:class="${page.lastPage}? 'page-item disabled' : 'page-item'">
+                <span class="page-link" th:if='${page.lastPage}'>→</span>
+                <a class="page-link" th:if='${not page.lastPage}' th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'>→</a>
+            </li>
+        </ul>
     </div>
 </div>
 </body>

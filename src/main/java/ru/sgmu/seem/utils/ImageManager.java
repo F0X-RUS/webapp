@@ -29,7 +29,9 @@ public class ImageManager {
 
     private final FilenameGenerator filenameGenerator;
 
-    public static final String DEFAULT_IMAGE = "default.png";
+    public static final String DEFAULT_USER_IMAGE = "defaultuser.png";
+    public static final String DEFAULT_INFOBLOCK_IMAGE = "defaultinfoblock.svg";
+    public static final String DEFAULT_PASSAGE_IMAGE = "defaultpassage.png";
 
     private enum Extentions {
         PNG,
@@ -59,32 +61,34 @@ public class ImageManager {
         }
     }
 
-    public boolean checkExtention(String inputExtention) {
+    public boolean checkExtention(MultipartFile file) {
+        String fileExtention = file.getContentType().split("/")[1].toUpperCase();
         boolean flag = false;
         for (Extentions extention : Extentions.values()) {
-            if (inputExtention.equals(extention.name())) {
+            if (fileExtention.equals(extention.name())) {
                 flag = true;
             }
         }
-//        System.out.println(flag);
         return flag;
     }
 
     public String parseFile(MultipartFile file) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
-        String extention = file.getContentType().split("/")[1];
-        if (!checkExtention(extention.toUpperCase())) {
+        if (!checkExtention(file)) {
             throw new IOException("Wrong extention!");
         }
         String name = filenameGenerator.nextString();
-        stringBuilder.append(name).append(".").append(extention);
+        stringBuilder
+                .append(name)
+                .append(".")
+                .append(file.getContentType().split("/")[1].toUpperCase());
         return stringBuilder.toString();
     }
 
     public boolean checkSelectedImage(MultipartFile file) {
         boolean check = true;
         String extension = file.getContentType().split("/")[1].toUpperCase();
-        if (file.isEmpty() || !checkExtention(extension)) {
+        if (file.isEmpty() || !checkExtention(file)) {
             check = false;
         }
         return check;

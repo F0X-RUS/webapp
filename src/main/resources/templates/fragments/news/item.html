@@ -4,24 +4,26 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-    <div th:fragment="main" role="main">
-        <div class="jumbotron p-0">
-            <div class="crop-slider">
-                <img th:src="@{'~/' + ${news_images_path} + '/' + ${news.imageName}}"/>
-            </div>
+<div th:fragment="main" role="main" class="container">
+    <div class="col-md-12 card my-3 pl-0 pr-0 pb-3 bg-white rounded box-shadow border">
+        <div class="card-header">
+            <h4 th:text="${news.title}"></h4>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 th:text="${news.title}">Заголовок</h2>
-                    <p th:text="${news.content}">Содержание</p>
-                    <p class="card-text">
-                        <small th:text="@{'Добавлено: ' + ${#dates.format(news.time, 'HH:mm')} + ' ' + ${#dates.format(news.date, 'dd.MM.yyyy')}}" class="text-muted"></small>
-                    </p>
-                </div>
-            </div>
-            <hr/>
+        <div class="mx-auto mt-4 newsitem-crop border rounded d-inline" style="width: 350px">
+            <img th:width="350px" class="img-fluid" th:src="@{'~/' + ${news_images_path} + '/' + ${news.imageName}}"/>
         </div>
+        <div class="pl-4 pr-4">
+            <p th:utext="${news.content}"></p>
+        </div>
+        <p class="card-text pl-4">
+            <small class="text-primary" th:text="#{added} + ': '"></small>
+            <small th:text="@{${#dates.format(news.time, 'HH:mm')} + ' ' + ${#dates.format(news.date, 'dd.MM.yyyy')}}"
+                   class="text-muted mr-3"></small>
+            <small class="text-primary" th:text="#{author} + ' '"></small>
+            <small th:text="${news.user.name} + ' ' + ${news.user.surname}"
+                   class="text-muted"></small>
+        </p>
     </div>
+</div>
 </body>
 </html>

@@ -4,12 +4,14 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+<div th:fragment="main" role="main" class="col-sm-10 pt-3">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Изменение данных для страницы "О кафедре"</h1>
+        <h1 class="h2" th:text="#{menuoption_about}"></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a th:href="@{'/editor/about/add'}"><button class="btn btn-sm btn-outline-secondary">Добавить абзац</button></a>
+                <a th:href="@{'/editor/about/add'}">
+                    <button class="btn btn-sm btn-outline-secondary" th:text="#{add_passage}"></button>
+                </a>
             </div>
         </div>
     </div>
@@ -17,53 +19,68 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Название абзаца</th>
-            <th>Изменил(а)</th>
-            <th>Дата изменения</th>
-            <th>Время изменения</th>
-            <th>Функции</th>
+            <th th:text="#{image}"></th>
+            <th th:text="#{title}"></th>
+            <th th:text="#{user}"></th>
+            <th th:text="#{date}"></th>
+            <th th:text="#{time}"></th>
+            <th th:text="#{functions}"></th>
         </tr>
         </thead>
         <tr th:each="item : ${PASSAGE_LIST}">
-                <td class="align-middle" th:text="${#strings.abbreviate(item.title,60)}"></td>
-                <td class="align-middle" th:text="${item.updatedBy}"></td>
-                <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')}"></td>
-                <td class="align-middle" th:text="${#dates.format(item.time, 'HH:mm:ss')}"></td>
-                <td>
-                    <input type="hidden" name="id" th:value="${item.id}"/>
-                    <a th:href="'about/' + ${item.id} + '/edit'">
-                        <button type="submit" class="btn btn-primary">Изменить</button>
-                    </a>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                            th:attr="data-id=${item.id},data-title=${item.title}">
-                        Удалить
-                    </button>
-                </td>
+            <td class="align-middle">
+                <img th:width="100px" th:src="@{'/' + ${PASSAGE_IMAGES} + '/' + ${item.imageName}}"/>
+            </td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.title,30)}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.user.name + ' ' + item.user.surname, 15)}"></td>
+            <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')}"></td>
+            <td class="align-middle" th:text="${#dates.format(item.time, 'HH:mm:ss')}"></td>
+            <td class="align-middle">
+                <input type="hidden" name="id" th:value="${item.id}"/>
+                <a th:href="'about/' + ${item.id} + '/edit'">
+                    <button type="submit" class="btn btn-primary" th:text="#{edit}"></button>
+                </a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                        th:attr="data-id=${item.id},
+                            data-title=${#strings.abbreviate(item.title,60)},
+                            data-content=${#strings.abbreviate(T(org.jsoup.Jsoup).parse(item.content).text(),150)},
+                            data-action=@{'/editor/about/delete'},
+                            data-date=${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}"
+                        th:text="#{remove}">
+                </button>
+            </td>
         </tr>
     </table>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Вы действительно хотите удалить абзац?</h5>
+                <h5 class="modal-title" id="exampleModalLabel" th:text="@{#{your_really_want_delete} + #{passage_item} + '?'}"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
-                    <h5 class="card-title">Заголовок:</h5>
+                    <h5 class="card-title" th:text="#{title}"></h5>
                     <p id="title" class="card-text"></p>
+                    <h5 class="card-title" th:text="#{content}"></h5>
+                    <p id="content" class="card-text"></p>
+                    <small class="card-text" th:text="#{last_update_date} + ' '"></small>
+                        <small id="date" class="text-muted"></small>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </form>
             </div>
             <div class="modal-footer">
-                <form method="post" enctype="multipart/form-data" action="/editor/about/delete">
+                <form method="post" enctype="multipart/form-data" id="action" action="/editor/about/delete">
                     <input type="hidden" id="id" name="id"/>
-                    <button type="submit" class="btn btn-danger">Удалить</button>
+                    <button type="submit" class="btn btn-danger" th:text="#{remove}"></button>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </form>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{cancel}"></button>
             </div>
         </div>
     </div>

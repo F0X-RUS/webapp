@@ -1,6 +1,5 @@
 package ru.sgmu.seem.webapp.controllers;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.sgmu.seem.utils.enums.ListTitle;
 import ru.sgmu.seem.utils.enums.MenuOption;
-import ru.sgmu.seem.utils.enums.PageTitle;
 import ru.sgmu.seem.webapp.domains.Staff;
 import ru.sgmu.seem.webapp.services.StaffService;
 
@@ -44,8 +42,7 @@ public class StaffController {
                 .sorted(Comparator.comparing(Staff::getSurname))
                 .collect(Collectors.groupingBy(e -> e.getSurname().substring(0, 1)));
         model.addAttribute(CONTENT.name(), staff)
-                .addAttribute(CURRENT_PAGE.name(), MenuOption.STAFF.name())
-                .addAttribute(TITLE.name(), PageTitle.STAFF.getText())
+                .addAttribute(MENU_OPTION.name(), MenuOption.STAFF.name())
                 .addAttribute("STAFF_MAP", mapStaff);
         return "layouts/main";
     }
@@ -55,8 +52,7 @@ public class StaffController {
                        @PathVariable("id") Long id) {
         Staff staff = staffService.getById(id);
         model.addAttribute(CONTENT.name(), staffItem)
-                .addAttribute(CURRENT_PAGE.name(), MenuOption.STAFF.name())
-                .addAttribute(TITLE.name(), PageTitle.STAFF.getText())
+                .addAttribute(MENU_OPTION.name(), MenuOption.STAFF.name())
                 .addAttribute("staff", staff)
                 .addAttribute(STAFF_IMAGES.getText(), STAFF_IMAGES_URL);
         return "layouts/main";

@@ -7,9 +7,12 @@ public enum FolderTitle {
     NEWS_IMAGES("news_images_path"),
     MAN_IMAGES("man_images_path"),
     INFOBLOCK_IMAGES("infoblock_images_path"),
-    STAFF_IMAGES("staff_images_path");
+    STAFF_IMAGES("staff_images_path"),
+    PASSAGE_IMAGES;
 
     private String text;
+
+    FolderTitle(){}
 
     FolderTitle(String text) {
         this.text = text;

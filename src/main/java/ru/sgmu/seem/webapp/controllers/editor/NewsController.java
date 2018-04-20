@@ -1,10 +1,12 @@
 package ru.sgmu.seem.webapp.controllers.editor;
 
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,30 +17,31 @@ import ru.sgmu.seem.utils.*;
 import ru.sgmu.seem.utils.enums.FolderTitle;
 import ru.sgmu.seem.utils.enums.MenuOption;
 import ru.sgmu.seem.webapp.domains.News;
-import ru.sgmu.seem.webapp.services.NewsService;
+import ru.sgmu.seem.webapp.domains.User;
+import ru.sgmu.seem.webapp.services.CustomUserDetailsService;
+import ru.sgmu.seem.webapp.services.PageableService;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 
 import static ru.sgmu.seem.utils.DateManager.*;
 import static ru.sgmu.seem.utils.FolderManager.NEWS_IMAGES_URL;
 import static ru.sgmu.seem.utils.FolderManager.newsImagesPath;
-import static ru.sgmu.seem.utils.FormValidator.IMAGE_CHOOSE_FILE;
 import static ru.sgmu.seem.utils.FormValidator.IMAGE_UPLOAD_ERROR;
-import static ru.sgmu.seem.utils.FormValidator.IMAGE_WRONG_FORMAT;
 import static ru.sgmu.seem.utils.enums.FolderTitle.NEWS_IMAGES;
 import static ru.sgmu.seem.utils.enums.ListTitle.NEWS_LIST;
 import static ru.sgmu.seem.utils.enums.PageAttribute.*;
-import static ru.sgmu.seem.utils.enums.PageAttribute.CURRENT_PAGE;
-import static ru.sgmu.seem.utils.enums.PageTitle.*;
 
+@PreAuthorize("hasAnyRole('ADMIN','MODER')")
 @Controller("EditorNewsController")
 @RequestMapping(value = "/editor/news")
 public class NewsController {
 
-    private NewsService newsService;
+    private CustomUserDetailsService userService;
+    private PageableService<News> newsPageableService;
     private FormValidator formValidator;
     private ImageManager imageManager;
     private Path news = Paths.get("editor", "fragments", "news", "news");
@@ -46,22 +49,25 @@ public class NewsController {
     private Path editNews = Paths.get("editor", "fragments", "news", "edit");
 
     @Autowired
-    public NewsController(NewsService newsService, FormValidator formValidator, ImageManager imageManager) {
-        this.newsService = newsService;
+    public NewsController(@Qualifier("newsServiceImpl") PageableService<News> newsPageableService,
+                          FormValidator formValidator,
+                          ImageManager imageManager,
+                          CustomUserDetailsService userService) {
+        this.newsPageableService = newsPageableService;
         this.formValidator = formValidator;
         this.imageManager = imageManager;
+        this.userService = userService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String news(Model model, Pageable pageable) {
-        Page<News> newsPage = newsService.getPage(pageable.getPageNumber(), 10,
+        Page<News> newsPage = newsPageableService.getPage(pageable.getPageNumber(), 10,
                 Sort.Direction.DESC, "date", "time");
         PageWrapper<News> page = new PageWrapper<>(newsPage, "news", 5);
         model.addAttribute(NEWS_LIST.name(), page.getContent())
                 .addAttribute("page", page)
                 .addAttribute(CONTENT.name(), news)
                 .addAttribute(MENU_OPTION.name(), MenuOption.NEWS.name())
-                .addAttribute(TITLE.name(), NEWS.getText())
                 .addAttribute(NEWS_IMAGES.getText(), NEWS_IMAGES_URL);
         return "editor/layouts/index";
 
@@ -71,9 +77,9 @@ public class NewsController {
     public String newsAdd(Model model,
                           News news) {
         model.addAttribute(CONTENT.name(), addNews)
-                .addAttribute(TITLE.name(), ADD_NEWS.getText())
-                .addAttribute(CURRENT_PAGE.name(), MenuOption.NEWS.toString())
-                .addAttribute(NEWS_IMAGES.getText(), NEWS_IMAGES_URL);
+                .addAttribute(MENU_OPTION.name(), MenuOption.NEWS.toString())
+                .addAttribute(NEWS_IMAGES.getText(), NEWS_IMAGES_URL)
+                .addAttribute("lang", LocaleContextHolder.getLocale().toString().split("-")[0]);
         return "editor/layouts/index";
     }
 
@@ -81,18 +87,20 @@ public class NewsController {
     public String newsAddSubmit(@Valid News news,
                                 BindingResult bindingResult,
                                 @RequestParam("image") MultipartFile file,
-                                Model model) {
-        if (!formValidator.check(file, bindingResult, model)) {
+                                Model model,
+                                Principal principal) {
+        if (!formValidator.checkImage(file, bindingResult, model)) {
             model.addAttribute(CONTENT.name(), addNews)
-                    .addAttribute(MENU_OPTION.toString(), MenuOption.NEWS.name())
-                    .addAttribute(TITLE.name(), ADD_NEWS.getText());
-            return "/editor/layouts/index";
+                    .addAttribute(MENU_OPTION.toString(), MenuOption.NEWS.name());
+            return "editor/layouts/index";
         }
         String imageName = imageManager.getImageName(file, newsImagesPath);
+        User user = userService.getByUsername(principal.getName());
+        news.setUser(user);
         news.setImageName(imageName);
         news.setDate(getCurrentDate());
         news.setTime(getCurrentTime());
-        newsService.add(news);
+        newsPageableService.add(news);
         return "redirect:/editor/news";
     }
 
@@ -100,12 +108,12 @@ public class NewsController {
     public String newsEdit(Model model,
                            @PathVariable("id") Long id,
                            News news) {
-        news = newsService.getById(id);
+        news = newsPageableService.getById(id);
         model.addAttribute(CONTENT.toString(), editNews)
-                .addAttribute(TITLE.toString(), EDIT_NEWS.getText())
                 .addAttribute(NEWS_IMAGES.getText(), NEWS_IMAGES_URL)
-                .addAttribute(CURRENT_PAGE.name(), MenuOption.NEWS.toString())
-                .addAttribute("news", news);
+                .addAttribute(MENU_OPTION.name(), MenuOption.NEWS.toString())
+                .addAttribute("news", news)
+                .addAttribute("lang", LocaleContextHolder.getLocale().toString().split("-")[0]);
         return "editor/layouts/index";
     }
 
@@ -113,20 +121,19 @@ public class NewsController {
     public String newsEditSubmit(@Valid News news,
                                  BindingResult bindingResult,
                                  @RequestParam("image") MultipartFile file,
-                                 Model model) {
-        String oldImageName = newsService.getById(news.getId()).getImageName();
-        String fileExtention = file.getContentType().split("/")[1].toUpperCase();
-        if (!imageManager.checkExtention(fileExtention) && !file.isEmpty()){
+                                 Model model,
+                                 Principal principal) {
+        String oldImageName = newsPageableService.getById(news.getId()).getImageName();
+        if (!imageManager.checkExtention(file) && !file.isEmpty()){
             model.addAttribute("image_err", IMAGE_UPLOAD_ERROR);
         }
         if (bindingResult.hasErrors() || model.containsAttribute("image_err")) {
             news.setImageName(oldImageName);
             model.addAttribute(CONTENT.name(), editNews)
-                    .addAttribute(TITLE.name(), EDIT_NEWS.getText())
-                    .addAttribute(CURRENT_PAGE.name(), MenuOption.NEWS.toString())
+                    .addAttribute(MENU_OPTION.name(), MenuOption.NEWS.toString())
                     .addAttribute("news", news)
                     .addAttribute(FolderTitle.NEWS_IMAGES.getText(), NEWS_IMAGES_URL);
-            return "/editor/layouts/index";
+            return "editor/layouts/index";
         }
         String imageName = (!file.isEmpty()) ? imageManager.getImageName(file, newsImagesPath) : oldImageName;
         if (!imageName.equals(oldImageName)){
@@ -136,16 +143,18 @@ public class NewsController {
                 e.printStackTrace();
             }
         }
+        User user = userService.getByUsername(principal.getName());
+        news.setUser(user);
         news.setImageName(imageName);
         news.setDate(getCurrentDate());
         news.setTime(getCurrentTime());
-        newsService.update(news);
+        newsPageableService.update(news);
         return "redirect:/editor/news";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public RedirectView newsDelete(@RequestParam("id") Long id) {
-        newsService.remove(id);
+        newsPageableService.remove(id);
         return new RedirectView("/editor/news", true);
     }
 }

@@ -2,24 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Редактирование - Главная страница</title>
 </head>
 <body>
-<div th:fragment="CONTENT" role="main" class="col-sm-10 pt-3">
+<div th:fragment="main" role="main" class="col-sm-10 pt-3">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Изменение содержимого главной страницы</h1>
+        <h1 class="h2" th:text="@{#{edit_content} + #{menuoption_main}}"></h1>
     </div>
 
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Фотография</th>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Отчество</th>
-                <th>Последнее изменение</th>
-                <th>Изменил(а)</th>
-                <th>Функции</th>
+                <th th:text="#{photo}"></th>
+                <th th:text="#{surname}"></th>
+                <th th:text="#{name}"></th>
+                <th th:text="#{patronymic}"></th>
+                <th th:text="#{last_update_date}"></th>
+                <th th:text="#{user}"></th>
+                <th th:text="#{functions}"></th>
             </tr>
         </thead>
         <tr th:each="item : ${MAN_LIST}">
@@ -28,11 +27,11 @@
             </td>
             <td class="align-middle" th:text="${item.surname}"></td>
             <td class="align-middle" th:text="${item.name}"></td>
-            <td class="align-middle" th:text="${#strings.abbreviate(item.patronymic,10)}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(item.patronymic,20)}"></td>
             <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}"></td>
-            <td class="align-middle" th:text="${#strings.abbreviate(item.updatedBy,7)}"></td>
+            <td class="align-middle" th:text="${item.user.name} + ' ' + ${item.user.surname}"></td>
             <td class="align-middle">
-                <a th:href="@{'main/man/' + ${item.id}}"><button type="submit" class="btn btn-primary">Изменить</button></a>
+                <a th:href="@{'main/man/' + ${item.id}}"><button type="submit" class="btn btn-primary" th:text="#{edit}"></button></a>
             </td>
         </tr>
     </table>
@@ -40,24 +39,25 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Изображение</th>
-            <th>Заголовок</th>
-            <th>Слоган</th>
-            <th>Последнее изменение</th>
-            <th>Изменил(а)</th>
-            <th>Функции</th>
+            <th th:text="#{image}"></th>
+            <th th:text="#{title}"></th>
+            <th th:text="#{slogan}"></th>
+            <th th:text="#{last_update_date}"></th>
+            <th th:text="#{user}"></th>
+            <th th:text="#{functions}"></th>
         </tr>
         </thead>
-        <tr th:each="item : ${INFOBLOCK_LIST}">
+        <tr>
             <td>
-                <img width="100px" th:src="@{'~/' + ${infoblock_images_path} + '/' + ${item.imageName}}"/>
+                <img th:if="${INFOBLOCK_LIST[0].imageName} != null" width="100px" th:src="@{'~/' + ${infoblock_images_path} + '/' + ${INFOBLOCK_LIST[0].imageName}}"/>
+                <img th:if="${INFOBLOCK_LIST[0].imageName} == null" th:width="100px" th:src="@{/images/defaultinfoblock.svg}"/>
             </td>
-            <td class="align-middle" th:text="${#strings.abbreviate(item.title,17)}"></td>
-            <td class="align-middle" th:text="${#strings.abbreviate(item.slogan,15)}"></td>
-            <td class="align-middle" th:text="${#dates.format(item.date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(item.time, 'HH:mm:ss')}"></td>
-            <td class="align-middle" th:text="${#strings.abbreviate(item.updatedBy,7)}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(INFOBLOCK_LIST[0].title,17)}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(INFOBLOCK_LIST[0].slogan,20)}"></td>
+            <td class="align-middle" th:text="${#dates.format(INFOBLOCK_LIST[0].date, 'dd.MM.yyyy')} + ' ' + ${#dates.format(INFOBLOCK_LIST[0].time, 'HH:mm:ss')}"></td>
+            <td class="align-middle" th:text="${#strings.abbreviate(INFOBLOCK_LIST[0].user.name + ' ' + INFOBLOCK_LIST[0].user.surname, 15)}"></td>
             <td class="align-middle">
-                <a th:href="@{'main/infoblock/' + ${item.id}}"><button type="submit" class="btn btn-primary">Изменить</button></a>
+                <a th:href="@{'main/infoblock/' + ${INFOBLOCK_LIST[0].id}}"><button type="submit" class="btn btn-primary" th:text="#{edit}"></button></a>
             </td>
         </tr>
     </table>

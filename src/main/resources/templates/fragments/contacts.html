@@ -4,35 +4,26 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-    <div th:fragment="main" role="main" class="container mt-4">
-        <h1 class="display-4 ml-3 mr-3">Контакты</h1>
+<div th:fragment="main" role="main" class="container mt-4">
+    <h1 class="display-4 ml-3 mr-3" th:text="#{menuoption_contacts}"></h1>
+    <hr class="my-4"/>
+    <div class="col-12 my-3 pl-3 pr-3 pb-3 pt-1 bg-white rounded box-shadow border">
+        <div class="col-sm-12 mx-auto row mt-4" th:each='entry : ${CONTACTS_LIST}'>
+            <table class="table table-hover text-left mb-0">
+                <tbody>
+                <tr th:each="contact, entryStat : ${entry.value}">
+                    <td th:width="200px" th:if="${entryStat.count == 1}" th:text="@{${entry.key.name} + ':'}"></td>
+                    <td th:if="${entryStat.count > 1}"></td>
+                    <td th:text="${contact.content}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <hr class="my-4"/>
-        <div class="jumbotron pt-4 pb-4">
-            <h4 th:text="${header}"></h4>
-            <hr class="my-4"/>
-            <address class="pl-4 pr-4">
-                <div class="row" >
-                    <p class="col-sm-4 card-text">Адрес(а):</p>
-                    <p th:text="${first_address.content}" class="col-sm-8"></p>
-                </div>
-                <div class="row" th:each='address : ${ADDRESS_LIST}'>
-                    <p class="col-sm-4 card-text"></p>
-                    <p th:text="${address.content}" class="col-sm-8"></p>
-                </div>
-                <div class="row">
-                    <p class="col-sm-4 card-text">Телефон:</p>
-                    <p th:text="${first_phone.content}" class="col-sm-8"></p>
-                </div>
-                <div class="row" th:each='phone : ${PHONE_LIST}'>
-                    <p class="col-sm-4 card-text"></p>
-                    <p th:text="${phone.content}" class="col-sm-8"></p>
-                </div>
-            </address>
-            <hr class="my-4"/>
-            <div>
-                <div class="shadow rounded" id="googleMap" style="width:100%;height:500px"></div>
-            </div>
+        <div class="col-md-11 mx-auto mb-5 mt-5">
+            <div class="shadow rounded" id="googleMap" style="width:100%;height:500px"></div>
         </div>
     </div>
+</div>
 </body>
 </html>
