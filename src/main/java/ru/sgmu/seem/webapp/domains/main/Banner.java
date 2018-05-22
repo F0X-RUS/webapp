@@ -12,6 +12,10 @@ public class Banner extends EntityDetails {
     @Size(min=5, max=50)
     private String title;
 
+    @NotNull
+    @Size(min=5, max=200)
+    private String link;
+
     @Size(max=100)
     private String description;
 
@@ -37,5 +41,13 @@ public class Banner extends EntityDetails {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
